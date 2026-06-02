@@ -1,6 +1,6 @@
 # Adding SSH access
 
-This guide adds an SSH public key for a user, then optionally hardens the SSH server. It assumes the user already exists (see [Creating a user](creating-a-user.md)).
+This guide adds an SSH public key for a user, then optionally hardens the SSH server. It assumes the user already exists (see [Creating a user](guides/creating-a-user.html)).
 
 ## 1. Add the public key
 
@@ -107,6 +107,6 @@ sudo abstrax firewall allow 2222 --protocol=tcp
 
 ## Related
 
-- [SSH keys and SSH configuration](../commands/ssh-keys.md)
-- [Firewall](../commands/system.md#firewall-commands)
-- [Security](../reference/security.md)
+- [SSH keys and SSH configuration](commands/ssh-keys.html)
+- [Firewall](commands/system.html#firewall-commands)
+- [Security](reference/security.html)

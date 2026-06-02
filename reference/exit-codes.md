@@ -77,5 +77,5 @@ Without `--json`, Abstrax prints human-readable text:
 
 ## Related
 
-- [Troubleshooting](troubleshooting.md)
-- [Command reference](command-reference.md)
+- [Troubleshooting](reference/troubleshooting.html)
+- [Command reference](reference/command-reference.html)

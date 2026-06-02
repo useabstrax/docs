@@ -19,18 +19,18 @@ A single-page listing of every Abstrax command and its flags. Each command links
 
 | Command | Root | Description | Docs |
 |---|---|---|---|
-| `abstrax version` | No | Print version, commit, build date | [commands](../commands/index.md#version) |
-| `abstrax doctor` | No | Inspect the system | [commands](../commands/index.md#doctor) |
-| `abstrax log` | No | View the Abstrax log file | [commands](../commands/index.md#log) |
-| `abstrax agent ...` | No | Placeholder, not implemented | [platforms](supported-platforms.md#future-agent) |
-| `abstrax help` | No | Show help for any command | [commands](../commands/index.md#top-level-commands) |
-| `abstrax completion <shell>` | No | Generate a shell autocompletion script | [commands](../commands/index.md#top-level-commands) |
+| `abstrax version` | No | Print version, commit, build date | [commands](commands/index.html#version) |
+| `abstrax doctor` | No | Inspect the system | [commands](commands/index.html#doctor) |
+| `abstrax log` | No | View the Abstrax log file | [commands](commands/index.html#log) |
+| `abstrax agent ...` | No | Placeholder, not implemented | [platforms](reference/supported-platforms.html#future-agent) |
+| `abstrax help` | No | Show help for any command | [commands](commands/index.html#top-level-commands) |
+| `abstrax completion <shell>` | No | Generate a shell autocompletion script | [commands](commands/index.html#top-level-commands) |
 
 `abstrax log` flags: `--lines` (default 50), `--follow`/`-f`. The `help` and `completion` commands are provided automatically by the command framework.
 
 ## user
 
-See [Users](../commands/users.md).
+See [Users](commands/users.html).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -49,7 +49,7 @@ See [Users](../commands/users.md).
 
 ## ssh-key
 
-See [SSH keys](../commands/ssh-keys.md#ssh-key-management).
+See [SSH keys](commands/ssh-keys.html#ssh-key-management).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -62,7 +62,7 @@ See [SSH keys](../commands/ssh-keys.md#ssh-key-management).
 
 ## ssh
 
-See [SSH configuration](../commands/ssh-keys.md#ssh-server-configuration).
+See [SSH configuration](commands/ssh-keys.html#ssh-server-configuration).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -78,7 +78,7 @@ See [SSH configuration](../commands/ssh-keys.md#ssh-server-configuration).
 
 ## package
 
-See [Packages](../commands/packages.md).
+See [Packages](commands/packages.html).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -92,7 +92,7 @@ See [Packages](../commands/packages.md).
 
 ## service
 
-See [Service commands](../commands/system.md#service-commands).
+See [Service commands](commands/system.html#service-commands).
 
 | Command | Root | Description |
 |---|---|---|
@@ -106,7 +106,7 @@ See [Service commands](../commands/system.md#service-commands).
 
 ## cron
 
-See [Cron](../commands/cron.md).
+See [Cron](commands/cron.html).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -122,7 +122,7 @@ Frequency flags: `--every-minute`, `--every-five-minutes`, `--every-ten-minutes`
 
 ## daemon
 
-See [Daemons](../commands/daemons.md).
+See [Daemons](commands/daemons.html).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -138,7 +138,7 @@ See [Daemons](../commands/daemons.md).
 
 ## project
 
-See [Projects](../commands/projects.md).
+See [Projects](commands/projects.html).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -153,7 +153,7 @@ See [Projects](../commands/projects.md).
 
 ## web
 
-See [Web server commands](../commands/projects.md#web-server-commands).
+See [Web server commands](commands/projects.html#web-server-commands).
 
 | Command | Root | Description |
 |---|---|---|
@@ -163,7 +163,7 @@ See [Web server commands](../commands/projects.md#web-server-commands).
 
 ## ssl
 
-See [Certificates](../commands/certificates.md).
+See [Certificates](commands/certificates.html).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -174,7 +174,7 @@ See [Certificates](../commands/certificates.md).
 
 ## mysql
 
-See [MySQL commands](../commands/system.md#mysql-commands).
+See [MySQL commands](commands/system.html#mysql-commands).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -196,7 +196,7 @@ Privilege presets: `readonly`, `app`, `admin`.
 
 ## cache
 
-See [Cache commands](../commands/system.md#cache-commands).
+See [Cache commands](commands/system.html#cache-commands).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -212,7 +212,7 @@ Drivers: `redis`, `memcached`.
 
 ## firewall
 
-See [Firewall commands](../commands/system.md#firewall-commands).
+See [Firewall commands](commands/system.html#firewall-commands).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -228,7 +228,7 @@ See [Firewall commands](../commands/system.md#firewall-commands).
 
 ## server
 
-See [Server status commands](../commands/system.md#server-status-commands).
+See [Server status commands](commands/system.html#server-status-commands).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -241,4 +241,4 @@ See [Server status commands](../commands/system.md#server-status-commands).
 
 ## Action names
 
-Every command maps to a stable action name used in JSON output (the `action` field) and reserved for the future agent. Examples: `user.add`, `firewall.enable`, `project.add`, `mysql.database.add`, `cron.modify`. See the [JSON output](exit-codes.md#json-result-shape) reference for the result shape.
+Every command maps to a stable action name used in JSON output (the `action` field) and reserved for the future agent. Examples: `user.add`, `firewall.enable`, `project.add`, `mysql.database.add`, `cron.modify`. See the [JSON output](reference/exit-codes.html#json-result-shape) reference for the result shape.

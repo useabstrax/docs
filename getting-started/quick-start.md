@@ -151,7 +151,7 @@ A successful command exits with status `0`. Any error exits with status `1`.
 
 ## Where to go next
 
-- [Commands overview](../commands/index.md) – every command group explained.
-- [Creating a user](../guides/creating-a-user.md) – a worked example.
-- [Configuration](../configuration/index.md) – how Abstrax stores state and config.
-- [Permissions and security](../reference/security.md) – when root is needed and why.
+- [Commands overview](commands/index.html) – every command group explained.
+- [Creating a user](guides/creating-a-user.html) – a worked example.
+- [Configuration](configuration/index.html) – how Abstrax stores state and config.
+- [Permissions and security](reference/security.html) – when root is needed and why.

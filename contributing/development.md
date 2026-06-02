@@ -73,7 +73,7 @@ go mod download
 go build -o abstrax ./cmd/abstrax
 ```
 
-The resulting `./abstrax` binary sits in the repo and is `.gitignore`d. See [Building from source](building-from-source.md) for more, including version metadata.
+The resulting `./abstrax` binary sits in the repo and is `.gitignore`d. See [Building from source](contributing/building-from-source.html) for more, including version metadata.
 
 ## Run
 
@@ -130,7 +130,7 @@ Releases are built with [GoReleaser](https://goreleaser.com/) via `.github/workf
 - Pushes to `main` (without a tag) build `linux/amd64` and `linux/arm64` binaries and upload them as workflow artifacts.
 - Pushing a tag matching `v*` runs GoReleaser, which builds the binaries, produces `tar.gz` archives and `.deb`/`.rpm` packages, generates checksums, and creates a GitHub release.
 
-See [Building from source](building-from-source.md#release-builds) for the GoReleaser configuration details.
+See [Building from source](contributing/building-from-source.html#release-builds) for the GoReleaser configuration details.
 
 ## Contributing checklist
 
@@ -143,5 +143,5 @@ See [Building from source](building-from-source.md#release-builds) for the GoRel
 
 ## Related
 
-- [Building from source](building-from-source.md)
-- [Command reference](../reference/command-reference.md)
+- [Building from source](contributing/building-from-source.html)
+- [Command reference](reference/command-reference.html)

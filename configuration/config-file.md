@@ -33,7 +33,7 @@ Notes:
 - `abstrax mysql config show` displays the host, port, user, and socket, but not the password.
 - If no config file exists, the MySQL commands fall back to the defaults `host=127.0.0.1`, `port=3306`, `user=root` with no password.
 
-See the [MySQL commands](../commands/system.md#mysql-commands) for usage.
+See the [MySQL commands](commands/system.html#mysql-commands) for usage.
 
 ## Directories Abstrax uses
 
@@ -72,6 +72,6 @@ These are not Abstrax configuration files as such; they are the configuration of
 
 ## Related
 
-- [Environment variables](environment-variables.md)
-- [Permissions](permissions.md)
-- [Security](../reference/security.md)
+- [Environment variables](configuration/environment-variables.html)
+- [Permissions](configuration/permissions.html)
+- [Security](reference/security.html)

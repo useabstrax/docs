@@ -10,7 +10,7 @@ abstrax version
 
 ## Update from a release archive
 
-Download the newer archive from the [releases page](https://github.com/abstrax-io/abstrax/releases), extract it, and replace the existing binary:
+Download the newer archive from the [releases page](https://github.com/useabstrax/agent/releases), extract it, and replace the existing binary:
 
 ```bash
 # Replace <version> with the release version

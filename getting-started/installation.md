@@ -24,11 +24,11 @@ On any other distribution Abstrax reports the platform as not fully supported. D
 
 The package management commands use `apt`, and many service operations assume `systemd`, so the most reliable experience is on current Ubuntu and Debian releases.
 
-See [Supported platforms](../reference/supported-platforms.md) for more detail.
+See [Supported platforms](reference/supported-platforms.html) for more detail.
 
 ## Option 1: Release archive
 
-Releases are published as compressed archives on the [releases page](https://github.com/abstrax-io/abstrax/releases). The release builds produce `tar.gz` archives for `linux/amd64` and `linux/arm64`. The archive name includes the version, for example `abstrax_1.0.0_linux_amd64.tar.gz`.
+Releases are published as compressed archives on the [releases page](https://github.com/useabstrax/agent/releases). The release builds produce `tar.gz` archives for `linux/amd64` and `linux/arm64`. The archive name includes the version, for example `abstrax_1.0.0_linux_amd64.tar.gz`.
 
 Download the archive for your architecture (check with `uname -m`), extract the `abstrax` binary, and move it onto your `PATH`:
 
@@ -66,10 +66,10 @@ It also installs a systemd unit file for a future agent at `/etc/systemd/system/
 
 ## Option 3: Build from source
 
-See [Building from source](../contributing/building-from-source.md) for full detail. In short:
+See [Building from source](contributing/building-from-source.html) for full detail. In short:
 
 ```bash
-git clone https://github.com/abstrax-io/abstrax
+git clone https://github.com/useabstrax/agent
 cd abstrax/cli
 go mod download
 go build -o abstrax ./cmd/abstrax
@@ -127,6 +127,6 @@ abstrax version --json
 
 ## Next steps
 
-- [Quick start](quick-start.md)
-- [Updating](updating.md)
-- [Uninstalling](uninstalling.md)
+- [Quick start](getting-started/quick-start.html)
+- [Updating](getting-started/updating.html)
+- [Uninstalling](getting-started/uninstalling.html)

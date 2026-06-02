@@ -14,7 +14,7 @@ This page lists common problems, their likely causes, and how to fix them. The s
 sudo abstrax user add deploy
 ```
 
-See [Permissions](../configuration/permissions.md) for which commands need root.
+See [Permissions](configuration/permissions.html) for which commands need root.
 
 ## "invalid username ..." and other validation errors
 
@@ -70,7 +70,7 @@ sudo abstrax cron add report --command="php artisan report" --schedule="0 8 * * 
 
 **Cause.** The OS `ID` in `/etc/os-release` is not one of the supported Debian/Ubuntu based systems.
 
-**Fix.** Run Abstrax on Ubuntu or Debian (or a close derivative). On other distributions, package and service operations may not work because they assume `apt` and `systemd`. See [Supported platforms](supported-platforms.md).
+**Fix.** Run Abstrax on Ubuntu or Debian (or a close derivative). On other distributions, package and service operations may not work because they assume `apt` and `systemd`. See [Supported platforms](reference/supported-platforms.html).
 
 ## A tool is "not found" in doctor
 
@@ -144,7 +144,7 @@ sudo abstrax ssh config set-port 22 --allow-firewall
 sudo abstrax ssh reload
 ```
 
-To avoid this, always keep a second session open while changing SSH settings, test key login before disabling passwords, and open the new port in the firewall before changing the SSH port. See [Adding SSH access](../guides/adding-ssh-access.md).
+To avoid this, always keep a second session open while changing SSH settings, test key login before disabling passwords, and open the new port in the firewall before changing the SSH port. See [Adding SSH access](guides/adding-ssh-access.html).
 
 ## "port must be a number" when allowing a port
 
@@ -184,7 +184,7 @@ If you are already locked out, you will need console access to run `sudo abstrax
 
 ## Related
 
-- [Permissions](../configuration/permissions.md)
-- [Security](security.md)
-- [Supported platforms](supported-platforms.md)
-- [Exit codes and output](exit-codes.md)
+- [Permissions](configuration/permissions.html)
+- [Security](reference/security.html)
+- [Supported platforms](reference/supported-platforms.html)
+- [Exit codes and output](reference/exit-codes.html)

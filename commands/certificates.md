@@ -1,6 +1,6 @@
 # Certificates (SSL)
 
-The `ssl` command group manages TLS certificates using [Certbot](https://certbot.eff.org/) and Let's Encrypt. Certificates are tied to projects created with the [`project`](projects.md) commands.
+The `ssl` command group manages TLS certificates using [Certbot](https://certbot.eff.org/) and Let's Encrypt. Certificates are tied to projects created with the [`project`](commands/projects.html) commands.
 
 ```text
 abstrax ssl <action> [arguments] [flags]
@@ -75,6 +75,6 @@ myapp     myapp.com, www.myapp.com   2024-04-01
 
 ## Related
 
-- [Projects](projects.md)
-- [Creating a project](../guides/creating-a-project.md)
-- [Firewall](system.md#firewall-commands) – make sure ports 80 and 443 are open
+- [Projects](commands/projects.html)
+- [Creating a project](guides/creating-a-project.html)
+- [Firewall](commands/system.html#firewall-commands) – make sure ports 80 and 443 are open

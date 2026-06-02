@@ -81,29 +81,29 @@ abstrax log --follow
 
 ### agent
 
-The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) are placeholders. They print a message stating that agent mode is not yet implemented and make no changes. See [Supported platforms](../reference/supported-platforms.md#future-agent).
+The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) are placeholders. They print a message stating that agent mode is not yet implemented and make no changes. See [Supported platforms](reference/supported-platforms.html#future-agent).
 
 ## Command groups
 
 | Group | Purpose | Documentation |
 |---|---|---|
-| `user` | Manage Linux users and groups | [users.md](users.md) |
-| `ssh-key` | Manage SSH authorised keys for users | [ssh-keys.md](ssh-keys.md) |
-| `ssh` | Manage SSH server configuration | [ssh-keys.md](ssh-keys.md#ssh-server-configuration) |
-| `package` | Manage apt packages | [packages.md](packages.md) |
-| `service` | Manage systemd services | [system.md](system.md#service-commands) |
-| `cron` | Manage scheduled cron jobs | [cron.md](cron.md) |
-| `daemon` | Manage background processes with Supervisor | [daemons.md](daemons.md) |
-| `project` | Manage nginx-backed web projects | [projects.md](projects.md) |
-| `web` | Test, reload, and restart the web server | [projects.md](projects.md#web-server-commands) |
-| `ssl` | Manage Let's Encrypt certificates with Certbot | [certificates.md](certificates.md) |
-| `mysql` | Manage MySQL/MariaDB databases and users | [system.md](system.md#mysql-commands) |
-| `cache` | Manage Redis and Memcached | [system.md](system.md#cache-commands) |
-| `firewall` | Manage the UFW firewall | [system.md](system.md#firewall-commands) |
-| `server` | Show server status and resource usage | [system.md](system.md#server-status-commands) |
+| `user` | Manage Linux users and groups | [users.md](commands/users.html) |
+| `ssh-key` | Manage SSH authorised keys for users | [ssh-keys.md](commands/ssh-keys.html) |
+| `ssh` | Manage SSH server configuration | [ssh-keys.md](commands/ssh-keys.html#ssh-server-configuration) |
+| `package` | Manage apt packages | [packages.md](commands/packages.html) |
+| `service` | Manage systemd services | [system.md](commands/system.html#service-commands) |
+| `cron` | Manage scheduled cron jobs | [cron.md](commands/cron.html) |
+| `daemon` | Manage background processes with Supervisor | [daemons.md](commands/daemons.html) |
+| `project` | Manage nginx-backed web projects | [projects.md](commands/projects.html) |
+| `web` | Test, reload, and restart the web server | [projects.md](commands/projects.html#web-server-commands) |
+| `ssl` | Manage Let's Encrypt certificates with Certbot | [certificates.md](commands/certificates.html) |
+| `mysql` | Manage MySQL/MariaDB databases and users | [system.md](commands/system.html#mysql-commands) |
+| `cache` | Manage Redis and Memcached | [system.md](commands/system.html#cache-commands) |
+| `firewall` | Manage the UFW firewall | [system.md](commands/system.html#firewall-commands) |
+| `server` | Show server status and resource usage | [system.md](commands/system.html#server-status-commands) |
 
-For a single page listing every command and flag, see the [command reference](../reference/command-reference.md).
+For a single page listing every command and flag, see the [command reference](reference/command-reference.html).
 
 ## A note on permissions
 
-Many commands change system state and require root. Run them with `sudo`. Read-only commands such as `doctor`, `version`, `server status`, and the various `list`, `info`, and `status` actions generally do not require root, though some need root to read protected system files. Each command page notes the requirement. See [Permissions](../configuration/permissions.md) for the full picture.
+Many commands change system state and require root. Run them with `sudo`. Read-only commands such as `doctor`, `version`, `server status`, and the various `list`, `info`, and `status` actions generally do not require root, though some need root to read protected system files. Each command page notes the requirement. See [Permissions](configuration/permissions.html) for the full picture.

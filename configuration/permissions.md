@@ -69,10 +69,10 @@ The operations Abstrax performs are the same ones you would otherwise run by han
 - Use `--verbose` to see the exact underlying command Abstrax will run.
 - Only run Abstrax as root for the commands that need it. Read-only checks like `doctor` and `server status` can run as a normal user.
 
-See [Security](../reference/security.md) for the safeguards Abstrax includes and recommendations for safe use.
+See [Security](reference/security.html) for the safeguards Abstrax includes and recommendations for safe use.
 
 ## Related
 
-- [Config file](config-file.md)
-- [Security](../reference/security.md)
-- [Troubleshooting](../reference/troubleshooting.md)
+- [Config file](configuration/config-file.html)
+- [Security](reference/security.html)
+- [Troubleshooting](reference/troubleshooting.html)

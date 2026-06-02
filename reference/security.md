@@ -8,7 +8,7 @@ Most commands that change system state require root, because the operations them
 
 Commands check for root before doing any work and stop with a clear error if it is missing. Read-only commands (`doctor`, `version`, `server status`, and the various `list`, `info`, and `status` commands) generally do not require root, though some need root to read protected files.
 
-See [Permissions](../configuration/permissions.md) for the full list of which commands need root.
+See [Permissions](configuration/permissions.html) for the full list of which commands need root.
 
 ## What changes Abstrax can make
 
@@ -101,6 +101,6 @@ Abstrax reduces the chance of certain mistakes through confirmations, validation
 
 ## Related
 
-- [Permissions](../configuration/permissions.md)
-- [Troubleshooting](troubleshooting.md)
-- [Adding SSH access](../guides/adding-ssh-access.md)
+- [Permissions](configuration/permissions.html)
+- [Troubleshooting](reference/troubleshooting.html)
+- [Adding SSH access](guides/adding-ssh-access.html)
