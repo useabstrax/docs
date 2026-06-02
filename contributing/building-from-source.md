@@ -110,6 +110,6 @@ The release workflow (`.github/workflows/release.yml`) runs:
 
 ## Related
 
-- [Development](contributing/development.html)
-- [Installation](getting-started/installation.html)
-- [Supported platforms](reference/supported-platforms.html)
+- [Development](/contributing/index.html)
+- [Installation](/getting-started/installation.html)
+- [Supported platforms](/reference/supported-platforms.html)

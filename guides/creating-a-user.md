@@ -2,7 +2,7 @@
 
 This guide creates a user suitable for deploying and running an application, gives it sudo access, and adds it to a couple of groups.
 
-These commands change system state, so run them with `sudo`. See [Permissions](configuration/permissions.html).
+These commands change system state, so run them with `sudo`. See [Permissions](/configuration/permissions.html).
 
 ## 1. Preview the change
 
@@ -76,12 +76,12 @@ abstrax user list --sudo
 
 ## Common follow-ups
 
-- Give the user SSH access: see [Adding SSH access](guides/adding-ssh-access.html).
+- Give the user SSH access: see [Adding SSH access](/guides/adding-ssh-access.html).
 - Lock the account temporarily: `sudo abstrax user lock deploy`, and later `sudo abstrax user unlock deploy`.
 - Remove the user (asks for confirmation): `sudo abstrax user remove deploy --delete-home`.
 
 ## Related
 
-- [Users command reference](commands/users.html)
-- [Adding SSH access](guides/adding-ssh-access.html)
-- [Permissions](configuration/permissions.html)
+- [Users command reference](/commands/users.html)
+- [Adding SSH access](/guides/adding-ssh-access.html)
+- [Permissions](/configuration/permissions.html)

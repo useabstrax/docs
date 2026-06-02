@@ -94,5 +94,5 @@ Do not rely on agent functionality; it does nothing today.
 
 ## Related
 
-- [Installation](getting-started/installation.html)
-- [Troubleshooting](reference/troubleshooting.html)
+- [Installation](/getting-started/installation.html)
+- [Troubleshooting](/reference/troubleshooting.html)

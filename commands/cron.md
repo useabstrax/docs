@@ -158,6 +158,6 @@ abstrax cron disable backup
 
 ## Related
 
-- [Managing cron jobs](guides/managing-cron-jobs.html)
-- [Daemons](commands/daemons.html) – for long-running processes rather than scheduled jobs
-- [Configuration](configuration/index.html)
+- [Managing cron jobs](/guides/managing-cron-jobs.html)
+- [Daemons](/commands/daemons.html) – for long-running processes rather than scheduled jobs
+- [Configuration](/configuration/index.html)

@@ -446,7 +446,7 @@ abstrax server services --failed
 
 ## Related
 
-- [Daemons](commands/daemons.html) – for Supervisor-managed processes
-- [Packages](commands/packages.html)
-- [Configuration](configuration/index.html)
-- [Security](reference/security.html)
+- [Daemons](/commands/daemons.html) – for Supervisor-managed processes
+- [Packages](/commands/packages.html)
+- [Configuration](/configuration/index.html)
+- [Security](/reference/security.html)

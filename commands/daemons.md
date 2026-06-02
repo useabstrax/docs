@@ -6,7 +6,7 @@ The `daemon` command group manages long-running background processes using [Supe
 /etc/supervisor/conf.d/abstrax-<name>.conf
 ```
 
-Use daemons for processes that should run continuously (queue workers, websocket servers, and similar). For scheduled tasks that run and exit, use [cron](commands/cron.html) instead.
+Use daemons for processes that should run continuously (queue workers, websocket servers, and similar). For scheduled tasks that run and exit, use [cron](/commands/cron.html) instead.
 
 ```text
 abstrax daemon <action> [arguments] [flags]
@@ -171,6 +171,6 @@ abstrax daemon logs queue-worker --lines=100 --follow
 
 ## Related
 
-- [Managing daemons](guides/managing-daemons.html)
-- [Cron](commands/cron.html) – for scheduled jobs
-- [Services](commands/system.html#service-commands) – for systemd services
+- [Managing daemons](/guides/managing-daemons.html)
+- [Cron](/commands/cron.html) – for scheduled jobs
+- [Services](/commands/system.html#service-commands) – for systemd services

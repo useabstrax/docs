@@ -1,12 +1,16 @@
 # Configuration
 
+- [Config file](/configuration/config-file.html)
+- [Environment variables](/configuration/environment-variables.html)
+- [Permissions](/configuration/permissions.html)
+
 Abstrax is controlled almost entirely through commands and flags. It does not read a general settings file to change its behaviour. There is one specific configuration file, used only by the MySQL commands, and a small set of standard directories that Abstrax uses for state and logs.
 
 This section covers:
 
-- [Config file](configuration/config-file.html) – the MySQL connection config and the directories Abstrax uses.
-- [Environment variables](configuration/environment-variables.html) – what Abstrax reads from the environment.
-- [Permissions](configuration/permissions.html) – which commands need root and why.
+- [Config file](/configuration/config-file.html) – the MySQL connection config and the directories Abstrax uses.
+- [Environment variables](/configuration/environment-variables.html) – what Abstrax reads from the environment.
+- [Permissions](/configuration/permissions.html) – which commands need root and why.
 
 ## Summary
 
@@ -19,7 +23,7 @@ This section covers:
 | Log file | `/var/log/abstrax/abstrax.log` | Read by `abstrax log` |
 | Log directory | `/var/log/abstrax` | Created with mode 0750 |
 
-There is no global config file that changes default flags, output format, or behaviour. Everything else is provided per command through flags. See the [command reference](reference/command-reference.html) for the full list.
+There is no global config file that changes default flags, output format, or behaviour. Everything else is provided per command through flags. See the [command reference](/reference/index.html) for the full list.
 
 ## Behaviour controlled by flags
 
@@ -34,4 +38,4 @@ Instead of a config file, Abstrax uses global flags to control output and safety
 | `--verbose` | Show the underlying commands being run |
 | `--no-color` | Disable coloured output |
 
-These are described in [Environment variables](configuration/environment-variables.html) and the [command reference](reference/command-reference.html).
+These are described in [Environment variables](/configuration/environment-variables.html) and the [command reference](/reference/index.html).

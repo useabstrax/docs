@@ -216,7 +216,7 @@ www-data   33     /var/www        /usr/sbin/nologin
 
 ## Related
 
-- [Adding SSH access](guides/adding-ssh-access.html)
-- [SSH keys](commands/ssh-keys.html)
-- [Creating a user](guides/creating-a-user.html)
-- [Permissions](configuration/permissions.html)
+- [Adding SSH access](/guides/adding-ssh-access.html)
+- [SSH keys](/commands/ssh-keys.html)
+- [Creating a user](/guides/creating-a-user.html)
+- [Permissions](/configuration/permissions.html)

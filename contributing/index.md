@@ -1,5 +1,7 @@
 # Contributing
 
+- [Building from source](/contributing/building-from-source.html)
+
 This page is for contributors and maintainers. It describes how the project is organised, how to set up a development environment, and how the project is built, tested, and released.
 
 Abstrax is a single Go binary. There is no web frontend, no database, and no services to run during development — development is building and testing a Go binary.
@@ -73,7 +75,7 @@ go mod download
 go build -o abstrax ./cmd/abstrax
 ```
 
-The resulting `./abstrax` binary sits in the repo and is `.gitignore`d. See [Building from source](contributing/building-from-source.html) for more, including version metadata.
+The resulting `./abstrax` binary sits in the repo and is `.gitignore`d. See [Building from source](/contributing/building-from-source.html) for more, including version metadata.
 
 ## Run
 
@@ -130,7 +132,7 @@ Releases are built with [GoReleaser](https://goreleaser.com/) via `.github/workf
 - Pushes to `main` (without a tag) build `linux/amd64` and `linux/arm64` binaries and upload them as workflow artifacts.
 - Pushing a tag matching `v*` runs GoReleaser, which builds the binaries, produces `tar.gz` archives and `.deb`/`.rpm` packages, generates checksums, and creates a GitHub release.
 
-See [Building from source](contributing/building-from-source.html#release-builds) for the GoReleaser configuration details.
+See [Building from source](/contributing/building-from-source.html#release-builds) for the GoReleaser configuration details.
 
 ## Contributing checklist
 
@@ -143,5 +145,5 @@ See [Building from source](contributing/building-from-source.html#release-builds
 
 ## Related
 
-- [Building from source](contributing/building-from-source.html)
-- [Command reference](reference/command-reference.html)
+- [Building from source](/contributing/building-from-source.html)
+- [Command reference](/reference/index.html)

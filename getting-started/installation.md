@@ -24,7 +24,7 @@ On any other distribution Abstrax reports the platform as not fully supported. D
 
 The package management commands use `apt`, and many service operations assume `systemd`, so the most reliable experience is on current Ubuntu and Debian releases.
 
-See [Supported platforms](reference/supported-platforms.html) for more detail.
+See [Supported platforms](/reference/supported-platforms.html) for more detail.
 
 ## Option 1: Release archive
 
@@ -66,7 +66,7 @@ It also installs a systemd unit file for a future agent at `/etc/systemd/system/
 
 ## Option 3: Build from source
 
-See [Building from source](contributing/building-from-source.html) for full detail. In short:
+See [Building from source](/contributing/building-from-source.html) for full detail. In short:
 
 ```bash
 git clone https://github.com/useabstrax/agent
@@ -127,6 +127,6 @@ abstrax version --json
 
 ## Next steps
 
-- [Quick start](getting-started/quick-start.html)
-- [Updating](getting-started/updating.html)
-- [Uninstalling](getting-started/uninstalling.html)
+- [Quick start](/getting-started/index.html)
+- [Updating](/getting-started/updating.html)
+- [Uninstalling](/getting-started/uninstalling.html)

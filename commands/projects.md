@@ -239,6 +239,6 @@ sudo abstrax web restart
 
 ## Related
 
-- [Creating a project](guides/creating-a-project.html)
-- [Certificates (SSL)](commands/certificates.html)
-- [Security](reference/security.html)
+- [Creating a project](/guides/creating-a-project.html)
+- [Certificates (SSL)](/commands/certificates.html)
+- [Security](/reference/security.html)

@@ -108,9 +108,9 @@ A custom `--schedule` takes priority over a frequency flag and must have exactly
 
 ## Cron versus daemons
 
-Cron jobs run on a schedule and then exit. For a process that should run continuously (such as a queue worker), use a [daemon](guides/managing-daemons.html) instead.
+Cron jobs run on a schedule and then exit. For a process that should run continuously (such as a queue worker), use a [daemon](/guides/managing-daemons.html) instead.
 
 ## Related
 
-- [Cron command reference](commands/cron.html)
-- [Managing daemons](guides/managing-daemons.html)
+- [Cron command reference](/commands/cron.html)
+- [Managing daemons](/guides/managing-daemons.html)
