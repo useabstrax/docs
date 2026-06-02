@@ -1,5 +1,9 @@
 # Uninstalling
 
+- [Installation](/getting-started/installation.html)
+- [Updating](/getting-started/updating.html)
+- [Uninstalling](/getting-started/uninstalling.html)
+
 How you remove Abstrax depends on how you installed it.
 
 ## Remove a binary installation

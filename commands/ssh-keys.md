@@ -1,5 +1,14 @@
 # SSH keys and SSH configuration
 
+- [Users](/commands/users.html)
+- [SSH keys](/commands/ssh-keys.html)
+- [Packages](/commands/packages.html)
+- [System](/commands/system.html)
+- [Cron](/commands/cron.html)
+- [Daemons](/commands/daemons.html)
+- [Projects](/commands/projects.html)
+- [Certificates](/commands/certificates.html)
+
 This page covers two related command groups:
 
 - `ssh-key` – manage SSH authorised keys for users.

@@ -1,5 +1,10 @@
 # Troubleshooting
 
+- [Exit codes and output](/reference/exit-codes.html)
+- [Security](/reference/security.html)
+- [Supported platforms](/reference/supported-platforms.html)
+- [Troubleshooting](/reference/troubleshooting.html)
+
 This page lists common problems, their likely causes, and how to fix them. The symptoms are based on the errors and validation messages produced by the application.
 
 ## "this command requires root privileges; please run with sudo"

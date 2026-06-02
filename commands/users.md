@@ -1,5 +1,14 @@
 # Users
 
+- [Users](/commands/users.html)
+- [SSH keys](/commands/ssh-keys.html)
+- [Packages](/commands/packages.html)
+- [System](/commands/system.html)
+- [Cron](/commands/cron.html)
+- [Daemons](/commands/daemons.html)
+- [Projects](/commands/projects.html)
+- [Certificates](/commands/certificates.html)
+
 The `user` command group manages Linux user accounts: creating and removing users, managing their groups, granting or revoking sudo, setting the login shell, and locking or unlocking accounts.
 
 ```text

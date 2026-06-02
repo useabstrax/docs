@@ -1,5 +1,12 @@
 # Creating a project
 
+- [Creating a user](/guides/creating-a-user.html)
+- [Adding SSH access](/guides/adding-ssh-access.html)
+- [Installing packages](/guides/installing-packages.html)
+- [Creating a project](/guides/creating-a-project.html)
+- [Managing cron jobs](/guides/managing-cron-jobs.html)
+- [Managing daemons](/guides/managing-daemons.html)
+
 This guide creates an nginx-backed web project, then adds a TLS certificate. It uses the [`project`](/commands/projects.html), [`web`](/commands/projects.html#web-server-commands), and [`ssl`](/commands/certificates.html) commands.
 
 These commands change system state and require root. Make sure nginx is installed first (`abstrax doctor` will show you).

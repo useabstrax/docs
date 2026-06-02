@@ -1,5 +1,10 @@
 # Supported platforms
 
+- [Exit codes and output](/reference/exit-codes.html)
+- [Security](/reference/security.html)
+- [Supported platforms](/reference/supported-platforms.html)
+- [Troubleshooting](/reference/troubleshooting.html)
+
 Abstrax targets Debian and Ubuntu based Linux systems. This page describes what is supported today, how detection works, and what is not yet implemented.
 
 ## Architecture

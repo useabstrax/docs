@@ -1,5 +1,9 @@
 # Permissions
 
+- [Config file](/configuration/config-file.html)
+- [Environment variables](/configuration/environment-variables.html)
+- [Permissions](/configuration/permissions.html)
+
 Most Abstrax commands change system state and require root. This page explains which commands need root, which do not, and how Abstrax enforces this.
 
 ## How the root check works

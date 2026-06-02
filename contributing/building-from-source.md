@@ -1,5 +1,7 @@
 # Building from source
 
+- [Building from source](/contributing/building-from-source.html)
+
 This page covers building the Abstrax binary yourself, including how version information is embedded and how release packages are produced.
 
 ## Requirements

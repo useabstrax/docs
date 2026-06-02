@@ -1,5 +1,14 @@
 # Daemons
 
+- [Users](/commands/users.html)
+- [SSH keys](/commands/ssh-keys.html)
+- [Packages](/commands/packages.html)
+- [System](/commands/system.html)
+- [Cron](/commands/cron.html)
+- [Daemons](/commands/daemons.html)
+- [Projects](/commands/projects.html)
+- [Certificates](/commands/certificates.html)
+
 The `daemon` command group manages long-running background processes using [Supervisor](http://supervisord.org/). Abstrax writes a Supervisor program configuration for each daemon to:
 
 ```text

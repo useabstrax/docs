@@ -1,5 +1,12 @@
 # Managing daemons
 
+- [Creating a user](/guides/creating-a-user.html)
+- [Adding SSH access](/guides/adding-ssh-access.html)
+- [Installing packages](/guides/installing-packages.html)
+- [Creating a project](/guides/creating-a-project.html)
+- [Managing cron jobs](/guides/managing-cron-jobs.html)
+- [Managing daemons](/guides/managing-daemons.html)
+
 This guide runs a long-lived process under Supervisor, then checks its status and logs. Use daemons for processes that should run continuously, such as queue workers or websocket servers. For scheduled tasks, use [cron](/guides/managing-cron-jobs.html) instead.
 
 Adding, modifying, removing, and controlling daemons requires root. Supervisor must be installed; you can install it as part of the first command with `--install-supervisor`.

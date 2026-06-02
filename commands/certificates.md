@@ -1,5 +1,14 @@
 # Certificates (SSL)
 
+- [Users](/commands/users.html)
+- [SSH keys](/commands/ssh-keys.html)
+- [Packages](/commands/packages.html)
+- [System](/commands/system.html)
+- [Cron](/commands/cron.html)
+- [Daemons](/commands/daemons.html)
+- [Projects](/commands/projects.html)
+- [Certificates](/commands/certificates.html)
+
 The `ssl` command group manages TLS certificates using [Certbot](https://certbot.eff.org/) and Let's Encrypt. Certificates are tied to projects created with the [`project`](/commands/projects.html) commands.
 
 ```text

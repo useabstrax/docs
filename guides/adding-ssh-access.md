@@ -1,5 +1,12 @@
 # Adding SSH access
 
+- [Creating a user](/guides/creating-a-user.html)
+- [Adding SSH access](/guides/adding-ssh-access.html)
+- [Installing packages](/guides/installing-packages.html)
+- [Creating a project](/guides/creating-a-project.html)
+- [Managing cron jobs](/guides/managing-cron-jobs.html)
+- [Managing daemons](/guides/managing-daemons.html)
+
 This guide adds an SSH public key for a user, then optionally hardens the SSH server. It assumes the user already exists (see [Creating a user](/guides/creating-a-user.html)).
 
 ## 1. Add the public key

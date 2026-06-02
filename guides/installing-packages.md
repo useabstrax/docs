@@ -1,5 +1,12 @@
 # Installing packages
 
+- [Creating a user](/guides/creating-a-user.html)
+- [Adding SSH access](/guides/adding-ssh-access.html)
+- [Installing packages](/guides/installing-packages.html)
+- [Creating a project](/guides/creating-a-project.html)
+- [Managing cron jobs](/guides/managing-cron-jobs.html)
+- [Managing daemons](/guides/managing-daemons.html)
+
 This guide covers the common package workflow on Debian and Ubuntu systems. The package commands use `apt` and require root.
 
 ## 1. Update the package lists

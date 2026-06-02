@@ -1,5 +1,14 @@
 # Cron
 
+- [Users](/commands/users.html)
+- [SSH keys](/commands/ssh-keys.html)
+- [Packages](/commands/packages.html)
+- [System](/commands/system.html)
+- [Cron](/commands/cron.html)
+- [Daemons](/commands/daemons.html)
+- [Projects](/commands/projects.html)
+- [Certificates](/commands/certificates.html)
+
 The `cron` command group manages scheduled jobs. Abstrax writes each job as a file in `/etc/cron.d`, named `abstrax-<id>`. This keeps Abstrax-managed jobs separate from hand-written crontabs.
 
 ```text

@@ -1,5 +1,14 @@
 # Packages
 
+- [Users](/commands/users.html)
+- [SSH keys](/commands/ssh-keys.html)
+- [Packages](/commands/packages.html)
+- [System](/commands/system.html)
+- [Cron](/commands/cron.html)
+- [Daemons](/commands/daemons.html)
+- [Projects](/commands/projects.html)
+- [Certificates](/commands/certificates.html)
+
 The `package` command group manages system packages through `apt`. It is intended for Debian and Ubuntu based systems.
 
 ```text
