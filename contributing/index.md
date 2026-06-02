@@ -1,4 +1,4 @@
-# Development
+# Contributing
 
 This page is for contributors and maintainers. It describes how the project is organised, how to set up a development environment, and how the project is built, tested, and released.
 
