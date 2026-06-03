@@ -1,9 +1,9 @@
 # Command reference
 
-- [Exit codes and output](/reference/exit-codes.html)
-- [Security](/reference/security.html)
-- [Supported platforms](/reference/supported-platforms.html)
-- [Troubleshooting](/reference/troubleshooting.html)
+- [Exit codes and output](/docs/reference/exit-codes)
+- [Security](/docs/reference/security)
+- [Supported platforms](/docs/reference/supported-platforms)
+- [Troubleshooting](/docs/reference/troubleshooting)
 
 A single-page listing of every Abstrax command and its flags. Each command links to its detailed documentation. For global flags that apply to every command, see [Global flags](#global-flags).
 
@@ -24,18 +24,18 @@ A single-page listing of every Abstrax command and its flags. Each command links
 
 | Command | Root | Description | Docs |
 |---|---|---|---|
-| `abstrax version` | No | Print version, commit, build date | [commands](/commands/index.html#version) |
-| `abstrax doctor` | No | Inspect the system | [commands](/commands/index.html#doctor) |
-| `abstrax log` | No | View the Abstrax log file | [commands](/commands/index.html#log) |
-| `abstrax agent ...` | No | Placeholder, not implemented | [platforms](/reference/supported-platforms.html#future-agent) |
-| `abstrax help` | No | Show help for any command | [commands](/commands/index.html#top-level-commands) |
-| `abstrax completion <shell>` | No | Generate a shell autocompletion script | [commands](/commands/index.html#top-level-commands) |
+| `abstrax version` | No | Print version, commit, build date | [commands](/docs/commands/index#version) |
+| `abstrax doctor` | No | Inspect the system | [commands](/docs/commands/index#doctor) |
+| `abstrax log` | No | View the Abstrax log file | [commands](/docs/commands/index#log) |
+| `abstrax agent ...` | No | Placeholder, not implemented | [platforms](/docs/reference/supported-platforms#future-agent) |
+| `abstrax help` | No | Show help for any command | [commands](/docs/commands/index#top-level-commands) |
+| `abstrax completion <shell>` | No | Generate a shell autocompletion script | [commands](/docs/commands/index#top-level-commands) |
 
 `abstrax log` flags: `--lines` (default 50), `--follow`/`-f`. The `help` and `completion` commands are provided automatically by the command framework.
 
 ## user
 
-See [Users](/commands/users.html).
+See [Users](/docs/commands/users).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -54,7 +54,7 @@ See [Users](/commands/users.html).
 
 ## ssh-key
 
-See [SSH keys](/commands/ssh-keys.html#ssh-key-management).
+See [SSH keys](/docs/commands/ssh-keys#ssh-key-management).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -67,7 +67,7 @@ See [SSH keys](/commands/ssh-keys.html#ssh-key-management).
 
 ## ssh
 
-See [SSH configuration](/commands/ssh-keys.html#ssh-server-configuration).
+See [SSH configuration](/docs/commands/ssh-keys#ssh-server-configuration).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -83,7 +83,7 @@ See [SSH configuration](/commands/ssh-keys.html#ssh-server-configuration).
 
 ## package
 
-See [Packages](/commands/packages.html).
+See [Packages](/docs/commands/packages).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -97,7 +97,7 @@ See [Packages](/commands/packages.html).
 
 ## service
 
-See [Service commands](/commands/system.html#service-commands).
+See [Service commands](/docs/commands/system#service-commands).
 
 | Command | Root | Description |
 |---|---|---|
@@ -111,7 +111,7 @@ See [Service commands](/commands/system.html#service-commands).
 
 ## cron
 
-See [Cron](/commands/cron.html).
+See [Cron](/docs/commands/cron).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -127,7 +127,7 @@ Frequency flags: `--every-minute`, `--every-five-minutes`, `--every-ten-minutes`
 
 ## daemon
 
-See [Daemons](/commands/daemons.html).
+See [Daemons](/docs/commands/daemons).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -143,7 +143,7 @@ See [Daemons](/commands/daemons.html).
 
 ## project
 
-See [Projects](/commands/projects.html).
+See [Projects](/docs/commands/projects).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -158,7 +158,7 @@ See [Projects](/commands/projects.html).
 
 ## web
 
-See [Web server commands](/commands/projects.html#web-server-commands).
+See [Web server commands](/docs/commands/projects#web-server-commands).
 
 | Command | Root | Description |
 |---|---|---|
@@ -168,7 +168,7 @@ See [Web server commands](/commands/projects.html#web-server-commands).
 
 ## ssl
 
-See [Certificates](/commands/certificates.html).
+See [Certificates](/docs/commands/certificates).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -179,7 +179,7 @@ See [Certificates](/commands/certificates.html).
 
 ## mysql
 
-See [MySQL commands](/commands/system.html#mysql-commands).
+See [MySQL commands](/docs/commands/system#mysql-commands).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -201,7 +201,7 @@ Privilege presets: `readonly`, `app`, `admin`.
 
 ## cache
 
-See [Cache commands](/commands/system.html#cache-commands).
+See [Cache commands](/docs/commands/system#cache-commands).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -217,7 +217,7 @@ Drivers: `redis`, `memcached`.
 
 ## firewall
 
-See [Firewall commands](/commands/system.html#firewall-commands).
+See [Firewall commands](/docs/commands/system#firewall-commands).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -233,7 +233,7 @@ See [Firewall commands](/commands/system.html#firewall-commands).
 
 ## server
 
-See [Server status commands](/commands/system.html#server-status-commands).
+See [Server status commands](/docs/commands/system#server-status-commands).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -246,4 +246,4 @@ See [Server status commands](/commands/system.html#server-status-commands).
 
 ## Action names
 
-Every command maps to a stable action name used in JSON output (the `action` field) and reserved for the future agent. Examples: `user.add`, `firewall.enable`, `project.add`, `mysql.database.add`, `cron.modify`. See the [JSON output](/reference/exit-codes.html#json-result-shape) reference for the result shape.
+Every command maps to a stable action name used in JSON output (the `action` field) and reserved for the future agent. Examples: `user.add`, `firewall.enable`, `project.add`, `mysql.database.add`, `cron.modify`. See the [JSON output](/docs/reference/exit-codes#json-result-shape) reference for the result shape.

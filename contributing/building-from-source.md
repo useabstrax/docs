@@ -1,6 +1,6 @@
 # Building from source
 
-- [Building from source](/contributing/building-from-source.html)
+- [Building from source](/docs/contributing/building-from-source)
 
 This page covers building the Abstrax binary yourself, including how version information is embedded and how release packages are produced.
 
@@ -112,6 +112,6 @@ The release workflow (`.github/workflows/release.yml`) runs:
 
 ## Related
 
-- [Development](/contributing/index.html)
-- [Installation](/getting-started/installation.html)
-- [Supported platforms](/reference/supported-platforms.html)
+- [Development](/docs/contributing/index)
+- [Installation](/docs/getting-started/installation)
+- [Supported platforms](/docs/reference/supported-platforms)

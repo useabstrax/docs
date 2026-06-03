@@ -1,8 +1,8 @@
 # Permissions
 
-- [Config file](/configuration/config-file.html)
-- [Environment variables](/configuration/environment-variables.html)
-- [Permissions](/configuration/permissions.html)
+- [Config file](/docs/configuration/config-file)
+- [Environment variables](/docs/configuration/environment-variables)
+- [Permissions](/docs/configuration/permissions)
 
 Most Abstrax commands change system state and require root. This page explains which commands need root, which do not, and how Abstrax enforces this.
 
@@ -73,10 +73,10 @@ The operations Abstrax performs are the same ones you would otherwise run by han
 - Use `--verbose` to see the exact underlying command Abstrax will run.
 - Only run Abstrax as root for the commands that need it. Read-only checks like `doctor` and `server status` can run as a normal user.
 
-See [Security](/reference/security.html) for the safeguards Abstrax includes and recommendations for safe use.
+See [Security](/docs/reference/security) for the safeguards Abstrax includes and recommendations for safe use.
 
 ## Related
 
-- [Config file](/configuration/config-file.html)
-- [Security](/reference/security.html)
-- [Troubleshooting](/reference/troubleshooting.html)
+- [Config file](/docs/configuration/config-file)
+- [Security](/docs/reference/security)
+- [Troubleshooting](/docs/reference/troubleshooting)

@@ -1,13 +1,13 @@
 # Cron
 
-- [Users](/commands/users.html)
-- [SSH keys](/commands/ssh-keys.html)
-- [Packages](/commands/packages.html)
-- [System](/commands/system.html)
-- [Cron](/commands/cron.html)
-- [Daemons](/commands/daemons.html)
-- [Projects](/commands/projects.html)
-- [Certificates](/commands/certificates.html)
+- [Users](/docs/commands/users)
+- [SSH keys](/docs/commands/ssh-keys)
+- [Packages](/docs/commands/packages)
+- [System](/docs/commands/system)
+- [Cron](/docs/commands/cron)
+- [Daemons](/docs/commands/daemons)
+- [Projects](/docs/commands/projects)
+- [Certificates](/docs/commands/certificates)
 
 The `cron` command group manages scheduled jobs. Abstrax writes each job as a file in `/etc/cron.d`, named `abstrax-<id>`. This keeps Abstrax-managed jobs separate from hand-written crontabs.
 
@@ -167,6 +167,6 @@ abstrax cron disable backup
 
 ## Related
 
-- [Managing cron jobs](/guides/managing-cron-jobs.html)
-- [Daemons](/commands/daemons.html) – for long-running processes rather than scheduled jobs
-- [Configuration](/configuration/index.html)
+- [Managing cron jobs](/docs/guides/managing-cron-jobs)
+- [Daemons](/docs/commands/daemons) – for long-running processes rather than scheduled jobs
+- [Configuration](/docs/configuration/index)

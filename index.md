@@ -58,7 +58,7 @@ You do not need to be a Linux expert to use Abstrax, but you should understand t
 
 - It is not a configuration management system like Ansible, Puppet, or Chef. It does not enforce a desired state over time.
 - It is not a replacement for the underlying tools. It calls `apt`, `systemctl`, `ufw`, `certbot`, `supervisorctl`, and `mysql` on your behalf.
-- It does not currently provide a hosted control plane or remote agent. A future agent is described in the code and README, but it is not implemented yet. See [Supported platforms](/reference/supported-platforms.html) for current scope.
+- It does not currently provide a hosted control plane or remote agent. A future agent is described in the code and README, but it is not implemented yet. See [Supported platforms](/docs/reference/supported-platforms) for current scope.
 
 ## A short example
 
@@ -78,11 +78,11 @@ abstrax server status --json
 
 ## Where to go next
 
-- [Installation](/getting-started/installation.html) – install Abstrax on your server.
-- [Quick start](/getting-started/index.html) – your first commands.
-- [Commands](/commands/index.html) – detailed documentation for every command group.
-- [Command reference](/reference/index.html) – every command and flag in one place.
-- [Configuration](/configuration/index.html) – config files, environment, and permissions.
-- [Permissions and security](/reference/security.html) – what Abstrax needs and why.
-- [Troubleshooting](/reference/troubleshooting.html) – common problems and fixes.
-- [Contributing](/contributing/index.html) – build, test, and develop Abstrax.
+- [Installation](/docs/getting-started/installation) – install Abstrax on your server.
+- [Quick start](/docs/getting-started/index) – your first commands.
+- [Commands](/docs/commands/index) – detailed documentation for every command group.
+- [Command reference](/docs/reference/index) – every command and flag in one place.
+- [Configuration](/docs/configuration/index) – config files, environment, and permissions.
+- [Permissions and security](/docs/reference/security) – what Abstrax needs and why.
+- [Troubleshooting](/docs/reference/troubleshooting) – common problems and fixes.
+- [Contributing](/docs/contributing/index) – build, test, and develop Abstrax.

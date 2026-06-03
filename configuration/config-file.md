@@ -1,8 +1,8 @@
 # Config file
 
-- [Config file](/configuration/config-file.html)
-- [Environment variables](/configuration/environment-variables.html)
-- [Permissions](/configuration/permissions.html)
+- [Config file](/docs/configuration/config-file)
+- [Environment variables](/docs/configuration/environment-variables)
+- [Permissions](/docs/configuration/permissions)
 
 Abstrax does not use a general configuration file to control its behaviour. There is one configuration file, used only by the MySQL commands, plus a set of directories where Abstrax stores state and logs.
 
@@ -37,7 +37,7 @@ Notes:
 - `abstrax mysql config show` displays the host, port, user, and socket, but not the password.
 - If no config file exists, the MySQL commands fall back to the defaults `host=127.0.0.1`, `port=3306`, `user=root` with no password.
 
-See the [MySQL commands](/commands/system.html#mysql-commands) for usage.
+See the [MySQL commands](/docs/commands/system#mysql-commands) for usage.
 
 ## Directories Abstrax uses
 
@@ -76,6 +76,6 @@ These are not Abstrax configuration files as such; they are the configuration of
 
 ## Related
 
-- [Environment variables](/configuration/environment-variables.html)
-- [Permissions](/configuration/permissions.html)
-- [Security](/reference/security.html)
+- [Environment variables](/docs/configuration/environment-variables)
+- [Permissions](/docs/configuration/permissions)
+- [Security](/docs/reference/security)

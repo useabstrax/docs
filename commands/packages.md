@@ -1,13 +1,13 @@
 # Packages
 
-- [Users](/commands/users.html)
-- [SSH keys](/commands/ssh-keys.html)
-- [Packages](/commands/packages.html)
-- [System](/commands/system.html)
-- [Cron](/commands/cron.html)
-- [Daemons](/commands/daemons.html)
-- [Projects](/commands/projects.html)
-- [Certificates](/commands/certificates.html)
+- [Users](/docs/commands/users)
+- [SSH keys](/docs/commands/ssh-keys)
+- [Packages](/docs/commands/packages)
+- [System](/docs/commands/system)
+- [Cron](/docs/commands/cron)
+- [Daemons](/docs/commands/daemons)
+- [Projects](/docs/commands/projects)
+- [Certificates](/docs/commands/certificates)
 
 The `package` command group manages system packages through `apt`. It is intended for Debian and Ubuntu based systems.
 
@@ -131,6 +131,6 @@ curl       8.5.0-2ubuntu10      amd64
 
 ## Related
 
-- [Installing packages](/guides/installing-packages.html)
-- [Cache (Redis, Memcached)](/commands/system.html#cache-commands)
-- [Troubleshooting](/reference/troubleshooting.html)
+- [Installing packages](/docs/guides/installing-packages)
+- [Cache (Redis, Memcached)](/docs/commands/system#cache-commands)
+- [Troubleshooting](/docs/reference/troubleshooting)

@@ -1,8 +1,8 @@
 # Installation
 
-- [Installation](/getting-started/installation.html)
-- [Updating](/getting-started/updating.html)
-- [Uninstalling](/getting-started/uninstalling.html)
+- [Installation](/docs/getting-started/installation)
+- [Updating](/docs/getting-started/updating)
+- [Uninstalling](/docs/getting-started/uninstalling)
 
 Abstrax is distributed as a single binary. There is no runtime to install and no background service to run. This page covers the installation options that are currently supported.
 
@@ -28,7 +28,7 @@ On any other distribution Abstrax reports the platform as not fully supported. D
 
 The package management commands use `apt`, and many service operations assume `systemd`, so the most reliable experience is on current Ubuntu and Debian releases.
 
-See [Supported platforms](/reference/supported-platforms.html) for more detail.
+See [Supported platforms](/docs/reference/supported-platforms) for more detail.
 
 ## Option 1: Release archive
 
@@ -70,7 +70,7 @@ It also installs a systemd unit file for a future agent at `/etc/systemd/system/
 
 ## Option 3: Build from source
 
-See [Building from source](/contributing/building-from-source.html) for full detail. In short:
+See [Building from source](/docs/contributing/building-from-source) for full detail. In short:
 
 ```bash
 git clone https://github.com/useabstrax/agent
@@ -131,6 +131,6 @@ abstrax version --json
 
 ## Next steps
 
-- [Quick start](/getting-started/index.html)
-- [Updating](/getting-started/updating.html)
-- [Uninstalling](/getting-started/uninstalling.html)
+- [Quick start](/docs/getting-started/index)
+- [Updating](/docs/getting-started/updating)
+- [Uninstalling](/docs/getting-started/uninstalling)

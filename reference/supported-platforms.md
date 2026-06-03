@@ -1,9 +1,9 @@
 # Supported platforms
 
-- [Exit codes and output](/reference/exit-codes.html)
-- [Security](/reference/security.html)
-- [Supported platforms](/reference/supported-platforms.html)
-- [Troubleshooting](/reference/troubleshooting.html)
+- [Exit codes and output](/docs/reference/exit-codes)
+- [Security](/docs/reference/security)
+- [Supported platforms](/docs/reference/supported-platforms)
+- [Troubleshooting](/docs/reference/troubleshooting)
 
 Abstrax targets Debian and Ubuntu based Linux systems. This page describes what is supported today, how detection works, and what is not yet implemented.
 
@@ -99,5 +99,5 @@ Do not rely on agent functionality; it does nothing today.
 
 ## Related
 
-- [Installation](/getting-started/installation.html)
-- [Troubleshooting](/reference/troubleshooting.html)
+- [Installation](/docs/getting-started/installation)
+- [Troubleshooting](/docs/reference/troubleshooting)

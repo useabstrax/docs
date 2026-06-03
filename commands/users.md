@@ -1,13 +1,13 @@
 # Users
 
-- [Users](/commands/users.html)
-- [SSH keys](/commands/ssh-keys.html)
-- [Packages](/commands/packages.html)
-- [System](/commands/system.html)
-- [Cron](/commands/cron.html)
-- [Daemons](/commands/daemons.html)
-- [Projects](/commands/projects.html)
-- [Certificates](/commands/certificates.html)
+- [Users](/docs/commands/users)
+- [SSH keys](/docs/commands/ssh-keys)
+- [Packages](/docs/commands/packages)
+- [System](/docs/commands/system)
+- [Cron](/docs/commands/cron)
+- [Daemons](/docs/commands/daemons)
+- [Projects](/docs/commands/projects)
+- [Certificates](/docs/commands/certificates)
 
 The `user` command group manages Linux user accounts: creating and removing users, managing their groups, granting or revoking sudo, setting the login shell, and locking or unlocking accounts.
 
@@ -225,7 +225,7 @@ www-data   33     /var/www        /usr/sbin/nologin
 
 ## Related
 
-- [Adding SSH access](/guides/adding-ssh-access.html)
-- [SSH keys](/commands/ssh-keys.html)
-- [Creating a user](/guides/creating-a-user.html)
-- [Permissions](/configuration/permissions.html)
+- [Adding SSH access](/docs/guides/adding-ssh-access)
+- [SSH keys](/docs/commands/ssh-keys)
+- [Creating a user](/docs/guides/creating-a-user)
+- [Permissions](/docs/configuration/permissions)

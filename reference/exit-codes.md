@@ -1,9 +1,9 @@
 # Exit codes and output
 
-- [Exit codes and output](/reference/exit-codes.html)
-- [Security](/reference/security.html)
-- [Supported platforms](/reference/supported-platforms.html)
-- [Troubleshooting](/reference/troubleshooting.html)
+- [Exit codes and output](/docs/reference/exit-codes)
+- [Security](/docs/reference/security)
+- [Supported platforms](/docs/reference/supported-platforms)
+- [Troubleshooting](/docs/reference/troubleshooting)
 
 This page describes the exit codes Abstrax returns, the structure of its JSON output, and the error codes it uses.
 
@@ -82,5 +82,5 @@ Without `--json`, Abstrax prints human-readable text:
 
 ## Related
 
-- [Troubleshooting](/reference/troubleshooting.html)
-- [Command reference](/reference/index.html)
+- [Troubleshooting](/docs/reference/troubleshooting)
+- [Command reference](/docs/reference/index)

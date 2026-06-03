@@ -1,13 +1,13 @@
 # System commands
 
-- [Users](/commands/users.html)
-- [SSH keys](/commands/ssh-keys.html)
-- [Packages](/commands/packages.html)
-- [System](/commands/system.html)
-- [Cron](/commands/cron.html)
-- [Daemons](/commands/daemons.html)
-- [Projects](/commands/projects.html)
-- [Certificates](/commands/certificates.html)
+- [Users](/docs/commands/users)
+- [SSH keys](/docs/commands/ssh-keys)
+- [Packages](/docs/commands/packages)
+- [System](/docs/commands/system)
+- [Cron](/docs/commands/cron)
+- [Daemons](/docs/commands/daemons)
+- [Projects](/docs/commands/projects)
+- [Certificates](/docs/commands/certificates)
 
 This page documents several command groups that manage core system services:
 
@@ -455,7 +455,7 @@ abstrax server services --failed
 
 ## Related
 
-- [Daemons](/commands/daemons.html) – for Supervisor-managed processes
-- [Packages](/commands/packages.html)
-- [Configuration](/configuration/index.html)
-- [Security](/reference/security.html)
+- [Daemons](/docs/commands/daemons) – for Supervisor-managed processes
+- [Packages](/docs/commands/packages)
+- [Configuration](/docs/configuration/index)
+- [Security](/docs/reference/security)

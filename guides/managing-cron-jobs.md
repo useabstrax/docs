@@ -1,11 +1,11 @@
 # Managing cron jobs
 
-- [Creating a user](/guides/creating-a-user.html)
-- [Adding SSH access](/guides/adding-ssh-access.html)
-- [Installing packages](/guides/installing-packages.html)
-- [Creating a project](/guides/creating-a-project.html)
-- [Managing cron jobs](/guides/managing-cron-jobs.html)
-- [Managing daemons](/guides/managing-daemons.html)
+- [Creating a user](/docs/guides/creating-a-user)
+- [Adding SSH access](/docs/guides/adding-ssh-access)
+- [Installing packages](/docs/guides/installing-packages)
+- [Creating a project](/docs/guides/creating-a-project)
+- [Managing cron jobs](/docs/guides/managing-cron-jobs)
+- [Managing daemons](/docs/guides/managing-daemons)
 
 This guide schedules a recurring task, then lists, inspects, and modifies it. Abstrax stores each job as a file in `/etc/cron.d/abstrax-<id>`, so its jobs stay separate from any hand-written crontabs.
 
@@ -115,9 +115,9 @@ A custom `--schedule` takes priority over a frequency flag and must have exactly
 
 ## Cron versus daemons
 
-Cron jobs run on a schedule and then exit. For a process that should run continuously (such as a queue worker), use a [daemon](/guides/managing-daemons.html) instead.
+Cron jobs run on a schedule and then exit. For a process that should run continuously (such as a queue worker), use a [daemon](/docs/guides/managing-daemons) instead.
 
 ## Related
 
-- [Cron command reference](/commands/cron.html)
-- [Managing daemons](/guides/managing-daemons.html)
+- [Cron command reference](/docs/commands/cron)
+- [Managing daemons](/docs/guides/managing-daemons)

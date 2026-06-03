@@ -1,15 +1,15 @@
 # Creating a user
 
-- [Creating a user](/guides/creating-a-user.html)
-- [Adding SSH access](/guides/adding-ssh-access.html)
-- [Installing packages](/guides/installing-packages.html)
-- [Creating a project](/guides/creating-a-project.html)
-- [Managing cron jobs](/guides/managing-cron-jobs.html)
-- [Managing daemons](/guides/managing-daemons.html)
+- [Creating a user](/docs/guides/creating-a-user)
+- [Adding SSH access](/docs/guides/adding-ssh-access)
+- [Installing packages](/docs/guides/installing-packages)
+- [Creating a project](/docs/guides/creating-a-project)
+- [Managing cron jobs](/docs/guides/managing-cron-jobs)
+- [Managing daemons](/docs/guides/managing-daemons)
 
 This guide creates a user suitable for deploying and running an application, gives it sudo access, and adds it to a couple of groups.
 
-These commands change system state, so run them with `sudo`. See [Permissions](/configuration/permissions.html).
+These commands change system state, so run them with `sudo`. See [Permissions](/docs/configuration/permissions).
 
 ## 1. Preview the change
 
@@ -83,12 +83,12 @@ abstrax user list --sudo
 
 ## Common follow-ups
 
-- Give the user SSH access: see [Adding SSH access](/guides/adding-ssh-access.html).
+- Give the user SSH access: see [Adding SSH access](/docs/guides/adding-ssh-access).
 - Lock the account temporarily: `sudo abstrax user lock deploy`, and later `sudo abstrax user unlock deploy`.
 - Remove the user (asks for confirmation): `sudo abstrax user remove deploy --delete-home`.
 
 ## Related
 
-- [Users command reference](/commands/users.html)
-- [Adding SSH access](/guides/adding-ssh-access.html)
-- [Permissions](/configuration/permissions.html)
+- [Users command reference](/docs/commands/users)
+- [Adding SSH access](/docs/guides/adding-ssh-access)
+- [Permissions](/docs/configuration/permissions)

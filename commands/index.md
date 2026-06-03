@@ -1,13 +1,13 @@
 # Commands
 
-- [Users](/commands/users.html)
-- [SSH keys](/commands/ssh-keys.html)
-- [Packages](/commands/packages.html)
-- [System](/commands/system.html)
-- [Cron](/commands/cron.html)
-- [Daemons](/commands/daemons.html)
-- [Projects](/commands/projects.html)
-- [Certificates](/commands/certificates.html)
+- [Users](/docs/commands/users)
+- [SSH keys](/docs/commands/ssh-keys)
+- [Packages](/docs/commands/packages)
+- [System](/docs/commands/system)
+- [Cron](/docs/commands/cron)
+- [Daemons](/docs/commands/daemons)
+- [Projects](/docs/commands/projects)
+- [Certificates](/docs/commands/certificates)
 
 Abstrax commands are grouped by area. Every command follows the same pattern:
 
@@ -90,29 +90,29 @@ abstrax log --follow
 
 ### agent
 
-The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) are placeholders. They print a message stating that agent mode is not yet implemented and make no changes. See [Supported platforms](/reference/supported-platforms.html#future-agent).
+The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) are placeholders. They print a message stating that agent mode is not yet implemented and make no changes. See [Supported platforms](/docs/reference/supported-platforms#future-agent).
 
 ## Command groups
 
 | Group | Purpose | Documentation |
 |---|---|---|
-| `user` | Manage Linux users and groups | [Users](/commands/users.html) |
-| `ssh-key` | Manage SSH authorised keys for users | [SSH keys](/commands/ssh-keys.html) |
-| `ssh` | Manage SSH server configuration | [SSH keys](/commands/ssh-keys.html#ssh-server-configuration) |
-| `package` | Manage apt packages | [Packages](/commands/packages.html) |
-| `service` | Manage systemd services | [System](/commands/system.html#service-commands) |
-| `cron` | Manage scheduled cron jobs | [Cron](/commands/cron.html) |
-| `daemon` | Manage background processes with Supervisor | [Daemons](/commands/daemons.html) |
-| `project` | Manage nginx-backed web projects | [Projects](/commands/projects.html) |
-| `web` | Test, reload, and restart the web server | [Projects](/commands/projects.html#web-server-commands) |
-| `ssl` | Manage Let's Encrypt certificates with Certbot | [Certificates](/commands/certificates.html) |
-| `mysql` | Manage MySQL/MariaDB databases and users | [System](/commands/system.html#mysql-commands) |
-| `cache` | Manage Redis and Memcached | [System](/commands/system.html#cache-commands) |
-| `firewall` | Manage the UFW firewall | [System](/commands/system.html#firewall-commands) |
-| `server` | Show server status and resource usage | [System](/commands/system.html#server-status-commands) |
+| `user` | Manage Linux users and groups | [Users](/docs/commands/users) |
+| `ssh-key` | Manage SSH authorised keys for users | [SSH keys](/docs/commands/ssh-keys) |
+| `ssh` | Manage SSH server configuration | [SSH keys](/docs/commands/ssh-keys#ssh-server-configuration) |
+| `package` | Manage apt packages | [Packages](/docs/commands/packages) |
+| `service` | Manage systemd services | [System](/docs/commands/system#service-commands) |
+| `cron` | Manage scheduled cron jobs | [Cron](/docs/commands/cron) |
+| `daemon` | Manage background processes with Supervisor | [Daemons](/docs/commands/daemons) |
+| `project` | Manage nginx-backed web projects | [Projects](/docs/commands/projects) |
+| `web` | Test, reload, and restart the web server | [Projects](/docs/commands/projects#web-server-commands) |
+| `ssl` | Manage Let's Encrypt certificates with Certbot | [Certificates](/docs/commands/certificates) |
+| `mysql` | Manage MySQL/MariaDB databases and users | [System](/docs/commands/system#mysql-commands) |
+| `cache` | Manage Redis and Memcached | [System](/docs/commands/system#cache-commands) |
+| `firewall` | Manage the UFW firewall | [System](/docs/commands/system#firewall-commands) |
+| `server` | Show server status and resource usage | [System](/docs/commands/system#server-status-commands) |
 
-For a single page listing every command and flag, see the [command reference](/reference/index.html).
+For a single page listing every command and flag, see the [command reference](/docs/reference/index).
 
 ## A note on permissions
 
-Many commands change system state and require root. Run them with `sudo`. Read-only commands such as `doctor`, `version`, `server status`, and the various `list`, `info`, and `status` actions generally do not require root, though some need root to read protected system files. Each command page notes the requirement. See [Permissions](/configuration/permissions.html) for the full picture.
+Many commands change system state and require root. Run them with `sudo`. Read-only commands such as `doctor`, `version`, `server status`, and the various `list`, `info`, and `status` actions generally do not require root, though some need root to read protected system files. Each command page notes the requirement. See [Permissions](/docs/configuration/permissions) for the full picture.

@@ -1,9 +1,9 @@
 # Permissions and security
 
-- [Exit codes and output](/reference/exit-codes.html)
-- [Security](/reference/security.html)
-- [Supported platforms](/reference/supported-platforms.html)
-- [Troubleshooting](/reference/troubleshooting.html)
+- [Exit codes and output](/docs/reference/exit-codes)
+- [Security](/docs/reference/security)
+- [Supported platforms](/docs/reference/supported-platforms)
+- [Troubleshooting](/docs/reference/troubleshooting)
 
 Abstrax performs real changes to your server, often as root. This page explains what permissions it needs, what changes it can make, the safeguards built into the application, and how to use it safely.
 
@@ -13,7 +13,7 @@ Most commands that change system state require root, because the operations them
 
 Commands check for root before doing any work and stop with a clear error if it is missing. Read-only commands (`doctor`, `version`, `server status`, and the various `list`, `info`, and `status` commands) generally do not require root, though some need root to read protected files.
 
-See [Permissions](/configuration/permissions.html) for the full list of which commands need root.
+See [Permissions](/docs/configuration/permissions) for the full list of which commands need root.
 
 ## What changes Abstrax can make
 
@@ -106,6 +106,6 @@ Abstrax reduces the chance of certain mistakes through confirmations, validation
 
 ## Related
 
-- [Permissions](/configuration/permissions.html)
-- [Troubleshooting](/reference/troubleshooting.html)
-- [Adding SSH access](/guides/adding-ssh-access.html)
+- [Permissions](/docs/configuration/permissions)
+- [Troubleshooting](/docs/reference/troubleshooting)
+- [Adding SSH access](/docs/guides/adding-ssh-access)

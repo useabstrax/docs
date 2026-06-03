@@ -1,15 +1,15 @@
 # Certificates (SSL)
 
-- [Users](/commands/users.html)
-- [SSH keys](/commands/ssh-keys.html)
-- [Packages](/commands/packages.html)
-- [System](/commands/system.html)
-- [Cron](/commands/cron.html)
-- [Daemons](/commands/daemons.html)
-- [Projects](/commands/projects.html)
-- [Certificates](/commands/certificates.html)
+- [Users](/docs/commands/users)
+- [SSH keys](/docs/commands/ssh-keys)
+- [Packages](/docs/commands/packages)
+- [System](/docs/commands/system)
+- [Cron](/docs/commands/cron)
+- [Daemons](/docs/commands/daemons)
+- [Projects](/docs/commands/projects)
+- [Certificates](/docs/commands/certificates)
 
-The `ssl` command group manages TLS certificates using [Certbot](https://certbot.eff.org/) and Let's Encrypt. Certificates are tied to projects created with the [`project`](/commands/projects.html) commands.
+The `ssl` command group manages TLS certificates using [Certbot](https://certbot.eff.org/) and Let's Encrypt. Certificates are tied to projects created with the [`project`](/docs/commands/projects) commands.
 
 ```text
 abstrax ssl <action> [arguments] [flags]
@@ -84,6 +84,6 @@ myapp     myapp.com, www.myapp.com   2024-04-01
 
 ## Related
 
-- [Projects](/commands/projects.html)
-- [Creating a project](/guides/creating-a-project.html)
-- [Firewall](/commands/system.html#firewall-commands) – make sure ports 80 and 443 are open
+- [Projects](/docs/commands/projects)
+- [Creating a project](/docs/guides/creating-a-project)
+- [Firewall](/docs/commands/system#firewall-commands) – make sure ports 80 and 443 are open

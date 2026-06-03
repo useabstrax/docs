@@ -1,13 +1,13 @@
 # Projects and web server
 
-- [Users](/commands/users.html)
-- [SSH keys](/commands/ssh-keys.html)
-- [Packages](/commands/packages.html)
-- [System](/commands/system.html)
-- [Cron](/commands/cron.html)
-- [Daemons](/commands/daemons.html)
-- [Projects](/commands/projects.html)
-- [Certificates](/commands/certificates.html)
+- [Users](/docs/commands/users)
+- [SSH keys](/docs/commands/ssh-keys)
+- [Packages](/docs/commands/packages)
+- [System](/docs/commands/system)
+- [Cron](/docs/commands/cron)
+- [Daemons](/docs/commands/daemons)
+- [Projects](/docs/commands/projects)
+- [Certificates](/docs/commands/certificates)
 
 This page covers two related command groups:
 
@@ -248,6 +248,6 @@ sudo abstrax web restart
 
 ## Related
 
-- [Creating a project](/guides/creating-a-project.html)
-- [Certificates (SSL)](/commands/certificates.html)
-- [Security](/reference/security.html)
+- [Creating a project](/docs/guides/creating-a-project)
+- [Certificates (SSL)](/docs/commands/certificates)
+- [Security](/docs/reference/security)

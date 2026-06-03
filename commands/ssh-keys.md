@@ -1,13 +1,13 @@
 # SSH keys and SSH configuration
 
-- [Users](/commands/users.html)
-- [SSH keys](/commands/ssh-keys.html)
-- [Packages](/commands/packages.html)
-- [System](/commands/system.html)
-- [Cron](/commands/cron.html)
-- [Daemons](/commands/daemons.html)
-- [Projects](/commands/projects.html)
-- [Certificates](/commands/certificates.html)
+- [Users](/docs/commands/users)
+- [SSH keys](/docs/commands/ssh-keys)
+- [Packages](/docs/commands/packages)
+- [System](/docs/commands/system)
+- [Cron](/docs/commands/cron)
+- [Daemons](/docs/commands/daemons)
+- [Projects](/docs/commands/projects)
+- [Certificates](/docs/commands/certificates)
 
 This page covers two related command groups:
 
@@ -33,7 +33,7 @@ ssh-ed25519 AAAAC3... user@example
 
 The `ssh-key` commands do not enforce a root check in code. In practice, editing another user's `~/.ssh/authorized_keys` requires sufficient file permissions, which usually means running as root or as the target user. Use `sudo` when managing keys for a user other than yourself.
 
-The username argument is validated using the same rules as the [user commands](/commands/users.html#username-validation).
+The username argument is validated using the same rules as the [user commands](/docs/commands/users#username-validation).
 
 ### `ssh-key add`
 
@@ -133,7 +133,7 @@ The `ssh` group manages the SSH server configuration. Rather than editing the ma
 /etc/ssh/sshd_config.d/99-abstrax.conf
 ```
 
-Before reloading, the configuration is validated with `sshd -t` (when `sshd` is available). The managed include file is backed up with a timestamped suffix before it is rewritten (see [Security](/reference/security.html)).
+Before reloading, the configuration is validated with `sshd -t` (when `sshd` is available). The managed include file is backed up with a timestamped suffix before it is rewritten (see [Security](/docs/reference/security)).
 
 ```text
 abstrax ssh <action> [arguments] [flags]
@@ -210,7 +210,7 @@ sudo abstrax ssh restart
 
 ## Related
 
-- [Adding SSH access](/guides/adding-ssh-access.html)
-- [Users](/commands/users.html)
-- [Firewall](/commands/system.html#firewall-commands)
-- [Security](/reference/security.html)
+- [Adding SSH access](/docs/guides/adding-ssh-access)
+- [Users](/docs/commands/users)
+- [Firewall](/docs/commands/system#firewall-commands)
+- [Security](/docs/reference/security)

@@ -1,8 +1,8 @@
 # Getting Started
 
-- [Installation](/getting-started/installation.html)
-- [Updating](/getting-started/updating.html)
-- [Uninstalling](/getting-started/uninstalling.html)
+- [Installation](/docs/getting-started/installation)
+- [Updating](/docs/getting-started/updating)
+- [Uninstalling](/docs/getting-started/uninstalling)
 
 This guide walks through your first commands with Abstrax. The early steps are safe to run and do not change the system. Later steps that change state are clearly marked.
 
@@ -155,7 +155,7 @@ A successful command exits with status `0`. Any error exits with status `1`.
 
 ## Where to go next
 
-- [Commands overview](/commands/index.html) – every command group explained.
-- [Creating a user](/guides/creating-a-user.html) – a worked example.
-- [Configuration](/configuration/index.html) – how Abstrax stores state and config.
-- [Permissions and security](/reference/security.html) – when root is needed and why.
+- [Commands overview](/docs/commands/index) – every command group explained.
+- [Creating a user](/docs/guides/creating-a-user) – a worked example.
+- [Configuration](/docs/configuration/index) – how Abstrax stores state and config.
+- [Permissions and security](/docs/reference/security) – when root is needed and why.
