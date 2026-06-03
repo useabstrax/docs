@@ -1,12 +1,5 @@
 # Managing cron jobs
 
-- [Creating a user](/docs/guides/creating-a-user)
-- [Adding SSH access](/docs/guides/adding-ssh-access)
-- [Installing packages](/docs/guides/installing-packages)
-- [Creating a project](/docs/guides/creating-a-project)
-- [Managing cron jobs](/docs/guides/managing-cron-jobs)
-- [Managing daemons](/docs/guides/managing-daemons)
-
 This guide schedules a recurring task, then lists, inspects, and modifies it. Abstrax stores each job as a file in `/etc/cron.d/abstrax-<id>`, so its jobs stay separate from any hand-written crontabs.
 
 Adding, modifying, and removing jobs requires root.

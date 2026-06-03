@@ -1,12 +1,5 @@
 # Guides
 
-- [Creating a user](/docs/guides/creating-a-user)
-- [Adding SSH access](/docs/guides/adding-ssh-access)
-- [Installing packages](/docs/guides/installing-packages)
-- [Creating a project](/docs/guides/creating-a-project)
-- [Managing cron jobs](/docs/guides/managing-cron-jobs)
-- [Managing daemons](/docs/guides/managing-daemons)
-
 These guides walk through common tasks from start to finish, using only commands that exist in Abstrax today. Each one assumes you have Abstrax installed (see [Installation](/docs/getting-started/installation)) and that you can use `sudo`.
 
 | Guide | What it covers |

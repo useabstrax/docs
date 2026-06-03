@@ -1,7 +1,5 @@
 # Contributing
 
-- [Building from source](/docs/contributing/building-from-source)
-
 This page is for contributors and maintainers. It describes how the project is organised, how to set up a development environment, and how the project is built, tested, and released.
 
 Abstrax is a single Go binary. There is no web frontend, no database, and no services to run during development — development is building and testing a Go binary.

@@ -1,10 +1,5 @@
 # Command reference
 
-- [Exit codes and output](/docs/reference/exit-codes)
-- [Security](/docs/reference/security)
-- [Supported platforms](/docs/reference/supported-platforms)
-- [Troubleshooting](/docs/reference/troubleshooting)
-
 A single-page listing of every Abstrax command and its flags. Each command links to its detailed documentation. For global flags that apply to every command, see [Global flags](#global-flags).
 
 ## Global flags

@@ -1,9 +1,5 @@
 # Updating
 
-- [Installation](/docs/getting-started/installation)
-- [Updating](/docs/getting-started/updating)
-- [Uninstalling](/docs/getting-started/uninstalling)
-
 Abstrax does not have a built-in self-update command. The `abstrax agent update` command exists but is a placeholder and is not yet implemented; it only prints a message. You update Abstrax the same way you installed it.
 
 ## Check your current version

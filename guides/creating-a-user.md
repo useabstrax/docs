@@ -1,12 +1,5 @@
 # Creating a user
 
-- [Creating a user](/docs/guides/creating-a-user)
-- [Adding SSH access](/docs/guides/adding-ssh-access)
-- [Installing packages](/docs/guides/installing-packages)
-- [Creating a project](/docs/guides/creating-a-project)
-- [Managing cron jobs](/docs/guides/managing-cron-jobs)
-- [Managing daemons](/docs/guides/managing-daemons)
-
 This guide creates a user suitable for deploying and running an application, gives it sudo access, and adds it to a couple of groups.
 
 These commands change system state, so run them with `sudo`. See [Permissions](/docs/configuration/permissions).

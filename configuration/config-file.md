@@ -1,9 +1,5 @@
 # Config file
 
-- [Config file](/docs/configuration/config-file)
-- [Environment variables](/docs/configuration/environment-variables)
-- [Permissions](/docs/configuration/permissions)
-
 Abstrax does not use a general configuration file to control its behaviour. There is one configuration file, used only by the MySQL commands, plus a set of directories where Abstrax stores state and logs.
 
 ## MySQL connection config

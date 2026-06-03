@@ -1,14 +1,5 @@
 # System commands
 
-- [Users](/docs/commands/users)
-- [SSH keys](/docs/commands/ssh-keys)
-- [Packages](/docs/commands/packages)
-- [System](/docs/commands/system)
-- [Cron](/docs/commands/cron)
-- [Daemons](/docs/commands/daemons)
-- [Projects](/docs/commands/projects)
-- [Certificates](/docs/commands/certificates)
-
 This page documents several command groups that manage core system services:
 
 - [`service`](#service-commands) – systemd services

@@ -1,14 +1,5 @@
 # Packages
 
-- [Users](/docs/commands/users)
-- [SSH keys](/docs/commands/ssh-keys)
-- [Packages](/docs/commands/packages)
-- [System](/docs/commands/system)
-- [Cron](/docs/commands/cron)
-- [Daemons](/docs/commands/daemons)
-- [Projects](/docs/commands/projects)
-- [Certificates](/docs/commands/certificates)
-
 The `package` command group manages system packages through `apt`. It is intended for Debian and Ubuntu based systems.
 
 ```text

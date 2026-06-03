@@ -1,9 +1,5 @@
 # Environment variables
 
-- [Config file](/docs/configuration/config-file)
-- [Environment variables](/docs/configuration/environment-variables)
-- [Permissions](/docs/configuration/permissions)
-
 Abstrax does not define its own environment variables to configure its behaviour. There is no `ABSTRAX_*` environment variable that changes defaults, output, or paths.
 
 This behaviour is based on the current application code. If you are looking for a way to change defaults, use the global flags instead.

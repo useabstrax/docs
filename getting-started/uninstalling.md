@@ -1,9 +1,5 @@
 # Uninstalling
 
-- [Installation](/docs/getting-started/installation)
-- [Updating](/docs/getting-started/updating)
-- [Uninstalling](/docs/getting-started/uninstalling)
-
 How you remove Abstrax depends on how you installed it.
 
 ## Remove a binary installation

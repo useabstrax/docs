@@ -1,10 +1,5 @@
 # Exit codes and output
 
-- [Exit codes and output](/docs/reference/exit-codes)
-- [Security](/docs/reference/security)
-- [Supported platforms](/docs/reference/supported-platforms)
-- [Troubleshooting](/docs/reference/troubleshooting)
-
 This page describes the exit codes Abstrax returns, the structure of its JSON output, and the error codes it uses.
 
 ## Exit codes

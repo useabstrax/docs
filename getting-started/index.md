@@ -1,9 +1,5 @@
 # Getting Started
 
-- [Installation](/docs/getting-started/installation)
-- [Updating](/docs/getting-started/updating)
-- [Uninstalling](/docs/getting-started/uninstalling)
-
 This guide walks through your first commands with Abstrax. The early steps are safe to run and do not change the system. Later steps that change state are clearly marked.
 
 ## 1. Check the CLI works

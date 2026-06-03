@@ -1,10 +1,5 @@
 # Permissions and security
 
-- [Exit codes and output](/docs/reference/exit-codes)
-- [Security](/docs/reference/security)
-- [Supported platforms](/docs/reference/supported-platforms)
-- [Troubleshooting](/docs/reference/troubleshooting)
-
 Abstrax performs real changes to your server, often as root. This page explains what permissions it needs, what changes it can make, the safeguards built into the application, and how to use it safely.
 
 ## What permissions Abstrax needs

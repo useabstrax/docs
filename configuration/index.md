@@ -1,9 +1,5 @@
 # Configuration
 
-- [Config file](/docs/configuration/config-file)
-- [Environment variables](/docs/configuration/environment-variables)
-- [Permissions](/docs/configuration/permissions)
-
 Abstrax is controlled almost entirely through commands and flags. It does not read a general settings file to change its behaviour. There is one specific configuration file, used only by the MySQL commands, and a small set of standard directories that Abstrax uses for state and logs.
 
 This section covers:

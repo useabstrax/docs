@@ -1,9 +1,5 @@
 # Installation
 
-- [Installation](/docs/getting-started/installation)
-- [Updating](/docs/getting-started/updating)
-- [Uninstalling](/docs/getting-started/uninstalling)
-
 Abstrax is distributed as a single binary. There is no runtime to install and no background service to run. This page covers the installation options that are currently supported.
 
 ## System requirements
