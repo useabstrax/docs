@@ -14,7 +14,7 @@ This page covers building the Abstrax binary yourself, including how version inf
 The Go module is in the `cli/` directory.
 
 ```bash
-git clone https://github.com/useabstrax/agent
+git clone https://github.com/useabstrax/abstrax
 cd abstrax/cli
 go mod download
 go build -o abstrax ./cmd/abstrax

@@ -32,7 +32,7 @@ See [Supported platforms](/docs/reference/supported-platforms) for more detail.
 
 ## Option 1: Release archive
 
-Releases are published as compressed archives on the [releases page](https://github.com/useabstrax/agent/releases). The release builds produce `tar.gz` archives for `linux/amd64` and `linux/arm64`. The archive name includes the version, for example `abstrax_1.0.0_linux_amd64.tar.gz`.
+Releases are published as compressed archives on the [releases page](https://github.com/useabstrax/abstrax/releases). The release builds produce `tar.gz` archives for `linux/amd64` and `linux/arm64`. The archive name includes the version, for example `abstrax_1.0.0_linux_amd64.tar.gz`.
 
 Download the archive for your architecture (check with `uname -m`), extract the `abstrax` binary, and move it onto your `PATH`:
 
@@ -73,7 +73,7 @@ It also installs a systemd unit file for a future agent at `/etc/systemd/system/
 See [Building from source](/docs/contributing/building-from-source) for full detail. In short:
 
 ```bash
-git clone https://github.com/useabstrax/agent
+git clone https://github.com/useabstrax/abstrax
 cd abstrax/cli
 go mod download
 go build -o abstrax ./cmd/abstrax
