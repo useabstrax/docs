@@ -2,8 +2,8 @@
 - [Overview](/docs/)
 
 ## Getting started
-- [Quick start](/docs/getting-started/)
-- [Installation](/docs/getting-started/installation)
+- [Installation](/docs/getting-started/)
+- [Quick start](/docs/getting-started/quick-start)
 - [Updating](/docs/getting-started/updating)
 - [Uninstalling](/docs/getting-started/uninstalling)
 
