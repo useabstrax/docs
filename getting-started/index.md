@@ -1,157 +1,132 @@
-# Getting Started
+# Installation
 
-This guide walks through your first commands with Abstrax. The early steps are safe to run and do not change the system. Later steps that change state are clearly marked.
+Abstrax is distributed as a single binary. There is no runtime to install and no background service to run. This page covers the installation options that are currently supported.
 
-## 1. Check the CLI works
+## System requirements
 
-Confirm the binary runs and see the top-level help:
+- A 64-bit Linux server (`amd64` or `arm64`).
+- Root or `sudo` access for most commands that change system state.
+- The underlying tools you intend to manage. Abstrax calls these tools rather than replacing them, so for example managing nginx requires nginx to be installed. Run `abstrax doctor` to see which tools are present.
+
+To build from source you also need Go 1.22 or newer.
+
+## Supported operating systems
+
+Abstrax targets Debian and Ubuntu based systems. The platform detection in the code treats the following as supported:
+
+- Ubuntu
+- Debian
+- Linux Mint
+- Pop!_OS
+- Raspbian
+
+On any other distribution Abstrax reports the platform as not fully supported. Detection is based on the `ID` field in `/etc/os-release`.
+
+The package management commands use `apt`, and many service operations assume `systemd`, so the most reliable experience is on current Ubuntu and Debian releases.
+
+See [Supported platforms](/docs/reference/supported-platforms) for more detail.
+
+## Option 1: Release archive
+
+Releases are published as compressed archives on the [releases page](https://github.com/useabstrax/abstrax/releases). The release builds produce `tar.gz` archives for `linux/amd64` and `linux/arm64`. The archive name includes the version, for example `abstrax_1.0.0_linux_amd64.tar.gz`.
+
+Download the archive for your architecture (check with `uname -m`), extract the `abstrax` binary, and move it onto your `PATH`:
+
+```bash
+# Replace <version> with the release version, for example 1.0.0
+tar -xzf abstrax_<version>_linux_amd64.tar.gz
+chmod +x abstrax
+sudo mv abstrax /usr/local/bin/abstrax
+```
+
+Each release also publishes a checksums file (`abstrax_<version>_checksums.txt`) using SHA-256. You can verify your download against it:
+
+```bash
+sha256sum -c abstrax_<version>_checksums.txt 2>&1 | grep abstrax_<version>_linux_amd64.tar.gz
+```
+
+## Option 2: Debian or RPM package
+
+Release builds also produce `.deb` and `.rpm` packages, named `abstrax_<version>_<arch>` (for example `abstrax_1.0.0_amd64.deb`). Installing the `.deb` places the binary at `/usr/bin/abstrax` and creates the standard Abstrax directories.
+
+```bash
+# Replace <version> and <arch> with the values from the release
+sudo dpkg -i abstrax_<version>_<arch>.deb
+```
+
+The package post-install step creates these directories with restricted permissions:
+
+```text
+/etc/abstrax        (0750)
+/var/lib/abstrax    (0750)
+/var/log/abstrax    (0750)
+```
+
+It also installs a systemd unit file for a future agent at `/etc/systemd/system/abstrax-agent.service`. This service is intentionally **not** enabled or started, because the agent is not yet implemented.
+
+## Option 3: Build from source
+
+See [Building from source](/docs/contributing/building-from-source) for full detail. In short:
+
+```bash
+git clone https://github.com/useabstrax/abstrax
+cd abstrax/cli
+go mod download
+go build -o abstrax ./cmd/abstrax
+sudo mv abstrax /usr/local/bin/abstrax
+```
+
+## Verify the installation
+
+Check that the binary is on your `PATH` and runs:
 
 ```bash
 abstrax --help
 ```
 
-You should see the list of command groups (user, ssh, package, service, cron, daemon, project, web, ssl, mysql, cache, firewall, server, and so on).
-
-## 2. Inspect the system
-
-`abstrax doctor` inspects the current server and reports what it finds. It does not require root and makes no changes, so it is a safe first command:
+Then run the system inspection command, which works without root and is a good first check:
 
 ```bash
 abstrax doctor
 ```
 
-Example output:
+If `doctor` reports your OS, package manager, and service manager correctly, the installation is working.
+
+## Check the installed version
+
+```bash
+abstrax version
+```
+
+This prints the version, commit, and build date, for example:
 
 ```text
-  OS:                  Ubuntu 22.04.3 LTS
-  Version:             22.04
-  Kernel:              5.15.0-91-generic
-  Architecture:        x86_64
-
-  Package manager:     apt
-  Service manager:     systemd
-  Firewall backend:    ufw
-
-  Running as root:     no
-  Platform support:    full
-
-  Tools:
-    nginx:           available
-    apache2:         not found
-    certbot:         available
-    mysql:           available
-    ...
+abstrax 1.0.0 (commit abc1234, built 2024-01-01T12:00:00Z)
 ```
 
-This tells you which underlying tools are installed. Abstrax relies on these tools, so the list is useful before you try a command in a given area.
+For a binary built locally without release metadata, the version reads `dev (commit none, built unknown)`.
 
-## 3. View available commands
-
-Each command group has its own help. To see what a group can do, ask for its help:
+You can also get this as JSON:
 
 ```bash
-abstrax user --help
-abstrax firewall --help
-abstrax package --help
+abstrax version --json
 ```
-
-To see the flags and arguments for a specific command, add `--help` at the end:
-
-```bash
-abstrax user add --help
-```
-
-## 4. Run a safe read-only command
-
-Status and listing commands only read state. They do not change anything and most do not require root:
-
-```bash
-abstrax server status
-abstrax user list
-abstrax firewall status
-```
-
-`abstrax server status` shows hostname, uptime, load average, CPU cores, memory, disk usage, OS, kernel, and private IP addresses.
-
-## 5. Preview a change with --dry-run
-
-Before making a real change, you can preview it. With `--dry-run`, Abstrax prints the underlying commands it would run instead of running them:
-
-```bash
-sudo abstrax user add deploy --grant-sudo --dry-run
-```
-
-You will see lines like:
-
-```text
-[dry-run] would run: useradd ...
-```
-
-Note that some commands still need to read system state, which can require root even in dry-run mode.
-
-## 6. Make a real change
-
-When you are ready, drop `--dry-run`. Commands that change system state generally need root, so use `sudo`:
-
-```bash
-sudo abstrax user add deploy --grant-sudo --create-home
-```
-
-Example output:
-
-```text
-User deploy created.
-  Home:   /home/deploy
-  Shell:  /bin/bash
-  UID:    1001
-  Groups: deploy, sudo
-  Sudo:   granted
-```
-
-Destructive commands such as `user remove` or `firewall disable` ask for confirmation first. Pass `--yes` to skip the prompt in scripts.
-
-## Understanding command output
-
-By default, Abstrax prints human-readable text. The general structure is:
-
-- A success line (often shown in green) summarising what happened.
-- Indented detail lines with relevant fields.
-- Warnings are printed to standard error and prefixed with `WARNING:`.
-- Errors are printed to standard error and prefixed with `ERROR:`.
-
-For automation, add `--json` to any command:
-
-```bash
-abstrax doctor --json
-```
-
-JSON results follow a consistent shape:
 
 ```json
 {
   "status": "success",
-  "action": "doctor.check",
-  "summary": "System inspection complete.",
-  "data": { "...": "..." }
+  "action": "version.show",
+  "summary": "abstrax 1.0.0 (commit abc1234, built 2024-01-01T12:00:00Z)",
+  "data": {
+    "version": "1.0.0",
+    "commit": "abc1234",
+    "build_date": "2024-01-01T12:00:00Z"
+  }
 }
 ```
 
-On failure the shape is:
+## Next steps
 
-```json
-{
-  "status": "error",
-  "action": "user.add",
-  "error_code": "command_error",
-  "message": "user deploy already exists"
-}
-```
-
-A successful command exits with status `0`. Any error exits with status `1`.
-
-## Where to go next
-
-- [Commands overview](/docs/commands/index) – every command group explained.
-- [Creating a user](/docs/guides/creating-a-user) – a worked example.
-- [Configuration](/docs/configuration/index) – how Abstrax stores state and config.
-- [Permissions and security](/docs/reference/security) – when root is needed and why.
+- [Quick start](/docs/getting-started/quick-start)
+- [Updating](/docs/getting-started/updating)
+- [Uninstalling](/docs/getting-started/uninstalling)
