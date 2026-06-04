@@ -44,7 +44,7 @@ See the [MySQL commands](/docs/commands/system#mysql-commands) for usage.
 | `/var/lib/abstrax/projects` | Project state, one JSON file per project | |
 | `/var/log/abstrax` | Logs | 0750 |
 
-When you install the `.deb` or `.rpm` package, the post-install script creates these directories with the permissions shown. When you install the binary by hand, the directories are created as needed by the commands that use them (for example `mysql config set` creates `/etc/abstrax`).
+When you install the binary by hand, the directories are created as needed by the commands that use them (for example `mysql config set` creates `/etc/abstrax`).
 
 ## Project state files
 

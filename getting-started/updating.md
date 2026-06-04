@@ -25,16 +25,6 @@ Then confirm the new version:
 abstrax version
 ```
 
-## Update a package installation
-
-If you installed the `.deb` package, install the newer package version over the top:
-
-```bash
-sudo dpkg -i abstrax_<version>_<arch>.deb
-```
-
-Your configuration in `/etc/abstrax` and state in `/var/lib/abstrax` are left in place.
-
 ## Update a source build
 
 Pull the latest code and rebuild:

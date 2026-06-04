@@ -10,20 +10,6 @@ If you copied the binary to `/usr/local/bin`, delete it:
 sudo rm /usr/local/bin/abstrax
 ```
 
-## Remove a package installation
-
-If you installed the `.deb` package:
-
-```bash
-sudo dpkg -r abstrax
-```
-
-To also remove configuration files installed by the package, use purge:
-
-```bash
-sudo dpkg -P abstrax
-```
-
 ## Abstrax data directories
 
 Abstrax creates and uses these directories. They are not removed automatically when you delete the binary:

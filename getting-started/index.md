@@ -45,26 +45,7 @@ Each release also publishes a checksums file (`abstrax_<version>_checksums.txt`)
 sha256sum -c abstrax_<version>_checksums.txt 2>&1 | grep abstrax_<version>_linux_amd64.tar.gz
 ```
 
-## Option 2: Debian or RPM package
-
-Release builds also produce `.deb` and `.rpm` packages, named `abstrax_<version>_<arch>` (for example `abstrax_1.0.0_amd64.deb`). Installing the `.deb` places the binary at `/usr/bin/abstrax` and creates the standard Abstrax directories.
-
-```bash
-# Replace <version> and <arch> with the values from the release
-sudo dpkg -i abstrax_<version>_<arch>.deb
-```
-
-The package post-install step creates these directories with restricted permissions:
-
-```text
-/etc/abstrax        (0750)
-/var/lib/abstrax    (0750)
-/var/log/abstrax    (0750)
-```
-
-It also installs a systemd unit file for a future agent at `/etc/systemd/system/abstrax-agent.service`. This service is intentionally **not** enabled or started, because the agent is not yet implemented.
-
-## Option 3: Build from source
+## Option 2: Build from source
 
 See [Building from source](/docs/contributing/building-from-source) for full detail. In short:
 
