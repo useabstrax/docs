@@ -172,5 +172,5 @@ abstrax daemon logs queue-worker --lines=100 --follow
 ## Related
 
 - [Managing daemons](/docs/guides/managing-daemons)
-- [Cron](/docs/commands/cron) – for scheduled jobs
-- [Services](/docs/commands/system#service-commands) – for systemd services
+- [Cron](/docs/commands/cron) - for scheduled jobs
+- [Services](/docs/commands/system#service-commands) - for systemd services

@@ -77,4 +77,4 @@ myapp     myapp.com, www.myapp.com   2024-04-01
 
 - [Projects](/docs/commands/projects)
 - [Creating a project](/docs/guides/creating-a-project)
-- [Firewall](/docs/commands/system#firewall-commands) – make sure ports 80 and 443 are open
+- [Firewall](/docs/commands/system#firewall-commands) - make sure ports 80 and 443 are open

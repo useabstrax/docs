@@ -2,11 +2,11 @@
 
 This page documents several command groups that manage core system services:
 
-- [`service`](#service-commands) – systemd services
-- [`mysql`](#mysql-commands) – MySQL/MariaDB databases and users
-- [`cache`](#cache-commands) – Redis and Memcached
-- [`firewall`](#firewall-commands) – the UFW firewall
-- [`server`](#server-status-commands) – server status and resource usage
+- [`service`](#service-commands) - systemd services
+- [`mysql`](#mysql-commands) - MySQL/MariaDB databases and users
+- [`cache`](#cache-commands) - Redis and Memcached
+- [`firewall`](#firewall-commands) - the UFW firewall
+- [`server`](#server-status-commands) - server status and resource usage
 
 ---
 
@@ -347,7 +347,7 @@ sudo abstrax firewall deny <port> [flags]
 
 The behaviour differs between `allow` and `deny`:
 
-- `firewall allow <port>` validates the port as a plain number in the range 1–65535. A value such as `443/tcp` is rejected with `port must be a number`. To restrict the protocol, use the `--protocol` flag.
+- `firewall allow <port>` validates the port as a plain number in the range 1-65535. A value such as `443/tcp` is rejected with `port must be a number`. To restrict the protocol, use the `--protocol` flag.
 - `firewall deny <port>` does not validate the port, so a value is passed through to UFW as given.
 
 ```bash
@@ -446,7 +446,7 @@ abstrax server services --failed
 
 ## Related
 
-- [Daemons](/docs/commands/daemons) – for Supervisor-managed processes
+- [Daemons](/docs/commands/daemons) - for Supervisor-managed processes
 - [Packages](/docs/commands/packages)
 - [Configuration](/docs/configuration/index)
 - [Security](/docs/reference/security)

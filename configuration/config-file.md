@@ -19,7 +19,7 @@ sudo abstrax mysql config set --host=127.0.0.1 --user=root --password
 The file is written with mode `0600`, so only its owner (root) can read it. It uses a simple key/value format:
 
 ```toml
-# Abstrax MySQL config – root readable only
+# Abstrax MySQL config - root readable only
 host = "127.0.0.1"
 port = 3306
 user = "root"

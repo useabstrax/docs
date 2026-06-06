@@ -11,7 +11,7 @@ Abstrax uses two exit codes:
 | `0` | The command completed successfully |
 | `1` | The command failed for any reason |
 
-There is no finer-grained set of exit codes. Any error — invalid input, missing permissions, a failed underlying command, an unsupported platform — results in exit code `1`. To distinguish between causes in a script, read the error message, or use `--json` and inspect the `error_code` and `message` fields.
+There is no finer-grained set of exit codes. Any error - invalid input, missing permissions, a failed underlying command, an unsupported platform - results in exit code `1`. To distinguish between causes in a script, read the error message, or use `--json` and inspect the `error_code` and `message` fields.
 
 When a command requires confirmation and you decline the prompt, the command stops without making changes and exits `0`.
 

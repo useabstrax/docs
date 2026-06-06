@@ -2,7 +2,7 @@
 
 This page is for contributors and maintainers. It describes how the project is organised, how to set up a development environment, and how the project is built, tested, and released.
 
-Abstrax is a single Go binary. There is no web frontend, no database, and no services to run during development — development is building and testing a Go binary.
+Abstrax is a single Go binary. There is no web frontend, no database, and no services to run during development - development is building and testing a Go binary.
 
 ## Requirements
 
@@ -116,7 +116,7 @@ gofmt -w .
 
 The test workflow (`.github/workflows/test.yml`) runs on pushes to `main` and on pull requests. It performs, in order:
 
-1. `gofmt -l .` — fails if any file is not formatted.
+1. `gofmt -l .` - fails if any file is not formatted.
 2. `go vet ./...`
 3. `go test -v -race ./...`
 4. `go build -o abstrax ./cmd/abstrax`

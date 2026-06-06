@@ -27,7 +27,7 @@ See [Permissions](/docs/configuration/permissions) for which commands need root.
 - Database names allow letters, digits, and underscores.
 - Cron IDs and daemon/project names allow letters, digits, underscores, and hyphens.
 - Domains must be well-formed.
-- Ports must be numbers in the range 1–65535.
+- Ports must be numbers in the range 1-65535.
 - Shells must be absolute paths.
 
 **Fix.** Correct the argument to match the rules above.

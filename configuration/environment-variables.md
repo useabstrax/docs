@@ -23,8 +23,8 @@ You can apply these per command. There is no configuration file or environment v
 
 While Abstrax has no variables of its own, it runs as a normal process and the usual environment still applies:
 
-- **`PATH`** – Abstrax finds the tools it manages (`apt`, `systemctl`, `ufw`, `nginx`, `certbot`, `supervisorctl`, `mysql`, and so on) by looking them up on the `PATH`. If a tool is installed in a non-standard location that is not on the `PATH`, Abstrax may report it as not found. The `abstrax doctor` command uses the same lookup.
-- **The invoking user** – whether you are root determines which commands you can run. See [Permissions](/docs/configuration/permissions).
+- **`PATH`** - Abstrax finds the tools it manages (`apt`, `systemctl`, `ufw`, `nginx`, `certbot`, `supervisorctl`, `mysql`, and so on) by looking them up on the `PATH`. If a tool is installed in a non-standard location that is not on the `PATH`, Abstrax may report it as not found. The `abstrax doctor` command uses the same lookup.
+- **The invoking user** - whether you are root determines which commands you can run. See [Permissions](/docs/configuration/permissions).
 
 ## Setting environment for managed jobs
 

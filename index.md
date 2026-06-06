@@ -63,7 +63,7 @@ You do not need to be a Linux expert to use Abstrax, but you should understand t
 ## A short example
 
 ```bash
-# Inspect the system first – this command does not require root
+# Inspect the system first - this command does not require root
 abstrax doctor
 
 # Create a deploy user with sudo
@@ -78,11 +78,11 @@ abstrax server status --json
 
 ## Where to go next
 
-- [Installation](/docs/getting-started/installation) – install Abstrax on your server.
-- [Quick start](/docs/getting-started/index) – your first commands.
-- [Commands](/docs/commands/index) – detailed documentation for every command group.
-- [Command reference](/docs/reference/index) – every command and flag in one place.
-- [Configuration](/docs/configuration/index) – config files, environment, and permissions.
-- [Permissions and security](/docs/reference/security) – what Abstrax needs and why.
-- [Troubleshooting](/docs/reference/troubleshooting) – common problems and fixes.
-- [Contributing](/docs/contributing/index) – build, test, and develop Abstrax.
+- [Installation](/docs/getting-started/installation) - install Abstrax on your server.
+- [Quick start](/docs/getting-started/index) - your first commands.
+- [Commands](/docs/commands/index) - detailed documentation for every command group.
+- [Command reference](/docs/reference/index) - every command and flag in one place.
+- [Configuration](/docs/configuration/index) - config files, environment, and permissions.
+- [Permissions and security](/docs/reference/security) - what Abstrax needs and why.
+- [Troubleshooting](/docs/reference/troubleshooting) - common problems and fixes.
+- [Contributing](/docs/contributing/index) - build, test, and develop Abstrax.

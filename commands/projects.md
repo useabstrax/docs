@@ -2,8 +2,8 @@
 
 This page covers two related command groups:
 
-- `project` – manage web application projects with nginx virtual hosts.
-- `web` – test, reload, and restart the web server.
+- `project` - manage web application projects with nginx virtual hosts.
+- `web` - test, reload, and restart the web server.
 
 ## Project management
 

@@ -4,9 +4,9 @@ Abstrax is controlled almost entirely through commands and flags. It does not re
 
 This section covers:
 
-- [Config file](/docs/configuration/config-file) – the MySQL connection config and the directories Abstrax uses.
-- [Environment variables](/docs/configuration/environment-variables) – what Abstrax reads from the environment.
-- [Permissions](/docs/configuration/permissions) – which commands need root and why.
+- [Config file](/docs/configuration/config-file) - the MySQL connection config and the directories Abstrax uses.
+- [Environment variables](/docs/configuration/environment-variables) - what Abstrax reads from the environment.
+- [Permissions](/docs/configuration/permissions) - which commands need root and why.
 
 ## Summary
 

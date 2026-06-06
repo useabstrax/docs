@@ -2,8 +2,8 @@
 
 This page covers two related command groups:
 
-- `ssh-key` – manage SSH authorised keys for users.
-- `ssh` – manage the SSH server (sshd) configuration.
+- `ssh-key` - manage SSH authorised keys for users.
+- `ssh` - manage the SSH server (sshd) configuration.
 
 ## SSH key management
 
@@ -163,7 +163,7 @@ sudo abstrax ssh config set-port 2222 --allow-firewall
 |---|---|
 | `--allow-firewall` | Open the new port in the firewall if a firewall backend is available |
 
-The port value is validated as a number in the range 1–65535.
+The port value is validated as a number in the range 1-65535.
 
 ### `ssh config set-timeout`
 

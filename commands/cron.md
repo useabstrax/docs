@@ -24,7 +24,7 @@ abstrax cron add <id> --command="<command>" (--schedule="..." | frequency flag) 
 
 ### Required
 
-- `--command` – the command to run. If omitted, the command fails with `--command is required`.
+- `--command` - the command to run. If omitted, the command fails with `--command is required`.
 - A schedule, provided either with `--schedule` or one of the frequency flags. If neither is given, the command fails with `--schedule or a frequency flag is required`.
 
 ### Schedule flags
@@ -159,5 +159,5 @@ abstrax cron disable backup
 ## Related
 
 - [Managing cron jobs](/docs/guides/managing-cron-jobs)
-- [Daemons](/docs/commands/daemons) – for long-running processes rather than scheduled jobs
+- [Daemons](/docs/commands/daemons) - for long-running processes rather than scheduled jobs
 - [Configuration](/docs/configuration/index)

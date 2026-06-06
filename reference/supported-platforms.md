@@ -88,7 +88,7 @@ The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) a
 Agent mode is not yet implemented.
 ```
 
-The code and README describe a planned hosted agent that would connect outbound to a hosted API, fetch structured jobs, run them locally through the same action layer as the CLI, and report results — without requiring inbound SSH. This is not built yet. A systemd unit file for the agent is installed by the packages at `/etc/systemd/system/abstrax-agent.service`, but it is intentionally left disabled.
+The code and README describe a planned hosted agent that would connect outbound to a hosted API, fetch structured jobs, run them locally through the same action layer as the CLI, and report results - without requiring inbound SSH. This is not built yet. A systemd unit file for the agent is installed by the packages at `/etc/systemd/system/abstrax-agent.service`, but it is intentionally left disabled.
 
 Do not rely on agent functionality; it does nothing today.
 
