@@ -26,26 +26,85 @@ The package management commands use `apt`, and many service operations assume `s
 
 See [Supported platforms](/docs/reference/supported-platforms) for more detail.
 
-## Option 1: Release archive
+## Option 1: Install from a release archive (recommended)
 
-Releases are published as compressed archives on the [releases page](https://github.com/useabstrax/abstrax/releases). The release builds produce `tar.gz` archives for `linux/amd64` and `linux/arm64`. The archive name includes the version, for example `abstrax_1.0.0_linux_amd64.tar.gz`.
+This is the recommended and most transparent way to install Abstrax. Every step is visible, so you can see exactly what is downloaded and verify it before it runs. This method:
 
-Download the archive for your architecture (check with `uname -m`), extract the `abstrax` binary, and move it onto your `PATH`:
+- downloads the release archive directly from the official [GitHub releases page](https://github.com/useabstrax/abstrax/releases)
+- verifies the archive using the published SHA-256 checksums file
+- extracts the `abstrax` binary
+- moves it onto your `PATH`
+
+Releases are published as compressed archives on the [releases page](https://github.com/useabstrax/abstrax/releases). GoReleaser builds `tar.gz` archives for `linux/amd64` and `linux/arm64`, named `abstrax_<version>_linux_<arch>.tar.gz` (for example `abstrax_1.0.0_linux_amd64.tar.gz`). Each release tag uses a `v` prefix (for example `v1.0.0`), but the version in the filename omits it.
+
+Set the release version and your architecture, then download, verify, and install:
 
 ```bash
-# Replace <version> with the release version, for example 1.0.0
-tar -xzf abstrax_<version>_linux_amd64.tar.gz
+# Replace with the release version from the releases page, without the leading v
+VERSION="1.0.0"
+
+# x86_64 servers use amd64; aarch64/ARM servers use arm64 (check with: uname -m)
+ARCH="amd64"
+
+wget "https://github.com/useabstrax/abstrax/releases/download/v${VERSION}/abstrax_${VERSION}_linux_${ARCH}.tar.gz"
+wget "https://github.com/useabstrax/abstrax/releases/download/v${VERSION}/abstrax_${VERSION}_checksums.txt"
+
+sha256sum -c "abstrax_${VERSION}_checksums.txt" 2>&1 | grep "abstrax_${VERSION}_linux_${ARCH}.tar.gz"
+
+tar -xzf "abstrax_${VERSION}_linux_${ARCH}.tar.gz"
 chmod +x abstrax
 sudo mv abstrax /usr/local/bin/abstrax
 ```
 
-Each release also publishes a checksums file (`abstrax_<version>_checksums.txt`) using SHA-256. You can verify your download against it:
+To install the latest release without looking up the version number:
 
 ```bash
-sha256sum -c abstrax_<version>_checksums.txt 2>&1 | grep abstrax_<version>_linux_amd64.tar.gz
+VERSION=$(wget -qO- "https://api.github.com/repos/useabstrax/abstrax/releases/latest" | grep -Po '"tag_name": "\K[^"]+' | sed 's/^v//')
+ARCH="amd64"   # or arm64
+
+wget "https://github.com/useabstrax/abstrax/releases/download/v${VERSION}/abstrax_${VERSION}_linux_${ARCH}.tar.gz"
+wget "https://github.com/useabstrax/abstrax/releases/download/v${VERSION}/abstrax_${VERSION}_checksums.txt"
+
+sha256sum -c "abstrax_${VERSION}_checksums.txt" 2>&1 | grep "abstrax_${VERSION}_linux_${ARCH}.tar.gz"
+
+tar -xzf "abstrax_${VERSION}_linux_${ARCH}.tar.gz"
+chmod +x abstrax
+sudo mv abstrax /usr/local/bin/abstrax
 ```
 
-## Option 2: Build from source
+Each release also publishes a SHA-256 checksums file named `abstrax_<version>_checksums.txt`. The commands above download it and verify the archive before extracting.
+
+## Option 2: Install using the convenience script
+
+The convenience script performs the same basic steps as the manual release archive method above. It:
+
+- detects the server architecture
+- finds the latest GitHub release
+- downloads the correct archive from GitHub
+- downloads the checksums file
+- verifies the archive with SHA-256
+- extracts the binary
+- installs it to `/usr/local/bin/abstrax`
+- prints the installed version
+- suggests running `abstrax doctor`
+
+If you would like to read the script before running it, download and inspect it first:
+
+```bash
+wget https://useabstrax.com/install.sh
+less install.sh
+sudo bash install.sh
+```
+
+Or install directly in a single command:
+
+```bash
+wget -qO- https://useabstrax.com/install.sh | sudo bash
+```
+
+If you would prefer not to pipe a script into `sudo bash`, use the manual release archive instructions above. They produce the same result with every step visible.
+
+## Option 3: Build from source
 
 See [Building from source](/docs/contributing/building-from-source) for full detail. In short:
 
