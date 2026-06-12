@@ -30,7 +30,7 @@ Every command also supports `--help` (alias `-h`). The root command additionally
 | `abstrax version` | Print version, commit, and build date | No |
 | `abstrax self` | Manage the Abstrax CLI itself | Depends on subcommand |
 | `abstrax doctor` | Inspect the system and report platform capabilities | No |
-| `abstrax log` | View the Abstrax log file | No |
+| `abstrax log [path]` | Tail a log file (defaults to the Abstrax log) | No |
 | `abstrax agent` | Placeholder for the future hosted agent (not implemented) | No |
 | `abstrax help` | Show help for any command | No |
 | `abstrax completion` | Generate a shell autocompletion script | No |
@@ -80,18 +80,20 @@ Available tools: nginx, apache2, certbot, mysql, mariadb, supervisor, redis, mem
 
 ### log
 
-`abstrax log` reads the Abstrax log file at `/var/log/abstrax/abstrax.log` using `tail`. If the file does not exist, it says so.
+`abstrax log` tails a log file using `tail`. By default it follows the Abstrax log at `/var/log/abstrax/abstrax.log`. Pass an optional path to tail a different file instead. If the file does not exist, it says so.
 
 ```bash
 abstrax log
 abstrax log --lines=100
-abstrax log --follow
+abstrax log --follow=false
+abstrax log /var/log/nginx/error.log
+abstrax log /var/log/nginx/error.log --lines=200
 ```
 
 | Flag | Default | Description |
 |---|---|---|
 | `--lines` | `50` | Number of lines to show |
-| `--follow`, `-f` | `false` | Follow the log output |
+| `--follow`, `-f` | `true` | Follow the log output |
 
 ### agent
 
