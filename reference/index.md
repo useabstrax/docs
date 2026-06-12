@@ -20,13 +20,22 @@ A single-page listing of every Abstrax command and its flags. Each command links
 | Command | Root | Description | Docs |
 |---|---|---|---|
 | `abstrax version` | No | Print version, commit, build date | [commands](/docs/commands/index#version) |
+| `abstrax self update [version]` | Yes | Update the CLI from GitHub releases | [self](/docs/commands/self) |
 | `abstrax doctor` | No | Inspect the system | [commands](/docs/commands/index#doctor) |
 | `abstrax log` | No | View the Abstrax log file | [commands](/docs/commands/index#log) |
 | `abstrax agent ...` | No | Placeholder, not implemented | [platforms](/docs/reference/supported-platforms#future-agent) |
 | `abstrax help` | No | Show help for any command | [commands](/docs/commands/index#top-level-commands) |
 | `abstrax completion <shell>` | No | Generate a shell autocompletion script | [commands](/docs/commands/index#top-level-commands) |
 
-`abstrax log` flags: `--lines` (default 50), `--follow`/`-f`. The `help` and `completion` commands are provided automatically by the command framework.
+`abstrax log` flags: `--lines` (default 50), `--follow`/`-f`. `abstrax self update` flags: `--allow-breaking`. The `help` and `completion` commands are provided automatically by the command framework.
+
+## self
+
+See [Self](/docs/commands/self).
+
+| Command | Root | Key flags |
+|---|---|---|
+| `self update [version]` | Yes | `--allow-breaking` |
 
 ## user
 

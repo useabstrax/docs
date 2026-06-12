@@ -21,6 +21,7 @@ sudo abstrax user add deploy --grant-sudo
 The following change system state and require root:
 
 - **user**: `add`, `remove`, `grant-sudo`, `revoke-sudo`, `set-groups`, `add-groups`, `remove-groups`, `set-shell`, `lock`, `unlock`
+- **self**: `update`
 - **ssh**: `config set-port`, `config set-timeout`, `config disable-root-login`, `config enable-root-login`, `config disable-password-auth`, `config enable-password-auth`, `reload`, `restart`
 - **package**: `install`, `remove`, `update`, `upgrade`
 - **service**: `start`, `stop`, `restart`, `reload`, `enable`, `disable`
@@ -38,6 +39,7 @@ The following change system state and require root:
 These read-only or query commands do not call the root check in code:
 
 - `doctor`, `version`, `log`
+- `self update --dry-run` (preview only; the actual update requires root)
 - `user info`, `user list`
 - `ssh config show`
 - `package search`, `package info`, `package list`

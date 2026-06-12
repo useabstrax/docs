@@ -28,6 +28,7 @@ Every command also supports `--help` (alias `-h`). The root command additionally
 | Command | Description | Root required |
 |---|---|---|
 | `abstrax version` | Print version, commit, and build date | No |
+| `abstrax self` | Manage the Abstrax CLI itself | Depends on subcommand |
 | `abstrax doctor` | Inspect the system and report platform capabilities | No |
 | `abstrax log` | View the Abstrax log file | No |
 | `abstrax agent` | Placeholder for the future hosted agent (not implemented) | No |
@@ -42,6 +43,19 @@ The `help` and `completion` commands are provided automatically by the command f
 abstrax version
 abstrax version --json
 ```
+
+### self
+
+The `self` command group manages the Abstrax CLI. See [Self](/docs/commands/self) for full detail.
+
+```bash
+sudo abstrax self update
+sudo abstrax self update 1.2.0
+sudo abstrax self update --allow-breaking
+abstrax self update --dry-run
+```
+
+`self update` downloads a release from GitHub, verifies the SHA-256 checksum, and replaces the running binary. By default it updates to the newest release within the current major version. Use `--allow-breaking` to upgrade across major versions.
 
 ### doctor
 
@@ -87,6 +101,7 @@ The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) a
 
 | Group | Purpose | Documentation |
 |---|---|---|
+| `self` | Update and manage the Abstrax CLI | [Self](/docs/commands/self) |
 | `user` | Manage Linux users and groups | [Users](/docs/commands/users) |
 | `ssh-key` | Manage SSH authorised keys for users | [SSH keys](/docs/commands/ssh-keys) |
 | `ssh` | Manage SSH server configuration | [SSH keys](/docs/commands/ssh-keys#ssh-server-configuration) |

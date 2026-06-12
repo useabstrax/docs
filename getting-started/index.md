@@ -168,5 +168,5 @@ abstrax version --json
 ## Next steps
 
 - [Quick start](/docs/getting-started/quick-start)
-- [Updating](/docs/getting-started/updating)
+- [Updating](/docs/getting-started/updating) - includes `abstrax self update` and manual upgrade steps
 - [Uninstalling](/docs/getting-started/uninstalling)
