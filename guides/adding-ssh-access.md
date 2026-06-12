@@ -108,5 +108,5 @@ sudo abstrax firewall allow 2222 --protocol=tcp
 ## Related
 
 - [SSH keys and SSH configuration](/docs/commands/ssh-keys)
-- [Firewall](/docs/commands/system#firewall-commands)
+- [Firewall](/docs/commands/firewall)
 - [Security](/docs/reference/security)

@@ -91,16 +91,16 @@ The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) a
 | `ssh-key` | Manage SSH authorised keys for users | [SSH keys](/docs/commands/ssh-keys) |
 | `ssh` | Manage SSH server configuration | [SSH keys](/docs/commands/ssh-keys#ssh-server-configuration) |
 | `package` | Manage apt packages | [Packages](/docs/commands/packages) |
-| `service` | Manage systemd services | [System](/docs/commands/system#service-commands) |
+| `service` | Manage systemd services | [Services](/docs/commands/service) |
 | `cron` | Manage scheduled cron jobs | [Cron](/docs/commands/cron) |
 | `daemon` | Manage background processes with Supervisor | [Daemons](/docs/commands/daemons) |
 | `project` | Manage nginx-backed web projects | [Projects](/docs/commands/projects) |
-| `web` | Test, reload, and restart the web server | [Projects](/docs/commands/projects#web-server-commands) |
+| `web` | Test, reload, and restart the web server | [Web server](/docs/commands/web) |
 | `ssl` | Manage Let's Encrypt certificates with Certbot | [Certificates](/docs/commands/certificates) |
-| `mysql` | Manage MySQL/MariaDB databases and users | [System](/docs/commands/system#mysql-commands) |
-| `cache` | Manage Redis and Memcached | [System](/docs/commands/system#cache-commands) |
-| `firewall` | Manage the UFW firewall | [System](/docs/commands/system#firewall-commands) |
-| `server` | Show server status and resource usage | [System](/docs/commands/system#server-status-commands) |
+| `mysql` | Manage MySQL/MariaDB databases and users | [MySQL](/docs/commands/mysql) |
+| `cache` | Manage Redis and Memcached | [Cache](/docs/commands/cache) |
+| `firewall` | Manage the UFW firewall | [Firewall](/docs/commands/firewall) |
+| `server` | Show server status and resource usage | [Server](/docs/commands/server) |
 
 For a single page listing every command and flag, see the [command reference](/docs/reference/index).
 

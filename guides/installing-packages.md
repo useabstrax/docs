@@ -94,5 +94,5 @@ sudo abstrax package remove nginx --purge
 ## Related
 
 - [Packages command reference](/docs/commands/packages)
-- [Cache (Redis, Memcached)](/docs/commands/system#cache-commands)
+- [Cache (Redis, Memcached)](/docs/commands/cache)
 - [Troubleshooting](/docs/reference/troubleshooting)

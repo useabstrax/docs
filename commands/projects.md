@@ -1,11 +1,4 @@
-# Projects and web server
-
-This page covers two related command groups:
-
-- `project` - manage web application projects with nginx virtual hosts.
-- `web` - test, reload, and restart the web server.
-
-## Project management
+# Projects
 
 The `project` group sets up a web application: it can create the project directory, set ownership, write an nginx virtual host, and record the project's state. Project state is stored as JSON in:
 
@@ -17,15 +10,15 @@ The `project` group sets up a web application: it can create the project directo
 abstrax project <action> [arguments] [flags]
 ```
 
-### Permissions
+## Permissions
 
 `add`, `remove`, `modify`, `enable`, `disable`, and `reload` require root. The read-only commands `list` and `info` do not require root.
 
-### Project names
+## Project names
 
 A project name may contain letters, digits, underscores, and hyphens, up to 64 characters.
 
-### Runtimes and web servers
+## Runtimes and web servers
 
 A project has a runtime and a web server backend.
 
@@ -38,7 +31,7 @@ A project has a runtime and a web server backend.
 
 The web server defaults to nginx. The `--apache` flag selects Apache, but Apache support is not yet implemented; use nginx.
 
-### `project add`
+## `project add`
 
 Create a new project.
 
@@ -74,7 +67,7 @@ If `--path` is not given, it defaults to `/var/www/<name>`.
 
 Domains are validated. Each must be a well-formed domain name.
 
-#### Examples
+### Examples
 
 ```bash
 # Static site
@@ -94,7 +87,7 @@ sudo abstrax project add myapp --path=/var/www/myapp \
   --domains=myapp.com --ruby --proxy-port=3000
 ```
 
-#### Example output
+### Example output
 
 ```text
 Project myapp created.
@@ -104,7 +97,7 @@ Project myapp created.
   Vhost:      /etc/nginx/sites-available/abstrax-myapp
 ```
 
-### `project remove`
+## `project remove`
 
 Remove a project. This is a destructive command and asks for confirmation unless `--yes` is given. By default the project files are kept and the nginx virtual host is removed.
 
@@ -125,7 +118,7 @@ sudo abstrax project remove myapp --remove-vhost
 sudo abstrax project remove myapp --delete-files --force
 ```
 
-### `project modify`
+## `project modify`
 
 Change a project's configuration.
 
@@ -147,7 +140,7 @@ sudo abstrax project modify <name> [flags]
 sudo abstrax project modify myapp --add-domain=www.myapp.com
 ```
 
-### `project list`
+## `project list`
 
 List managed projects. Does not require root.
 
@@ -160,7 +153,7 @@ NAME    PATH              WEB SERVER   RUNTIME   DOMAINS
 myapp   /var/www/myapp    nginx        php       myapp.com, www.myapp.com
 ```
 
-### `project info`
+## `project info`
 
 Show details for a project. Does not require root.
 
@@ -181,7 +174,7 @@ abstrax project info myapp
   Updated:       2024-01-01 12:00:00
 ```
 
-### Enable, disable, and reload
+## Enable, disable, and reload
 
 ```bash
 sudo abstrax project enable <name>
@@ -193,52 +186,9 @@ sudo abstrax project reload <name>
 - `disable` removes that symlink.
 - `reload` reloads nginx for the project.
 
----
-
-## Web server commands
-
-The `web` group operates on the web server directly. The current backend is nginx.
-
-```text
-abstrax web <action>
-```
-
-The group accepts a `--nginx` flag for selecting the backend. nginx is the only supported backend and is used by default, so you do not normally need to set it.
-
-### Permissions
-
-`web test` does not require root. `web reload` and `web restart` require root.
-
-### `web test`
-
-Test the web server configuration (runs `nginx -t`). Does not require root.
-
-```bash
-abstrax web test
-```
-
-```text
-nginx configuration test passed.
-```
-
-If the test fails, Abstrax prints the error output and the JSON result has `error_code: config_invalid`.
-
-### `web reload` and `web restart`
-
-```bash
-sudo abstrax web reload
-sudo abstrax web restart
-```
-
-`reload` applies configuration changes gracefully and is usually what you want. `restart` fully restarts the web server, which briefly drops active connections. Run `abstrax web test` first to confirm the configuration is valid before reloading or restarting.
-
-## Notes
-
-- These commands manage nginx. Apache is referenced in the flags but is not yet implemented.
-- After changing a virtual host by hand, run `abstrax web test` before reloading to catch configuration errors.
-
 ## Related
 
 - [Creating a project](/docs/guides/creating-a-project)
+- [Web server](/docs/commands/web)
 - [Certificates (SSL)](/docs/commands/certificates)
 - [Security](/docs/reference/security)

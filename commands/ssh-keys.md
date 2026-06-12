@@ -203,5 +203,5 @@ sudo abstrax ssh restart
 
 - [Adding SSH access](/docs/guides/adding-ssh-access)
 - [Users](/docs/commands/users)
-- [Firewall](/docs/commands/system#firewall-commands)
+- [Firewall](/docs/commands/firewall)
 - [Security](/docs/reference/security)

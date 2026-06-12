@@ -92,7 +92,7 @@ See [Packages](/docs/commands/packages).
 
 ## service
 
-See [Service commands](/docs/commands/system#service-commands).
+See [Services](/docs/commands/service).
 
 | Command | Root | Description |
 |---|---|---|
@@ -153,7 +153,7 @@ See [Projects](/docs/commands/projects).
 
 ## web
 
-See [Web server commands](/docs/commands/projects#web-server-commands).
+See [Web server](/docs/commands/web).
 
 | Command | Root | Description |
 |---|---|---|
@@ -174,7 +174,7 @@ See [Certificates](/docs/commands/certificates).
 
 ## mysql
 
-See [MySQL commands](/docs/commands/system#mysql-commands).
+See [MySQL](/docs/commands/mysql).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -196,7 +196,7 @@ Privilege presets: `readonly`, `app`, `admin`.
 
 ## cache
 
-See [Cache commands](/docs/commands/system#cache-commands).
+See [Cache](/docs/commands/cache).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -212,7 +212,7 @@ Drivers: `redis`, `memcached`.
 
 ## firewall
 
-See [Firewall commands](/docs/commands/system#firewall-commands).
+See [Firewall](/docs/commands/firewall).
 
 | Command | Root | Key flags |
 |---|---|---|
@@ -228,7 +228,7 @@ See [Firewall commands](/docs/commands/system#firewall-commands).
 
 ## server
 
-See [Server status commands](/docs/commands/system#server-status-commands).
+See [Server](/docs/commands/server).
 
 | Command | Root | Key flags |
 |---|---|---|

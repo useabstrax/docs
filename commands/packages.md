@@ -123,5 +123,5 @@ curl       8.5.0-2ubuntu10      amd64
 ## Related
 
 - [Installing packages](/docs/guides/installing-packages)
-- [Cache (Redis, Memcached)](/docs/commands/system#cache-commands)
+- [Cache (Redis, Memcached)](/docs/commands/cache)
 - [Troubleshooting](/docs/reference/troubleshooting)

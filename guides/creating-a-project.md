@@ -1,6 +1,6 @@
 # Creating a project
 
-This guide creates an nginx-backed web project, then adds a TLS certificate. It uses the [`project`](/docs/commands/projects), [`web`](/docs/commands/projects#web-server-commands), and [`ssl`](/docs/commands/certificates) commands.
+This guide creates an nginx-backed web project, then adds a TLS certificate. It uses the [`project`](/docs/commands/projects), [`web`](/docs/commands/web), and [`ssl`](/docs/commands/certificates) commands.
 
 These commands change system state and require root. Make sure nginx is installed first (`abstrax doctor` will show you).
 
@@ -125,6 +125,7 @@ sudo abstrax project remove myapp --delete-files --force
 
 ## Related
 
-- [Projects and web server](/docs/commands/projects)
+- [Projects](/docs/commands/projects)
+- [Web server](/docs/commands/web)
 - [Certificates (SSL)](/docs/commands/certificates)
-- [Firewall](/docs/commands/system#firewall-commands)
+- [Firewall](/docs/commands/firewall)

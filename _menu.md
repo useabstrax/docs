@@ -18,10 +18,15 @@
 - [Users](/docs/commands/users)
 - [SSH keys](/docs/commands/ssh-keys)
 - [Packages](/docs/commands/packages)
-- [System](/docs/commands/system)
+- [Services](/docs/commands/service)
+- [MySQL](/docs/commands/mysql)
+- [Cache](/docs/commands/cache)
+- [Firewall](/docs/commands/firewall)
+- [Server](/docs/commands/server)
 - [Cron](/docs/commands/cron)
 - [Daemons](/docs/commands/daemons)
 - [Projects](/docs/commands/projects)
+- [Web server](/docs/commands/web)
 - [Certificates](/docs/commands/certificates)
 
 ## Reference

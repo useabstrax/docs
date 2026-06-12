@@ -108,4 +108,4 @@ sudo abstrax daemon remove queue-worker --stop --delete-logs
 
 - [Daemons command reference](/docs/commands/daemons)
 - [Managing cron jobs](/docs/guides/managing-cron-jobs)
-- [Services](/docs/commands/system#service-commands)
+- [Services](/docs/commands/service)
