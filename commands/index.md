@@ -110,7 +110,7 @@ The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) a
 | `cron` | Manage scheduled cron jobs | [Cron](/docs/commands/cron) |
 | `daemon` | Manage background processes with Supervisor | [Daemons](/docs/commands/daemons) |
 | `project` | Manage nginx-backed web projects | [Projects](/docs/commands/projects) |
-| `web` | Test, reload, and restart the web server | [Web server](/docs/commands/web) |
+| `web` | Install, test, reload, and restart the web server | [Web server](/docs/commands/web) |
 | `ssl` | Manage Let's Encrypt certificates with Certbot | [Certificates](/docs/commands/certificates) |
 | `mysql` | Manage MySQL/MariaDB databases and users | [MySQL](/docs/commands/mysql) |
 | `cache` | Manage Redis and Memcached | [Cache](/docs/commands/cache) |

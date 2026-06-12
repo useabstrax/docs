@@ -67,6 +67,8 @@ If `--path` is not given, it defaults to `/var/www/<name>`.
 
 Domains are validated. Each must be a well-formed domain name.
 
+If a virtual host will be created (the default), Abstrax checks that the requested web server is installed. When nginx is missing, the command stops with a message pointing you to `sudo abstrax web install`. Use `--no-vhost` to create the project directory without this check.
+
 ### Examples
 
 ```bash
