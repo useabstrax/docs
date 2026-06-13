@@ -54,7 +54,7 @@ Each project you create with `abstrax project add` is recorded as a JSON file:
 /var/lib/abstrax/projects/<name>.json
 ```
 
-This file stores the project's name, path, domains, web server, runtime, SSL status, virtual host path, owner, and timestamps. The `project list` and `project info` commands read these files. You should not normally edit them by hand; use the `project modify` command instead.
+This file stores the project's name, path, domains, web server, runtime, runtime version (PHP, Node.js, or Ruby as applicable), public directory, proxy port, SSL status, virtual host path, owner, and timestamps. The `project list` and `project info` commands read these files. You should not normally edit them by hand; use the `project modify` command instead.
 
 ## Other system files Abstrax writes
 

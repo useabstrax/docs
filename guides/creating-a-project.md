@@ -23,8 +23,12 @@ sudo abstrax project add myapp \
 sudo abstrax project add myapp \
   --path=/var/www/myapp \
   --domains=myapp.com \
-  --php --php-version=8.2 --public-dir=public
+  --php --public-dir=public
 ```
+
+Omit `--php-version` to use the default (`8.5`). Pass `--php-version=8.4` (or another installed version) when you need something else.
+
+If PHP is not installed yet, Abstrax asks whether to install the requested version before continuing. Answer yes to install it, or no to abort. Pass `--yes` to install without prompting.
 
 ### Node.js or Ruby application (reverse proxy)
 
@@ -34,6 +38,8 @@ sudo abstrax project add myapp \
   --domains=myapp.com \
   --node --proxy-port=3000
 ```
+
+For Ruby, use `--ruby` instead of `--node`. Omit `--node-version` or `--ruby-version` to use the defaults (`24` and `4.0` respectively). If the runtime is missing, Abstrax offers to install it before creating the project.
 
 Expected output:
 

@@ -25,9 +25,9 @@ A project has a runtime and a web server backend.
 | Runtime | Flag | Notes |
 |---|---|---|
 | Static | `--static` | The default if no runtime flag is given |
-| PHP | `--php` | Uses PHP-FPM; set `--php-version` and `--public-dir` |
-| Node.js | `--node` | Proxies to a local port set with `--proxy-port` |
-| Ruby | `--ruby` | Proxies to a local port set with `--proxy-port` |
+| PHP | `--php` | Uses PHP-FPM; set `--php-version` (default `8.5`) and `--public-dir` |
+| Node.js | `--node` | Proxies to a local port set with `--proxy-port`; set `--node-version` (default `24`) |
+| Ruby | `--ruby` | Proxies to a local port set with `--proxy-port`; set `--ruby-version` (default `4.0`) |
 
 The web server defaults to nginx. The `--apache` flag selects Apache, but Apache support is not yet implemented; use nginx.
 
@@ -61,13 +61,42 @@ If `--path` is not given, it defaults to `/var/www/<name>`.
 | `--node` | `false` | Node.js application |
 | `--ruby` | `false` | Ruby application |
 | `--static` | `false` | Static site (default behaviour) |
-| `--php-version` | `8.2` | PHP version |
+| `--php-version` | `8.5` | PHP version |
+| `--node-version` | `24` | Node.js version |
+| `--ruby-version` | `4.0` | Ruby version |
 | `--public-dir` | | Public directory relative to the project path |
 | `--proxy-port` | `0` | Local port to proxy to (Node.js/Ruby) |
 
 Domains are validated. Each must be a well-formed domain name.
 
 If a virtual host will be created (the default), Abstrax checks that the requested web server is installed. When nginx is missing, the command stops with a message pointing you to `sudo abstrax web install`. Use `--no-vhost` to create the project directory without this check.
+
+### Runtime installation
+
+When you choose a PHP, Node.js, or Ruby runtime, Abstrax checks that the requested version is installed on the server before creating the project. Static projects skip this check.
+
+If the runtime is missing, you see a message like:
+
+```text
+PHP 8.5 is not installed on this server.
+Abstrax can install PHP 8.5.
+Install PHP 8.5 now? [y/N]
+```
+
+The version shown is the one you passed with `--php-version`, `--node-version`, or `--ruby-version`, or the default for that runtime if you omitted the flag.
+
+- Answer **yes** (or pass global `--yes`) and Abstrax installs the runtime, then continues with project creation.
+- Answer **no** and the command fails with an error; nothing is changed.
+
+The same check runs for `project modify` when the project uses a PHP, Node.js, or Ruby runtime (for example when you change `--php-version` to a version that is not yet installed).
+
+| Runtime | How Abstrax checks | What it installs |
+|---|---|---|
+| PHP | `php{version}-fpm` package | `php{version}-fpm`, `php{version}-cli`; enables and starts PHP-FPM |
+| Node.js | `node --version` major matches | NodeSource repository for the requested major, then `nodejs` |
+| Ruby | `ruby --version` matches major.minor | `ruby{version}` via apt, or `ruby-full` as a fallback |
+
+Use `--dry-run` to preview the prompt and installation steps without making changes.
 
 ### Examples
 
@@ -76,17 +105,29 @@ If a virtual host will be created (the default), Abstrax checks that the request
 sudo abstrax project add myapp --path=/var/www/myapp \
   --domains=myapp.com,www.myapp.com --static
 
-# PHP application
+# PHP application (uses default PHP 8.5)
 sudo abstrax project add myapp --path=/var/www/myapp \
-  --domains=myapp.com --php --php-version=8.2 --public-dir=public
+  --domains=myapp.com --php --public-dir=public
 
-# Node.js application (reverse proxy)
+# PHP application with a specific version
+sudo abstrax project add myapp --path=/var/www/myapp \
+  --domains=myapp.com --php --php-version=8.4 --public-dir=public
+
+# Node.js application (reverse proxy, uses default Node.js 24)
 sudo abstrax project add myapp --path=/var/www/myapp \
   --domains=myapp.com --node --proxy-port=3000
 
-# Ruby application (reverse proxy)
+# Node.js application with a specific version
+sudo abstrax project add myapp --path=/var/www/myapp \
+  --domains=myapp.com --node --node-version=22 --proxy-port=3000
+
+# Ruby application (reverse proxy, uses default Ruby 4.0)
 sudo abstrax project add myapp --path=/var/www/myapp \
   --domains=myapp.com --ruby --proxy-port=3000
+
+# Ruby application with a specific version
+sudo abstrax project add myapp --path=/var/www/myapp \
+  --domains=myapp.com --ruby --ruby-version=3.4 --proxy-port=3000
 ```
 
 ### Example output
@@ -135,6 +176,8 @@ sudo abstrax project modify <name> [flags]
 | `--add-domain` | Add a single domain |
 | `--remove-domain` | Remove a single domain |
 | `--php-version` | Change the PHP version |
+| `--node-version` | Change the Node.js version |
+| `--ruby-version` | Change the Ruby version |
 | `--public-dir` | Change the public directory |
 | `--proxy-port` | Change the proxy port |
 
@@ -168,6 +211,8 @@ abstrax project info myapp
   Path:          /var/www/myapp
   Web server:    nginx
   Runtime:       php
+  PHP version:   8.5
+  Public dir:    public
   Domains:       myapp.com, www.myapp.com
   SSL:           no
   Vhost:         /etc/nginx/sites-available/abstrax-myapp
