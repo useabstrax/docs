@@ -15,6 +15,7 @@
 
 ## Commands
 - [Commands overview](/docs/commands/)
+- [Config](/docs/commands/config)
 - [Self](/docs/commands/self)
 - [Users](/docs/commands/users)
 - [SSH keys](/docs/commands/ssh-keys)

@@ -1,6 +1,34 @@
 # Config file
 
-Abstrax does not use a general configuration file to control its behaviour. There is one configuration file, used only by the MySQL commands, plus a set of directories where Abstrax stores state and logs.
+Abstrax stores configuration in `/etc/abstrax/`. Most commands read and write these files automatically; you normally manage general settings with the [`config`](/docs/commands/config) command rather than editing files by hand.
+
+## General settings
+
+Server-wide Abstrax settings are stored in:
+
+```text
+/etc/abstrax/config.json
+```
+
+View effective settings (including built-in defaults):
+
+```bash
+abstrax config show
+```
+
+Example file after customising PHP extensions:
+
+```json
+{
+  "php": {
+    "extensions": ["mysql", "xml", "curl", "mbstring", "zip", "intl"]
+  }
+}
+```
+
+Extension values are apt package suffixes. When PHP is installed for a project, Abstrax expands them to versioned packages (for example `mysql` becomes `php8.5-mysql` for PHP 8.5).
+
+If the file does not exist, Abstrax uses built-in defaults. See the [config command](/docs/commands/config) for `set`, `add`, `remove`, and `reset`.
 
 ## MySQL connection config
 
@@ -39,7 +67,7 @@ See the [MySQL](/docs/commands/mysql) commands for usage.
 
 | Directory | Purpose | Permissions |
 |---|---|---|
-| `/etc/abstrax` | Configuration (currently `mysql.toml`) | 0750 |
+| `/etc/abstrax` | Configuration (`config.json`, `mysql.toml`) | 0750 |
 | `/var/lib/abstrax` | Runtime state | 0750 |
 | `/var/lib/abstrax/projects` | Project state, one JSON file per project | |
 | `/var/log/abstrax` | Logs | 0750 |

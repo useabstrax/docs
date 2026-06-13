@@ -145,6 +145,19 @@ See [Daemons](/docs/commands/daemons).
 | `daemon list` | No | |
 | `daemon logs <name>` | No | `--lines`, `--follow`, `--stderr`, `--stdout` |
 
+## config
+
+See [Config](/docs/commands/config).
+
+| Command | Root | Description |
+|---|---|---|
+| `config show` | No | Show effective configuration |
+| `config get <key>` | No | Get one configuration value |
+| `config set <key> <values...>` | Yes | Replace a list value |
+| `config add <key> <value>` | Yes | Append to a list value |
+| `config remove <key> <value>` | Yes | Remove from a list value |
+| `config reset [key]` | Yes | Reset to defaults |
+
 ## project
 
 See [Projects](/docs/commands/projects).

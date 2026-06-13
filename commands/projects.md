@@ -92,9 +92,11 @@ The same check runs for `project modify` when the project uses a PHP, Node.js, o
 
 | Runtime | How Abstrax checks | What it installs |
 |---|---|---|
-| PHP | `php{version}-fpm` package | `php{version}-fpm`, `php{version}-cli`; enables and starts PHP-FPM |
+| PHP | `php{version}-fpm` package | `php{version}-fpm`, `php{version}-cli`, plus extensions from [`config php.extensions`](/docs/commands/config); enables and starts PHP-FPM |
 | Node.js | `node --version` major matches | NodeSource repository for the requested major, then `nodejs` |
 | Ruby | `ruby --version` matches major.minor | `ruby{version}` via apt, or `ruby-full` as a fallback |
+
+PHP extensions are configured server-wide with `abstrax config` (default: `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`). See [Config](/docs/commands/config).
 
 Use `--dry-run` to preview the prompt and installation steps without making changes.
 

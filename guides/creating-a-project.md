@@ -28,7 +28,7 @@ sudo abstrax project add myapp \
 
 Omit `--php-version` to use the default (`8.5`). Pass `--php-version=8.4` (or another installed version) when you need something else.
 
-If PHP is not installed yet, Abstrax asks whether to install the requested version before continuing. Answer yes to install it, or no to abort. Pass `--yes` to install without prompting.
+If PHP is not installed yet, Abstrax asks whether to install the requested version before continuing. Answer yes to install it, or no to abort. Pass `--yes` to install without prompting. PHP is installed with FPM, CLI, and the extension packages configured in [`abstrax config`](/docs/commands/config) (defaults include `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, and `gd`).
 
 ### Node.js or Ruby application (reverse proxy)
 

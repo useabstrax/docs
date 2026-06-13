@@ -30,6 +30,7 @@ Every command also supports `--help` (alias `-h`). The root command additionally
 | `abstrax version` | Print version, commit, and build date | No |
 | `abstrax self` | Manage the Abstrax CLI itself | Depends on subcommand |
 | `abstrax doctor` | Inspect the system and report platform capabilities | No |
+| `abstrax config` | Manage Abstrax configuration | Depends on subcommand |
 | `abstrax log [path]` | Tail a log file (defaults to the Abstrax log) | No |
 | `abstrax agent` | Placeholder for the future hosted agent (not implemented) | No |
 | `abstrax help` | Show help for any command | No |
@@ -103,6 +104,7 @@ The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) a
 
 | Group | Purpose | Documentation |
 |---|---|---|
+| `config` | Manage Abstrax server-wide settings | [Config](/docs/commands/config) |
 | `self` | Update and manage the Abstrax CLI | [Self](/docs/commands/self) |
 | `user` | Manage Linux users and groups | [Users](/docs/commands/users) |
 | `ssh-key` | Manage SSH authorised keys for users | [SSH keys](/docs/commands/ssh-keys) |
