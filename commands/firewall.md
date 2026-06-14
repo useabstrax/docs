@@ -7,6 +7,17 @@ abstrax firewall <action> [arguments] [flags]
 abstrax firewall rule <action> [arguments]
 ```
 
+## Automatic SSH lockout protection
+
+On `allow`, `deny`, `allow-ip`, `deny-ip`, and `enable`, Abstrax automatically ensures your current IP address can reach the SSH port before applying the requested change. This helps prevent locking yourself out when editing firewall rules over SSH.
+
+- **SSH port** is read from sshd configuration: the Abstrax managed include file (`/etc/ssh/sshd_config.d/99-abstrax.conf`) first, then the main `/etc/ssh/sshd_config`, defaulting to `22`.
+- **Your IP address** is detected from the SSH session (`SSH_CONNECTION` or `SSH_CLIENT` environment variables). When running under `sudo`, Abstrax falls back to parsing `who` output, which uses the controlling terminal of your session.
+- **Idempotent**: if an allow rule for your IP on the SSH port already exists, no duplicate rule is added. For example, if `enable` adds the rule, a later `allow 443` will not add it again.
+- **Undetectable IP**: if your IP cannot be determined (local console, cron job, or automation), the command still runs but Abstrax prints a warning that SSH protection was skipped.
+
+The auto-protect rule is source-restricted (your IP only). On `enable`, `--allow-ssh` still opens the SSH port globally for all IPs, which is useful on servers with multiple administrators.
+
 ## Permissions
 
 `enable`, `disable`, `allow`, `deny`, `allow-ip`, `deny-ip`, and `rule remove` require root. `status` and `rule list` do not require root.

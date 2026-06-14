@@ -67,7 +67,7 @@ Abstrax warns before actions that commonly cause lockouts or exposure:
 - Changing the SSH port warns that it can lock you out if the firewall is not updated.
 - Disabling password authentication warns you to confirm you have a working key.
 - Restarting SSH warns that active sessions will briefly disconnect.
-- Enabling the firewall without `--allow-ssh` warns that you may be locked out.
+- Enabling the firewall without `--allow-ssh` warns that you may be locked out. Abstrax also auto-protects your current IP on the SSH port when you run `firewall enable`, `allow`, `deny`, `allow-ip`, or `deny-ip` (see [Firewall](/docs/commands/firewall#automatic-ssh-lockout-protection)).
 - Binding Redis to `0.0.0.0` warns that it is exposed on all interfaces and asks for confirmation.
 
 ### Passwords are never on the command line

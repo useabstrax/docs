@@ -172,6 +172,8 @@ Note that `firewall deny` does not validate the port, so it accepts a value as g
 sudo abstrax firewall enable --allow-ssh --ssh-port=2222
 ```
 
+Abstrax also auto-protects your current IP on the SSH port when you run `firewall enable`, `allow`, `deny`, `allow-ip`, or `deny-ip`. This reduces the risk of lockout when editing rules over SSH, but `--allow-ssh` is still recommended for servers with multiple administrators because it opens SSH globally.
+
 If you are already locked out, you will need console access to run `sudo abstrax firewall disable` or to allow the SSH port.
 
 ## No log file found
