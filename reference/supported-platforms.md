@@ -53,7 +53,7 @@ Abstrax calls other tools rather than replacing them. The relevant feature only 
 | memcached | `cache` |
 | ufw | `firewall` |
 | curl | general |
-| git | `project` (git deploy) |
+| git | general |
 
 ## Feature status
 

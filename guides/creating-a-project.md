@@ -53,6 +53,10 @@ Project myapp created.
 
 If you omit `--path`, it defaults to `/var/www/<name>`.
 
+### Deploy your application code
+
+`project add` creates the directory and nginx configuration but does not put your application files on the server. Deploy source code separately — for example with CI/CD, `git clone`/`git pull`, rsync, or your existing deployment process — once the project path and virtual host are in place.
+
 ## 2. Confirm the nginx configuration
 
 Test the web server configuration before relying on it:

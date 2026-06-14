@@ -164,7 +164,7 @@ See [Projects](/docs/commands/projects).
 
 | Command | Root | Key flags |
 |---|---|---|
-| `project add <name>` | Yes | `--path`, `--nginx`, `--apache`, `--no-vhost`, `--domains`, `--port`, `--web-root`, `--user`, `--group`, `--ssl`, `--email`, `--redirect-http`, `--git`, `--branch`, `--php`, `--node`, `--ruby`, `--static`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port` |
+| `project add <name>` | Yes | `--path`, `--nginx`, `--apache`, `--no-vhost`, `--domains`, `--port`, `--web-root`, `--user`, `--group`, `--ssl`, `--email`, `--redirect-http`, `--php`, `--node`, `--ruby`, `--static`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port` |
 | `project remove <name>` | Yes | `--remove-vhost`, `--remove-ssl`, `--delete-files`, `--keep-files`, `--force` |
 | `project modify <name>` | Yes | `--path`, `--domains`, `--add-domain`, `--remove-domain`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port` |
 | `project list` | No | |

@@ -31,6 +31,12 @@ A project has a runtime and a web server backend.
 
 The web server defaults to nginx. The `--apache` flag selects Apache, but Apache support is not yet implemented; use nginx.
 
+## Application code
+
+`project` commands set up server-side infrastructure: the project directory, ownership, nginx virtual host, and runtime. They do not deploy application source code.
+
+After creating a project, deploy your code separately — for example with CI/CD, `git clone`/`git pull`, rsync, or another deployment tool. Abstrax does not clone repositories or check out branches as part of `project add`.
+
 ## `project add`
 
 Create a new project.
@@ -55,8 +61,6 @@ If `--path` is not given, it defaults to `/var/www/<name>`.
 | `--ssl` | `false` | Enable SSL (requires certbot) |
 | `--email` | | Email for the SSL certificate |
 | `--redirect-http` | `true` | Redirect HTTP to HTTPS |
-| `--git` | | Git repository URL |
-| `--branch` | `main` | Git branch to deploy |
 | `--php` | `false` | PHP application |
 | `--node` | `false` | Node.js application |
 | `--ruby` | `false` | Ruby application |
