@@ -99,6 +99,22 @@ Arguments such as usernames, package names, database names, domains, ports, and 
 
 Abstrax reduces the chance of certain mistakes through confirmations, validation, dry-run, and SSH config validation. It does not sandbox commands, does not roll back changes automatically (beyond the file backups noted above), and does not prevent you from running a valid but unwanted command. You remain responsible for the changes you apply.
 
+## Plugins
+
+Abstrax supports standalone executable plugins. See [Plugins](/docs/commands/plugins) for full documentation.
+
+Key security properties:
+
+- Built-in commands always take priority over plugin names.
+- Plugin binaries are verified with SHA-256 checksums before installation; downloaded plugins are never executed before verification.
+- Plugins are launched with direct process execution (no shell).
+- The default plugin registry uses HTTPS.
+- Registry-blocked plugins cannot be installed; execution is blocked unless `--allow-blocked-plugin` is used.
+- Project configuration files cannot trigger automatic plugin installation.
+- Privileged operations are available to plugins only through narrow, validated core commands such as `abstrax project service restart`.
+
+Trust levels (`official`, `verified`, `community`) are policy metadata, not proof that a plugin is safe. Treat third-party plugins like any executable you install on your server.
+
 ## Related
 
 - [Permissions](/docs/configuration/permissions)

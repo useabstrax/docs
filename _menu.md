@@ -28,12 +28,14 @@
 - [Cron](/docs/commands/cron)
 - [Daemons](/docs/commands/daemons)
 - [Projects](/docs/commands/projects)
+- [Plugins](/docs/commands/plugins)
 - [Web server](/docs/commands/web)
 - [Certificates](/docs/commands/certificates)
 
 ## Reference
 - [Command reference](/docs/reference/)
 - [Exit codes](/docs/reference/exit-codes)
+- [Plugin registry API](/docs/reference/plugin-registry-api)
 - [Security](/docs/reference/security)
 - [Supported platforms](/docs/reference/supported-platforms)
 - [Troubleshooting](/docs/reference/troubleshooting)

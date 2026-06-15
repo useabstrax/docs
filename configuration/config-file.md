@@ -30,6 +30,26 @@ Extension values are apt package suffixes. When PHP is installed for a project, 
 
 If the file does not exist, Abstrax uses built-in defaults. See the [config command](/docs/commands/config) for `set`, `add`, `remove`, and `reset`.
 
+### Plugin settings
+
+Plugin registry configuration can be stored in `config.json`:
+
+```json
+{
+  "plugins": {
+    "registry_url": "https://plugins.useabstrax.com/api/v1",
+    "allow_blocked": ["legacy-plugin"]
+  }
+}
+```
+
+| Key | Description |
+|---|---|
+| `registry_url` | Base URL for the plugin registry (default: `https://plugins.useabstrax.com/api/v1`) |
+| `allow_blocked` | Plugin names permitted to run despite blocked registry status |
+
+See [Plugins](/docs/commands/plugins) for details.
+
 ## MySQL connection config
 
 The MySQL commands need to know how to connect to the database server. That connection information is saved in:
@@ -70,6 +90,8 @@ See the [MySQL](/docs/commands/mysql) commands for usage.
 | `/etc/abstrax` | Configuration (`config.json`, `mysql.toml`) | 0750 |
 | `/var/lib/abstrax` | Runtime state | 0750 |
 | `/var/lib/abstrax/projects` | Project state, one JSON file per project | |
+| `/var/lib/abstrax/plugins` | Plugin installation records and caches | |
+| `/usr/local/lib/abstrax/plugins` | Installed plugin binaries (system) | |
 | `/var/log/abstrax` | Logs | 0750 |
 
 When you install the binary by hand, the directories are created as needed by the commands that use them (for example `mysql config set` creates `/etc/abstrax`).

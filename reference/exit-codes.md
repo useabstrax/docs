@@ -11,7 +11,9 @@ Abstrax uses two exit codes:
 | `0` | The command completed successfully |
 | `1` | The command failed for any reason |
 
-There is no finer-grained set of exit codes. Any error - invalid input, missing permissions, a failed underlying command, an unsupported platform - results in exit code `1`. To distinguish between causes in a script, read the error message, or use `--json` and inspect the `error_code` and `message` fields.
+There is no finer-grained set of exit codes for most commands. Any error - invalid input, missing permissions, a failed underlying command, an unsupported platform - results in exit code `1`. To distinguish between causes in a script, read the error message, or use `--json` and inspect the `error_code` and `message` fields.
+
+**Exception:** When Abstrax delegates to a plugin command (for example `abstrax deploy`), the plugin process exit code is propagated to the shell. A plugin that exits with code `2` will cause Abstrax to exit with `2`.
 
 When a command requires confirmation and you decline the prompt, the command stops without making changes and exits `0`.
 
@@ -61,6 +63,15 @@ The error codes currently produced by the application are:
 |---|---|
 | `command_error` | The default code for any error surfaced at the top level (validation failures, permission errors, failed underlying commands) |
 | `config_invalid` | Returned by `web test` when the web server configuration test fails |
+| `plugin_not_installed` | Plugin binary or installation record not found |
+| `registry_unavailable` | Plugin registry could not be reached |
+| `incompatible_abstrax_version` | Plugin requires a different Abstrax version |
+| `unsupported_platform` | No plugin binary for the current platform |
+| `checksum_mismatch` | Downloaded plugin binary failed SHA-256 verification |
+| `malformed_plugin_metadata` | Plugin metadata JSON is invalid |
+| `unsupported_plugin_protocol` | Plugin uses an unsupported metadata protocol version |
+| `blocked_plugin` | Plugin is blocked by registry policy |
+| `plugin_process_failure` | Plugin process failed to start |
 
 Most failures use `command_error`. The `message` field carries the specific detail.
 

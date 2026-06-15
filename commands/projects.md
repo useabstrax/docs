@@ -227,6 +227,49 @@ abstrax project info myapp
   Updated:       2024-01-01 12:00:00
 ```
 
+## `project inspect`
+
+Inspect a project using the stable v1 API designed for plugins and automation. Does not require root.
+
+```bash
+abstrax project inspect myapp --json
+```
+
+```json
+{
+  "api_version": "v1",
+  "project": {
+    "name": "myapp",
+    "path": "/var/www/myapp",
+    "user": "www-data",
+    "runtime": {
+      "type": "php",
+      "version": "8.5"
+    },
+    "domains": ["myapp.com", "www.myapp.com"],
+    "services": [
+      {
+        "name": "worker",
+        "type": "worker"
+      }
+    ]
+  }
+}
+```
+
+This API exposes non-secret information only. The existing `project info --json` output remains unchanged for backward compatibility.
+
+## `project service`
+
+Restart or reload project-owned supervisor services. Requires root.
+
+```bash
+sudo abstrax project service restart <project> <service>
+sudo abstrax project service reload <project> <service>
+```
+
+Services must belong to the project — either recorded in project state or named `abstrax-<project>-<service>` in supervisor. These commands do not wrap arbitrary systemctl calls.
+
 ## Enable, disable, and reload
 
 ```bash
@@ -241,6 +284,7 @@ sudo abstrax project reload <name>
 
 ## Related
 
+- [Plugins](/docs/commands/plugins)
 - [Creating a project](/docs/guides/creating-a-project)
 - [Web server](/docs/commands/web)
 - [Certificates (SSL)](/docs/commands/certificates)

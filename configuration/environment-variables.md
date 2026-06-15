@@ -1,8 +1,6 @@
 # Environment variables
 
-Abstrax does not define its own environment variables to configure its behaviour. There is no `ABSTRAX_*` environment variable that changes defaults, output, or paths.
-
-This behaviour is based on the current application code. If you are looking for a way to change defaults, use the global flags instead.
+Abstrax does not define environment variables to configure core CLI behaviour. Plugin-related variables are documented below.
 
 ## Global flags instead of environment variables
 
@@ -19,11 +17,30 @@ Abstrax behaviour is controlled by flags rather than the environment:
 
 You can apply these per command. There is no configuration file or environment variable to set them globally.
 
+## Plugin environment variables
+
+When Abstrax launches a plugin, it sets these variables on the plugin process:
+
+| Variable | Value |
+|---|---|
+| `ABSTRAX_PLUGIN` | `1` |
+| `ABSTRAX_PLUGIN_PROTOCOL` | `1` |
+| `ABSTRAX_BINARY` | Absolute path to the `abstrax` binary |
+| `ABSTRAX_VERSION` | Current Abstrax semver |
+
+To override the plugin registry URL:
+
+| Variable | Effect |
+|---|---|
+| `ABSTRAX_PLUGIN_REGISTRY` | Base URL for the plugin registry (overrides config file) |
+
+See [Plugins](/docs/commands/plugins) for details.
+
 ## Environment that does affect Abstrax indirectly
 
 While Abstrax has no variables of its own, it runs as a normal process and the usual environment still applies:
 
-- **`PATH`** - Abstrax finds the tools it manages (`apt`, `systemctl`, `ufw`, `nginx`, `certbot`, `supervisorctl`, `mysql`, and so on) by looking them up on the `PATH`. If a tool is installed in a non-standard location that is not on the `PATH`, Abstrax may report it as not found. The `abstrax doctor` command uses the same lookup.
+- **`PATH`** - Abstrax finds the tools it manages (`apt`, `systemctl`, `ufw`, `nginx`, `certbot`, `supervisorctl`, `mysql`, and so on) by looking them up on the `PATH`. Abstrax also searches `PATH` for plugin binaries named `abstrax-<name>`. If a tool is installed in a non-standard location that is not on the `PATH`, Abstrax may report it as not found. The `abstrax doctor` command uses the same lookup.
 - **The invoking user** - whether you are root determines which commands you can run. See [Permissions](/docs/configuration/permissions).
 
 ## Setting environment for managed jobs
