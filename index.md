@@ -33,7 +33,7 @@ You do not need to be a Linux expert to use Abstrax, but you should understand t
 ## What problems it solves
 
 - **Inconsistent syntax.** Different tools (`useradd`, `ufw`, `certbot`, `supervisorctl`) each have their own flags and conventions. Abstrax gives them a single, predictable style.
-- **Repetitive setup.** Creating a web project usually means making a directory, setting ownership, writing an nginx virtual host, and reloading the web server. Abstrax does these steps together.
+- **Repetitive setup.** Creating a web project usually means making a directory, configuring ownership, writing an nginx virtual host, and reloading the web server. Abstrax creates the directory and virtual host, records the intended owner, and reloads the web server.
 - **Scripting.** The `--json` flag produces stable, structured output that is easier to parse than the text output of individual system tools.
 - **Safety.** Destructive commands ask for confirmation, SSH configuration is validated before it is applied, and many commands support `--dry-run` so you can preview changes.
 

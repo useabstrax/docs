@@ -1,6 +1,6 @@
 # Projects
 
-The `project` group sets up a web application: it can create the project directory, set ownership, write an nginx virtual host, and record the project's state. Project state is stored as JSON in:
+The `project` group sets up a web application: it can create the project directory, record the intended owner, write an nginx virtual host, and save the project's state. Project state is stored as JSON in:
 
 ```text
 /var/lib/abstrax/projects/<name>.json
@@ -33,9 +33,13 @@ The web server defaults to nginx. The `--apache` flag selects Apache, but Apache
 
 ## Application code
 
-`project` commands set up server-side infrastructure: the project directory, ownership, nginx virtual host, and runtime. They do not deploy application source code.
+`project` commands set up server-side infrastructure: the project directory, intended ownership (recorded in state), nginx virtual host, and runtime. They do not deploy application source code.
 
 After creating a project, deploy your code separately — for example with CI/CD, `git clone`/`git pull`, rsync, or another deployment tool. Abstrax does not clone repositories or check out branches as part of `project add`.
+
+## Ownership
+
+By default, `--user` and `--group` are both `www-data`. Abstrax records these in project state; set on-disk ownership to match your deployment workflow. Pass `--user` and `--group` on `project add` to record a different owner (for example `--user=deploy --group=www-data`). See [Creating a user](/docs/guides/creating-a-user) and [Creating a project](/docs/guides/creating-a-project).
 
 ## `project add`
 
@@ -56,8 +60,8 @@ If `--path` is not given, it defaults to `/var/www/<name>`.
 | `--domains` | | Comma-separated domain names |
 | `--port` | `80` | HTTP port |
 | `--web-root` | | Custom web root directory |
-| `--user` | `www-data` | Project owner user |
-| `--group` | `www-data` | Project owner group |
+| `--user` | `www-data` | Intended project owner (recorded in state) |
+| `--group` | `www-data` | Intended project group (recorded in state) |
 | `--ssl` | `false` | Enable SSL (requires certbot) |
 | `--email` | | Email for the SSL certificate |
 | `--redirect-http` | `true` | Redirect HTTP to HTTPS |

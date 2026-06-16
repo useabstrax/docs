@@ -53,6 +53,19 @@ Project myapp created.
 
 If you omit `--path`, it defaults to `/var/www/<name>`.
 
+### Ownership
+
+By default, `--user` and `--group` are both `www-data`. Abstrax records the intended owner in project state (see `project info`); set on-disk ownership to match your deployment workflow. To record a different owner when adding the project:
+
+```bash
+sudo abstrax project add myapp \
+  --path=/var/www/myapp \
+  --user=deploy --group=www-data \
+  --domains=myapp.com --php --public-dir=public
+```
+
+If you deploy over SSH as a dedicated user, see [Creating a user](/docs/guides/creating-a-user). You can place the project anywhere with `--path` (for example `/home/deploy/myapp`).
+
 ### Deploy your application code
 
 `project add` creates the directory and nginx configuration but does not put your application files on the server. Deploy source code separately — for example with CI/CD, `git clone`/`git pull`, rsync, or your existing deployment process — once the project path and virtual host are in place.
@@ -135,6 +148,7 @@ sudo abstrax project remove myapp --delete-files --force
 
 ## Related
 
+- [Creating a user](/docs/guides/creating-a-user)
 - [Projects](/docs/commands/projects)
 - [Web server](/docs/commands/web)
 - [Certificates (SSL)](/docs/commands/certificates)

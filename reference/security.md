@@ -20,7 +20,7 @@ Depending on the command, Abstrax can:
 - Start, stop, enable, and disable systemd services.
 - Create and remove cron files in `/etc/cron.d`.
 - Create and control Supervisor-managed processes.
-- Create nginx virtual hosts, set file ownership, and reload or restart nginx.
+- Create nginx virtual hosts, record intended project ownership, and reload or restart nginx.
 - Obtain, renew, and remove TLS certificates with Certbot.
 - Create and drop MySQL databases and users, and change grants.
 - Install and control Redis and Memcached.
