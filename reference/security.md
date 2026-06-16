@@ -101,7 +101,7 @@ Abstrax reduces the chance of certain mistakes through confirmations, validation
 
 ## Plugins
 
-Abstrax supports standalone executable plugins. See [Plugins](/docs/commands/plugins) for full documentation.
+Abstrax supports standalone executable plugins. See [Plugins](/docs/plugins/) for full documentation.
 
 Key security properties:
 

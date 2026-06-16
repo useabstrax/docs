@@ -261,6 +261,21 @@ See [Server](/docs/commands/server).
 | `server load` | No | |
 | `server services` | No | `--failed` |
 
+## plugin
+
+See [Plugins](/docs/commands/plugins).
+
+| Command | Root | Key flags |
+|---|---|---|
+| `plugin list` | No | |
+| `plugin info <name>` | No | |
+| `plugin search <query>` | No | |
+| `plugin install <name>` | Yes | `--manifest` |
+| `plugin update <name>` | Yes | |
+| `plugin remove <name>` | Yes | |
+
+Global flag: `--allow-blocked-plugin` (repeatable) allows execution of registry-blocked plugins.
+
 ## Action names
 
 Every command maps to a stable action name used in JSON output (the `action` field) and reserved for the future agent. Examples: `user.add`, `firewall.enable`, `project.add`, `mysql.database.add`, `cron.modify`. See the [JSON output](/docs/reference/exit-codes#json-result-shape) reference for the result shape.

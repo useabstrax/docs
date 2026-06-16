@@ -32,10 +32,20 @@
 - [Web server](/docs/commands/web)
 - [Certificates](/docs/commands/certificates)
 
+## Plugins
+- [Plugins overview](/docs/plugins/)
+- [How plugins work](/docs/plugins/how-it-works)
+- [Registry](/docs/plugins/registry)
+- [Metadata protocol](/docs/plugins/metadata-protocol)
+- [Integrating with Abstrax](/docs/plugins/integrating-with-abstrax)
+- [Creating a plugin](/docs/plugins/creating-a-plugin)
+- [Registry submission](/docs/plugins/registry-submission)
+- [Plugin security](/docs/plugins/security)
+- [Registry API](/docs/plugins/registry-api)
+
 ## Reference
 - [Command reference](/docs/reference/)
 - [Exit codes](/docs/reference/exit-codes)
-- [Plugin registry API](/docs/reference/plugin-registry-api)
 - [Security](/docs/reference/security)
 - [Supported platforms](/docs/reference/supported-platforms)
 - [Troubleshooting](/docs/reference/troubleshooting)

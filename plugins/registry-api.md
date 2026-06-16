@@ -1,6 +1,8 @@
-# Plugin registry API
+# Registry API
 
-The Abstrax plugin registry is hosted at [plugins.useabstrax.com](https://plugins.useabstrax.com). The public read-only API base URL is:
+HTTP reference for the read-only plugin registry API. For how the CLI configures and uses the registry, including trust levels and plugin status, see [Registry](/docs/plugins/registry).
+
+The registry is hosted at [plugins.useabstrax.com](https://plugins.useabstrax.com). The public API base URL is:
 
 ```text
 https://plugins.useabstrax.com/api/v1
@@ -172,5 +174,6 @@ Direct installation with `abstrax plugin install <name> --manifest=<url>` uses t
 
 ## Related
 
-- [Plugins command reference](/docs/commands/plugins)
-- [Security](/docs/reference/security)
+- [Registry](/docs/plugins/registry)
+- [Plugin commands](/docs/commands/plugins)
+- [Plugin security](/docs/plugins/security)

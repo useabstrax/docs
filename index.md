@@ -86,3 +86,4 @@ abstrax server status --json
 - [Permissions and security](/docs/reference/security) - what Abstrax needs and why.
 - [Troubleshooting](/docs/reference/troubleshooting) - common problems and fixes.
 - [Contributing](/docs/contributing/index) - build, test, and develop Abstrax.
+- [Plugins](/docs/plugins/) - extend Abstrax with plugins.

@@ -284,7 +284,7 @@ sudo abstrax project reload <name>
 
 ## Related
 
-- [Plugins](/docs/commands/plugins)
+- [Integrating with Abstrax](/docs/plugins/integrating-with-abstrax)
 - [Creating a project](/docs/guides/creating-a-project)
 - [Web server](/docs/commands/web)
 - [Certificates (SSL)](/docs/commands/certificates)

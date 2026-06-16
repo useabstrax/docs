@@ -48,7 +48,7 @@ Plugin registry configuration can be stored in `config.json`:
 | `registry_url` | Base URL for the plugin registry (default: `https://plugins.useabstrax.com/api/v1`) |
 | `allow_blocked` | Plugin names permitted to run despite blocked registry status |
 
-See [Plugins](/docs/commands/plugins) for details.
+See [Plugins](/docs/plugins/) for how plugins work and how to build them.
 
 ## MySQL connection config
 

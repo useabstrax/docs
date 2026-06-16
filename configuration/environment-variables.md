@@ -34,7 +34,7 @@ To override the plugin registry URL:
 |---|---|
 | `ABSTRAX_PLUGIN_REGISTRY` | Base URL for the plugin registry (overrides config file) |
 
-See [Plugins](/docs/commands/plugins) for details.
+See [Plugins overview](/docs/plugins/) and [Integrating with Abstrax](/docs/plugins/integrating-with-abstrax) for details.
 
 ## Environment that does affect Abstrax indirectly
 
