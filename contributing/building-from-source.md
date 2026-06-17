@@ -87,7 +87,7 @@ Releases use [GoReleaser](https://goreleaser.com/), configured in `.goreleaser.y
 
 - Builds `linux/amd64` and `linux/arm64` with `CGO_ENABLED=0` and the version `-ldflags` shown above.
 - Produces `tar.gz` archives that include `README.md` and the agent systemd unit.
-- Produces `.deb` and `.rpm` packages that install the binary to `/usr/bin/abstrax`, create `/etc/abstrax`, `/var/lib/abstrax`, and `/var/log/abstrax` with mode 0750, and install the agent systemd unit at `/etc/systemd/system/abstrax-agent.service`.
+- Produces `.deb` and `.rpm` packages that install the binary to `/usr/bin/abstrax`, create `/etc/abstrax` (including `/etc/abstrax/projects`), `/var/lib/abstrax`, and `/var/log/abstrax` with mode 0750, and install the agent systemd unit at `/etc/systemd/system/abstrax-agent.service`.
 - Runs a post-install script (`packaging/scripts/postinstall.sh`) that creates the directories, sets permissions, and prints a getting-started message. It does not enable the agent service, which is not implemented.
 - Generates SHA-256 checksums.
 

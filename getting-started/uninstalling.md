@@ -15,8 +15,8 @@ sudo rm /usr/local/bin/abstrax
 Abstrax creates and uses these directories. They are not removed automatically when you delete the binary:
 
 ```text
-/etc/abstrax        Configuration (for example mysql.toml)
-/var/lib/abstrax    Runtime state (for example project JSON files)
+/etc/abstrax        Configuration (config.json, mysql.json, projects/)
+/var/lib/abstrax    Runtime state (plugin records and caches)
 /var/log/abstrax    Logs
 ```
 

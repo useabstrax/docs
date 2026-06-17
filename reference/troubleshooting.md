@@ -120,7 +120,7 @@ sudo abstrax mysql config set --host=127.0.0.1 --user=root --password
 abstrax mysql test
 ```
 
-The config is stored at `/etc/abstrax/mysql.toml` with mode 0600, so reading it generally requires root.
+The config is stored at `/etc/abstrax/mysql.json` with mode 0600, so reading it generally requires root.
 
 ## "nginx configuration test failed"
 

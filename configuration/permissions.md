@@ -58,7 +58,7 @@ These read-only or query commands do not call the root check in code:
 A note on two groups:
 
 - **ssh-key**: the commands do not enforce root, but editing another user's `~/.ssh/authorized_keys` requires file permissions you usually only have as root or as that user. Use `sudo` when managing another user's keys.
-- **mysql**: most commands do not enforce a root check because they authenticate to the database using the saved connection config rather than relying on OS privileges. However, reading the config file at `/etc/abstrax/mysql.toml` (mode 0600, owned by root) generally requires root.
+- **mysql**: most commands do not enforce a root check because they authenticate to the database using the saved connection config rather than relying on OS privileges. However, reading the config file at `/etc/abstrax/mysql.json` (mode 0600, owned by root) generally requires root.
 - **cron enable/disable/list/info**: these do not enforce root, but reading or writing files in `/etc/cron.d` may still require root depending on file permissions.
 
 ## Why elevated permissions are needed

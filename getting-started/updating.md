@@ -2,7 +2,7 @@
 
 Abstrax can update itself from GitHub releases. You can use the built-in `self update` command (recommended), follow the manual release archive steps (the same method used during [installation](/docs/getting-started/)), or rebuild from source if you installed that way.
 
-Updating the binary does not change anything you have already configured on the server. Users, firewall rules, projects, cron jobs, databases, and certificates live in the system, not in the binary. Abstrax state files in `/var/lib/abstrax` and config in `/etc/abstrax` are not modified by an update.
+Updating the binary does not change anything you have already configured on the server. Users, firewall rules, projects, cron jobs, databases, and certificates live in the system, not in the binary. Abstrax config in `/etc/abstrax` and runtime state in `/var/lib/abstrax` are not modified by an update.
 
 ## Check your current version
 

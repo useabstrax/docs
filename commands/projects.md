@@ -3,7 +3,7 @@
 The `project` group sets up a web application: it can create the project directory, record the intended owner, write an nginx virtual host, and save the project's state. Project state is stored as JSON in:
 
 ```text
-/var/lib/abstrax/projects/<name>.json
+/etc/abstrax/projects/<name>.json
 ```
 
 ```text

@@ -1,10 +1,10 @@
 # Configuration
 
-Abstrax is controlled primarily through commands and flags. Server-wide settings live in `/etc/abstrax/config.json` and are managed with the [`config`](/docs/commands/config) command. MySQL connection settings use a separate file.
+Abstrax is controlled primarily through commands and flags. All server-wide configuration lives under `/etc/abstrax/` as JSON files.
 
 This section covers:
 
-- [Config file](/docs/configuration/config-file) - general settings, MySQL connection config, and directories Abstrax uses.
+- [Config file](/docs/configuration/config-file) - general settings, MySQL connection config, project state, and directories Abstrax uses.
 - [Environment variables](/docs/configuration/environment-variables) - what Abstrax reads from the environment.
 - [Permissions](/docs/configuration/permissions) - which commands need root and why.
 
@@ -13,10 +13,10 @@ This section covers:
 | Item | Path | Notes |
 |---|---|---|
 | General settings | `/etc/abstrax/config.json` | Managed by `config` commands, mode 0640 |
-| MySQL connection config | `/etc/abstrax/mysql.toml` | Written by `mysql config set`, mode 0600 |
+| MySQL connection config | `/etc/abstrax/mysql.json` | Written by `mysql config set`, mode 0600 |
+| Project state | `/etc/abstrax/projects/<name>.json` | One JSON file per project, mode 0640 |
 | Config directory | `/etc/abstrax` | Created with mode 0750 |
-| Project state | `/var/lib/abstrax/projects/<name>.json` | One JSON file per project |
-| State directory | `/var/lib/abstrax` | Created with mode 0750 |
+| Runtime state | `/var/lib/abstrax` | Plugin records and caches, mode 0750 |
 | Log file | `/var/log/abstrax/abstrax.log` | Read by `abstrax log` |
 | Log directory | `/var/log/abstrax` | Created with mode 0750 |
 

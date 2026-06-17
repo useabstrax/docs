@@ -1,6 +1,6 @@
 # MySQL
 
-The `mysql` group manages MySQL or MariaDB databases, users, and grants. Abstrax connects using a saved connection configuration stored at `/etc/abstrax/mysql.toml`.
+The `mysql` group manages MySQL or MariaDB databases, users, and grants. Abstrax connects using a saved connection configuration stored at `/etc/abstrax/mysql.json`.
 
 ```text
 abstrax mysql <action> [arguments] [flags]
@@ -11,7 +11,7 @@ abstrax mysql user <action> [arguments] [flags]
 
 ## Permissions
 
-`config set` and `install` require root. Other MySQL commands do not enforce a root check in code; they rely on the saved connection config to authenticate to the database. Note that reading the config file at `/etc/abstrax/mysql.toml` (mode 0600, root only) typically requires root.
+`config set` and `install` require root. Other MySQL commands do not enforce a root check in code; they rely on the saved connection config to authenticate to the database. Note that reading the config file at `/etc/abstrax/mysql.json` (mode 0600, root only) typically requires root.
 
 ## Connection configuration
 

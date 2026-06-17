@@ -1,6 +1,6 @@
 # Config file
 
-Abstrax stores configuration in `/etc/abstrax/`. Most commands read and write these files automatically; you normally manage general settings with the [`config`](/docs/commands/config) command rather than editing files by hand.
+Abstrax stores all configuration in `/etc/abstrax/` as JSON files. Most commands read and write these files automatically; you normally manage general settings with the [`config`](/docs/commands/config) command rather than editing files by hand.
 
 ## General settings
 
@@ -55,7 +55,7 @@ See [Plugins](/docs/plugins/) for how plugins work and how to build them.
 The MySQL commands need to know how to connect to the database server. That connection information is saved in:
 
 ```text
-/etc/abstrax/mysql.toml
+/etc/abstrax/mysql.json
 ```
 
 You create it with:
@@ -64,15 +64,15 @@ You create it with:
 sudo abstrax mysql config set --host=127.0.0.1 --user=root --password
 ```
 
-The file is written with mode `0600`, so only its owner (root) can read it. It uses a simple key/value format:
+The file is written with mode `0600`, so only its owner (root) can read it. Example contents:
 
-```toml
-# Abstrax MySQL config - root readable only
-host = "127.0.0.1"
-port = 3306
-user = "root"
-password = "..."
-socket = ""
+```json
+{
+  "host": "127.0.0.1",
+  "port": 3306,
+  "user": "root",
+  "password": "..."
+}
 ```
 
 Notes:
@@ -80,31 +80,34 @@ Notes:
 - The password is only written if you provided one with `--password` (which prompts securely). It is never passed on the command line.
 - `abstrax mysql config show` displays the host, port, user, and socket, but not the password.
 - If no config file exists, the MySQL commands fall back to the defaults `host=127.0.0.1`, `port=3306`, `user=root` with no password.
+- Upgrading from an older Abstrax version that used `mysql.toml` migrates the file to `mysql.json` automatically on first use.
 
 See the [MySQL](/docs/commands/mysql) commands for usage.
-
-## Directories Abstrax uses
-
-| Directory | Purpose | Permissions |
-|---|---|---|
-| `/etc/abstrax` | Configuration (`config.json`, `mysql.toml`) | 0750 |
-| `/var/lib/abstrax` | Runtime state | 0750 |
-| `/var/lib/abstrax/projects` | Project state, one JSON file per project | |
-| `/var/lib/abstrax/plugins` | Plugin installation records and caches | |
-| `/usr/local/lib/abstrax/plugins` | Installed plugin binaries (system) | |
-| `/var/log/abstrax` | Logs | 0750 |
-
-When you install the binary by hand, the directories are created as needed by the commands that use them (for example `mysql config set` creates `/etc/abstrax`).
 
 ## Project state files
 
 Each project you create with `abstrax project add` is recorded as a JSON file:
 
 ```text
-/var/lib/abstrax/projects/<name>.json
+/etc/abstrax/projects/<name>.json
 ```
 
 This file stores the project's name, path, domains, web server, runtime, runtime version (PHP, Node.js, or Ruby as applicable), public directory, proxy port, SSL status, virtual host path, owner, and timestamps. The `project list` and `project info` commands read these files. You should not normally edit them by hand; use the `project modify` command instead.
+
+Upgrading from an older Abstrax version that stored projects under `/var/lib/abstrax/projects/` migrates them to `/etc/abstrax/projects/` automatically on first use.
+
+## Directories Abstrax uses
+
+| Directory | Purpose | Permissions |
+|---|---|---|
+| `/etc/abstrax` | Configuration (`config.json`, `mysql.json`, `projects/`) | 0750 |
+| `/etc/abstrax/projects` | Project state, one JSON file per project | 0640 per file |
+| `/var/lib/abstrax` | Runtime state (plugin records and caches) | 0750 |
+| `/var/lib/abstrax/plugins` | Plugin installation records and caches | |
+| `/usr/local/lib/abstrax/plugins` | Installed plugin binaries (system) | |
+| `/var/log/abstrax` | Logs | 0750 |
+
+When you install the binary by hand, the directories are created as needed by the commands that use them (for example `mysql config set` creates `/etc/abstrax`).
 
 ## Other system files Abstrax writes
 

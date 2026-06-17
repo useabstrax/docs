@@ -145,3 +145,4 @@ See [Building from source](/docs/contributing/building-from-source#release-build
 
 - [Building from source](/docs/contributing/building-from-source)
 - [Command reference](/docs/reference/index)
+- [Licence](/docs/reference/license)

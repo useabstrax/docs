@@ -49,6 +49,7 @@
 - [Security](/docs/reference/security)
 - [Supported platforms](/docs/reference/supported-platforms)
 - [Troubleshooting](/docs/reference/troubleshooting)
+- [Licence](/docs/reference/license)
 
 ## Guides
 - [Guides overview](/docs/guides/)
