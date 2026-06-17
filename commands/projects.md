@@ -39,7 +39,117 @@ After creating a project, deploy your code separately — for example with CI/CD
 
 ## Ownership
 
-By default, `--user` and `--group` are both `www-data`. Abstrax records these in project state; set on-disk ownership to match your deployment workflow. Pass `--user` and `--group` on `project add` to record a different owner (for example `--user=deploy --group=www-data`). See [Creating a user](/docs/guides/creating-a-user) and [Creating a project](/docs/guides/creating-a-project).
+Abstrax supports two project ownership modes. **No separate isolation flag is required** — the mode is inferred from whether you supply `--user`.
+
+### Shared web user mode (default)
+
+When you omit `--user`, Abstrax uses **shared web user mode**:
+
+| Setting | Value |
+|---|---|
+| Project owner | `www-data` |
+| Project group | `www-data` |
+| Runtime user | `www-data` (via the system PHP-FPM pool) |
+| Default path | `/var/www/<name>` |
+
+```bash
+sudo abstrax project add example.com
+# path: /var/www/example.com, owner: www-data:www-data
+```
+
+This preserves existing behaviour. Commands and paths you used before continue to work unchanged.
+
+### User isolated mode
+
+When you **explicitly** pass `--user`, Abstrax selects **user isolated mode** automatically:
+
+| Setting | Value |
+|---|---|
+| Project owner | the supplied Linux user |
+| Project group | that user's primary group |
+| Runtime user | the same user (dedicated PHP-FPM pool for PHP projects) |
+| Default path | `<resolved home directory>/<name>` |
+
+```bash
+sudo abstrax project add example.com --user=mike
+# path: /home/mike/example.com (home resolved from the system account)
+```
+
+Abstrax resolves the user's real home directory, UID, GID, and primary group from the operating system. It does **not** use `SUDO_USER` unless you pass that name explicitly with `--user`.
+
+### Path precedence
+
+| User | Path | Result |
+|---|---|---|
+| omitted | omitted | `/var/www/<name>`, `www-data:www-data`, shared mode |
+| supplied | omitted | `<home>/<name>`, user isolated mode |
+| omitted | supplied | explicit path, `www-data:www-data`, shared mode |
+| supplied | supplied | explicit path, user isolated mode |
+
+An explicit `--path` always wins. Without `--path`, user isolated projects are created under the resolved home directory; shared mode projects use `/var/www/<name>`.
+
+### Path examples (all four combinations)
+
+```bash
+# 1. No user, no path → /var/www/example, www-data:www-data
+sudo abstrax project add example
+
+# 2. User, no path → /home/mike/example, mike:mike
+sudo abstrax project add example --user=mike
+
+# 3. Path, no user → /srv/sites/example, www-data:www-data
+sudo abstrax project add example --path=/srv/sites/example
+
+# 4. User and path → /srv/sites/example, mike:mike (with validation)
+sudo abstrax project add example --user=mike --path=/srv/sites/example
+```
+
+### Custom paths in user isolated mode
+
+- Paths **inside the selected user's home directory** are allowed (for example `/home/mike/projects/example`).
+- Paths **inside another user's home directory** are rejected.
+- Paths **outside the user's home** are allowed only when inside an [approved shared project root](#approved-shared-project-roots) configured in `/etc/abstrax/config.json`.
+- Abstrax **never** recursively `chown`s an existing directory owned by another user.
+- Abstrax **never** uses the approved root itself or a user's home directory as the project directory.
+
+### Approved shared project roots
+
+Configure approved roots for user isolated projects outside home directories:
+
+```bash
+sudo abstrax config set projects.approved_roots /srv/sites /srv/www
+```
+
+Or edit `/etc/abstrax/config.json`:
+
+```json
+{
+  "projects": {
+    "approved_roots": ["/srv/sites", "/srv/www"]
+  }
+}
+```
+
+### Nginx and PHP in user isolated mode
+
+- **Nginx** continues to run as `www-data`.
+- Abstrax grants **limited filesystem ACLs** so nginx can traverse parent directories and read the `public` directory only (not the entire home directory or private project files).
+- **PHP** runs as the project user through a **dedicated PHP-FPM pool** with a project-specific Unix socket.
+- Socket permissions use `listen.mode = 0660` with `listen.group = www-data` (not `0666`).
+- The `acl` package must be installed (`apt install acl`) when ACLs are required.
+
+### Project removal
+
+`project remove` reverses the correct mode:
+
+- **Shared mode:** removes the nginx vhost (by default) and project state; existing behaviour is unchanged.
+- **User isolated mode:** also removes the dedicated PHP-FPM pool, managed ACL entries, and the socket configuration. It does **not** delete the user's home directory, remove the Linux user, or remove unrelated ACL entries.
+
+Ownership mode and managed resources are read from project state (`/etc/abstrax/projects/<name>.json`), not guessed from the filesystem.
+
+### Legacy `--group` flag
+
+In shared mode you may pass `--group` to record a group in project state. In user isolated mode the primary group is always derived from the selected user.
 
 ## `project add`
 
@@ -49,19 +159,19 @@ Create a new project.
 abstrax project add <name> [flags]
 ```
 
-If `--path` is not given, it defaults to `/var/www/<name>`.
+If `--path` is not given, the default depends on ownership mode: `/var/www/<name>` in shared mode, or `<home>/<name>` when `--user` is set.
 
 | Flag | Default | Description |
 |---|---|---|
-| `--path` | `/var/www/<name>` | Project root path |
+| `--path` | `/var/www/<name>` when `--user` is omitted; `<home>/<name>` when `--user` is set | Project root path |
 | `--nginx` | `true` | Use nginx (default) |
 | `--apache` | `false` | Use Apache (not yet implemented) |
 | `--no-vhost` | `false` | Do not create a virtual host |
 | `--domains` | | Comma-separated domain names |
 | `--port` | `80` | HTTP port |
 | `--web-root` | | Custom web root directory |
-| `--user` | `www-data` | Intended project owner (recorded in state) |
-| `--group` | `www-data` | Intended project group (recorded in state) |
+| `--user` | | Linux user for a user-owned project (omit for shared `www-data` mode) |
+| `--group` | `www-data` in shared mode | Project group for shared mode only |
 | `--ssl` | `false` | Enable SSL (requires certbot) |
 | `--email` | | Email for the SSL certificate |
 | `--redirect-http` | `true` | Redirect HTTP to HTTPS |
@@ -111,11 +221,15 @@ Use `--dry-run` to preview the prompt and installation steps without making chan
 ### Examples
 
 ```bash
-# Static site
-sudo abstrax project add myapp --path=/var/www/myapp \
+# Shared static site (default mode)
+sudo abstrax project add myapp \
   --domains=myapp.com,www.myapp.com --static
 
-# PHP application (uses default PHP 8.5)
+# User isolated PHP application in the user's home
+sudo abstrax project add myapp --user=mike \
+  --domains=myapp.com --php --public-dir=public
+
+# Shared PHP application with custom path
 sudo abstrax project add myapp --path=/var/www/myapp \
   --domains=myapp.com --php --public-dir=public
 

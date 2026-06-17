@@ -50,6 +50,24 @@ Plugin registry configuration can be stored in `config.json`:
 
 See [Plugins](/docs/plugins/) for how plugins work and how to build them.
 
+### Project settings
+
+User isolated projects can use custom paths outside a user's home only when the path is inside an approved shared root:
+
+```json
+{
+  "projects": {
+    "approved_roots": ["/srv/sites", "/srv/www"]
+  }
+}
+```
+
+Configure with:
+
+```bash
+sudo abstrax config set projects.approved_roots /srv/sites /srv/www
+```
+
 ## MySQL connection config
 
 The MySQL commands need to know how to connect to the database server. That connection information is saved in:

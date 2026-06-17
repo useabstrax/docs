@@ -184,6 +184,71 @@ If you are already locked out, you will need console access to run `sudo abstrax
 
 **Fix.** This is informational, not an error. The log directory is created by package installation; the file appears when there is something to log.
 
+## User isolated project path rejected
+
+**Symptom.** `project add` fails with a message about another user's home directory, approved roots, or ownership conflicts.
+
+**Cause.** User isolated path validation blocked an unsafe location. Common cases:
+
+- The path is inside another user's home directory.
+- A non-existent path would be created under another user's home (parent directory check).
+- The path is outside the user's home and not under `projects.approved_roots`.
+- The directory already exists and is owned by another user.
+
+**Fix.**
+
+- Use a path inside the selected user's home: `--user=mike --path=/home/mike/projects/example`.
+- Or configure an approved root: `sudo abstrax config set projects.approved_roots /srv/sites`.
+- Or choose the matching project user for the target home directory.
+- For ownership conflicts, remove or reassign the existing directory manually; Abstrax will not recursively `chown` another user's files.
+
+## `setfacl is not installed`
+
+**Symptom.** User isolated project creation fails mentioning `setfacl` or the `acl` package.
+
+**Cause.** Nginx runs as `www-data` and needs filesystem ACLs to read public files in a user-owned home directory.
+
+**Fix.**
+
+```bash
+sudo apt install acl
+```
+
+Then re-run `project add`.
+
+## HTTP 403 on a user isolated site
+
+**Symptom.** nginx returns 403 for a user isolated project.
+
+**Cause.** Missing traversal permissions on parent directories, missing public directory ACLs, or SELinux/AppArmor blocking access.
+
+**Fix.**
+
+- Confirm the project was created with `project add --user=...` (ACLs are applied during creation).
+- Ensure the document root (`public` by default) exists and is readable.
+- On SELinux enforcing systems under `/home`, you may need appropriate file contexts (`semanage fcontext` / `restorecon`).
+- Check AppArmor profiles for nginx if access is denied despite correct Unix permissions.
+
+## PHP socket permission failures
+
+**Symptom.** nginx error log shows `connect() to unix:... failed (13: Permission denied)` for a user isolated PHP project.
+
+**Cause.** PHP-FPM socket permissions or pool ownership are incorrect.
+
+**Fix.**
+
+- Inspect project state: `abstrax project info <name>` and confirm `PHP socket` is set.
+- User isolated pools use `listen.mode = 0660` and `listen.group = www-data`.
+- Re-create the pool by removing and re-adding the project if the pool file was edited manually.
+
+## `user "..." does not exist`
+
+**Symptom.** `project add --user=...` fails because the Linux user was not found.
+
+**Cause.** The account does not exist on the system.
+
+**Fix.** Create the user first (`abstrax user add mike`) or omit `--user` for shared `www-data` mode. Abstrax does not fall back to `www-data` when a requested user is missing.
+
 ## Related
 
 - [Permissions](/docs/configuration/permissions)

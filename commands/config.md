@@ -27,8 +27,11 @@ Keys use dot notation. Only known keys are accepted.
 | Key | Type | Default |
 |---|---|---|
 | `php.extensions` | list of strings | `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd` |
+| `projects.approved_roots` | list of absolute paths | (none) |
 
 Values for `php.extensions` are apt package **suffixes**, not full package names. When PHP 8.5 is installed for a project, Abstrax expands `mysql` to `php8.5-mysql`, and so on.
+
+`projects.approved_roots` lists directories where **user isolated** projects (created with `--user`) may be placed outside the selected user's home directory. Example: `/srv/sites`. Paths inside another user's home are never allowed.
 
 ## `config show`
 
