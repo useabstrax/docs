@@ -208,7 +208,7 @@ See [MySQL](/docs/commands/mysql).
 | `mysql database add <name>` | No | `--charset`, `--collation`, `--if-not-exists` |
 | `mysql database remove <name>` | No | |
 | `mysql database list` | No | |
-| `mysql user add <name>` | No | `--host`, `--password`, `--grant-db`, `--privileges`, `--preset` |
+| `mysql user add <name>` | No | `--host`, `--password`, `--grant-db`, `--privileges`, `--preset` (password generated if `--password` omitted) |
 | `mysql user remove <name>` | No | `--host` |
 | `mysql user list` | No | |
 | `mysql user info <name>` | No | |

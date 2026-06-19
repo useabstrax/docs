@@ -13,7 +13,7 @@ This section covers:
 | Item | Path | Notes |
 |---|---|---|
 | General settings | `/etc/abstrax/config.json` | Managed by `config` commands, mode 0640 |
-| MySQL connection config | `/etc/abstrax/mysql.json` | Written by `mysql config set`, mode 0600 |
+| MySQL connection config | `/etc/abstrax/mysql.json` | Written by `mysql install`, `mysql reset-root-password`, or `mysql config set`, mode 0600 |
 | Project state | `/etc/abstrax/projects/<name>.json` | One JSON file per project, mode 0640 |
 | Config directory | `/etc/abstrax` | Created with mode 0750 |
 | Runtime state | `/var/lib/abstrax` | Plugin records and caches, mode 0750 |

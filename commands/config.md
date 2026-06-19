@@ -26,10 +26,10 @@ Keys use dot notation. Only known keys are accepted.
 
 | Key | Type | Default |
 |---|---|---|
-| `php.extensions` | list of strings | `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, `pcntl`, `posix`, `sqlite3` |
+| `php.extensions` | list of strings | `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, `sqlite3` |
 | `projects.approved_roots` | list of absolute paths | (none) |
 
-Values for `php.extensions` are apt package **suffixes**, not full package names. When PHP 8.5 is installed for a project, Abstrax expands `mysql` to `php8.5-mysql`, and so on.
+Values for `php.extensions` are apt package **suffixes**, not full package names. When PHP 8.5 is installed for a project, Abstrax expands `mysql` to `php8.5-mysql`, and so on. The `php*-cli` package is always installed and includes `pcntl` and `posix`; do not add those suffixes to `php.extensions`.
 
 `projects.approved_roots` lists directories where **user isolated** projects (created with `--user`) may be placed outside the selected user's home directory. Example: `/srv/sites`. Paths inside another user's home are never allowed.
 
@@ -54,10 +54,10 @@ abstrax config show
     - gd
     - intl
     - redis
-    - pcntl
-    - posix
     - sqlite3
 ```
+
+`pcntl` and `posix` are available through `php*-cli` and are not separate apt packages.
 
 ## `config get`
 
@@ -68,7 +68,7 @@ abstrax config get php.extensions
 ```
 
 ```text
-mysql xml curl mbstring zip bcmath gd intl redis pcntl posix sqlite3
+mysql xml curl mbstring zip bcmath gd intl redis sqlite3
 ```
 
 ## `config set`

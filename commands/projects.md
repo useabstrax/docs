@@ -213,7 +213,7 @@ The same check runs for `project modify` when the project uses a PHP, Node.js, o
 | Node.js | `node --version` major matches | NodeSource repository for the requested major, then `nodejs` |
 | Ruby | `ruby --version` matches major.minor | `ruby{version}` via apt, or `ruby-full` as a fallback |
 
-PHP extensions are configured server-wide with `abstrax config` (default: `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, `pcntl`, `posix`, `sqlite3`). See [Config](/docs/commands/config).
+PHP extensions are configured server-wide with `abstrax config` (default: `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, `sqlite3`; `pcntl` and `posix` are included in `php*-cli`). See [Config](/docs/commands/config).
 
 Use `--dry-run` to preview the prompt and installation steps without making changes.
 

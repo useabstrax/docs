@@ -52,13 +52,27 @@ sudo abstrax mysql install --root-password='YourPassword'
 | `--version` | Version to install |
 | `--root-password` | Root password (a secure random password is generated if omitted) |
 
-Install runs `apt install mysql-server`, enables and starts the service, applies secure defaults (removes anonymous users, drops the test database, restricts remote root), and sets the root password.
+Install runs `apt install mysql-server`, enables and starts the service, applies secure defaults (removes anonymous users, drops the test database, restricts remote root), and sets the root password for both `root@localhost` (socket) and `root@127.0.0.1` (TCP). This replaces the default `auth_socket` plugin on Debian/Ubuntu so root can log in with a password from database apps and SSH tunnels.
 
-The root password is displayed once after install and is **not** stored anywhere on the server. Abstrax does not write it to `/etc/abstrax/mysql.json`.
+The root password is displayed once after install and is saved to `/etc/abstrax/mysql.json` so Abstrax commands such as `mysql database add` work immediately without a separate `config set` step.
 
 For automation, you can set `ABSTRAX_MYSQL_ROOT_PASSWORD` instead of `--root-password`. Note that a password passed on the command line may be visible in process listings.
 
 If MySQL is already configured with a password, install will not overwrite it. Use `reset-root-password` if you have lost the root password.
+
+Removing the package with `package remove mysql-server` does **not** reset MySQL. The database files in `/var/lib/mysql` are kept, so reinstalling and running `mysql install` again will reuse the existing data and root password. For a completely fresh install, purge the package and remove the data directory:
+
+```bash
+sudo abstrax package remove mysql-server --purge
+sudo rm -rf /var/lib/mysql
+sudo abstrax mysql install
+```
+
+Or keep the existing data and reset the root password instead:
+
+```bash
+sudo abstrax mysql reset-root-password --yes
+```
 
 ## Reset root password
 
@@ -72,9 +86,9 @@ sudo abstrax mysql reset-root-password --root-password='NewPassword' --yes
 | `--root-password` | New root password (generated if omitted) |
 | `--yes` | Skip confirmation prompt |
 
-Requires root on the host. Does not require knowing the current MySQL root password. The command stops MySQL, starts it briefly in recovery mode, sets a new root password, and restarts the service normally.
+Requires root on the host. Does not require knowing the current MySQL root password. The command stops MySQL, starts it briefly in recovery mode, sets a new root password for both `root@localhost` and `root@127.0.0.1` (replacing `auth_socket` if present), and restarts the service normally.
 
-The new password is displayed once and is not stored on the server. If `/etc/abstrax/mysql.json` contains a saved password, Abstrax warns that the config may be stale — run `mysql config set --password` to update it.
+The new password is displayed once and is saved to `/etc/abstrax/mysql.json` so Abstrax commands continue to work without running `config set` again.
 
 For automation, `ABSTRAX_MYSQL_ROOT_PASSWORD` can be used instead of `--root-password`.
 
@@ -115,14 +129,17 @@ abstrax mysql user info <name>
 | Flag | Default | Description |
 |---|---|---|
 | `--host` | `localhost` | Host the user may connect from |
-| `--password` | `false` | Prompt for the password securely |
+| `--password` | `false` | Prompt for a password instead of generating one |
 | `--grant-db` | | Grant access to this database |
 | `--privileges` | | Specific privileges to grant |
 | `--preset` | `app` | Privilege preset (`readonly`, `app`, `admin`) |
 
+If `--password` is omitted, a secure random password is generated and displayed once. Abstrax does not store application user passwords. Use `--password` to enter your own password at a prompt.
+
 `user remove` asks for confirmation unless `--yes` is given. It accepts `--host` (default `localhost`).
 
 ```bash
+abstrax mysql user add appuser --grant-db=myapp_db --preset=app
 abstrax mysql user add appuser --password --grant-db=myapp_db --preset=app
 abstrax mysql user info appuser
 abstrax mysql user remove appuser

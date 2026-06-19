@@ -76,11 +76,13 @@ The MySQL commands need to know how to connect to the database server. That conn
 /etc/abstrax/mysql.json
 ```
 
-You create it with:
+You create or update it with:
 
 ```bash
 sudo abstrax mysql config set --host=127.0.0.1 --user=root --password
 ```
+
+`mysql install` and `mysql reset-root-password` write this file automatically. Use `config set` only when you need to change connection settings manually (for example, a non-default host or user).
 
 The file is written with mode `0600`, so only its owner (root) can read it. Example contents:
 
