@@ -30,7 +30,7 @@ The following change system state and require root:
 - **project**: `add`, `remove`, `modify`, `enable`, `disable`, `reload`
 - **web**: `reload`, `restart`
 - **ssl**: `add`, `remove`, `renew`
-- **mysql**: `config set`, `install`
+- **mysql**: `config set`, `install`, `reset-root-password`
 - **cache**: `install`, `remove`, `start`, `stop`, `restart`
 - **firewall**: `enable`, `disable`, `allow`, `deny`, `allow-ip`, `deny-ip`, `rule remove`
 
@@ -53,7 +53,7 @@ These read-only or query commands do not call the root check in code:
 - `cache status`, `cache config`
 - `firewall status`, `firewall rule list`
 - All `ssh-key` commands (`add`, `remove`, `list`, `info`)
-- Most `mysql` commands except `config set` and `install`
+- Most `mysql` commands except `config set`, `install`, and `reset-root-password`
 
 A note on two groups:
 

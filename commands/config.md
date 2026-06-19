@@ -26,7 +26,7 @@ Keys use dot notation. Only known keys are accepted.
 
 | Key | Type | Default |
 |---|---|---|
-| `php.extensions` | list of strings | `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd` |
+| `php.extensions` | list of strings | `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, `pcntl`, `posix`, `sqlite3` |
 | `projects.approved_roots` | list of absolute paths | (none) |
 
 Values for `php.extensions` are apt package **suffixes**, not full package names. When PHP 8.5 is installed for a project, Abstrax expands `mysql` to `php8.5-mysql`, and so on.
@@ -52,6 +52,11 @@ abstrax config show
     - zip
     - bcmath
     - gd
+    - intl
+    - redis
+    - pcntl
+    - posix
+    - sqlite3
 ```
 
 ## `config get`
@@ -63,7 +68,7 @@ abstrax config get php.extensions
 ```
 
 ```text
-mysql xml curl mbstring zip bcmath gd
+mysql xml curl mbstring zip bcmath gd intl redis pcntl posix sqlite3
 ```
 
 ## `config set`
@@ -71,7 +76,7 @@ mysql xml curl mbstring zip bcmath gd
 Replace a list configuration value.
 
 ```bash
-sudo abstrax config set php.extensions mysql xml curl mbstring zip intl
+sudo abstrax config set php.extensions mysql xml curl mbstring zip bcmath gd intl
 ```
 
 ## `config add`
@@ -79,7 +84,7 @@ sudo abstrax config set php.extensions mysql xml curl mbstring zip intl
 Append a value to a list configuration key.
 
 ```bash
-sudo abstrax config add php.extensions redis
+sudo abstrax config add php.extensions readline
 ```
 
 ## `config remove`

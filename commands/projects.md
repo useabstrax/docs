@@ -133,17 +133,16 @@ Or edit `/etc/abstrax/config.json`:
 ### Nginx and PHP in user isolated mode
 
 - **Nginx** continues to run as `www-data`.
-- Abstrax grants **limited filesystem ACLs** so nginx can traverse parent directories and read the `public` directory only (not the entire home directory or private project files).
+- Abstrax sets the **other execute** bit (`chmod o+x`) on existing directories along the path from the user's home to the project so nginx can traverse without filesystem ACLs. This does not grant read access to private home files. Deeper paths inside the project (for example a `public` directory) are created by your deployment tool and must be readable by the web server once your application is deployed.
 - **PHP** runs as the project user through a **dedicated PHP-FPM pool** with a project-specific Unix socket.
 - Socket permissions use `listen.mode = 0660` with `listen.group = www-data` (not `0666`).
-- The `acl` package must be installed (`apt install acl`) when ACLs are required.
 
 ### Project removal
 
 `project remove` reverses the correct mode:
 
 - **Shared mode:** removes the nginx vhost (by default) and project state; existing behaviour is unchanged.
-- **User isolated mode:** also removes the dedicated PHP-FPM pool, managed ACL entries, and the socket configuration. It does **not** delete the user's home directory, remove the Linux user, or remove unrelated ACL entries.
+- **User isolated mode:** also removes the dedicated PHP-FPM pool and the socket configuration. It does **not** delete the user's home directory, remove the Linux user, or revert traverse permissions on shared parent directories (other projects in the same home may still need them).
 
 Ownership mode and managed resources are read from project state (`/etc/abstrax/projects/<name>.json`), not guessed from the filesystem.
 
@@ -214,7 +213,7 @@ The same check runs for `project modify` when the project uses a PHP, Node.js, o
 | Node.js | `node --version` major matches | NodeSource repository for the requested major, then `nodejs` |
 | Ruby | `ruby --version` matches major.minor | `ruby{version}` via apt, or `ruby-full` as a fallback |
 
-PHP extensions are configured server-wide with `abstrax config` (default: `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`). See [Config](/docs/commands/config).
+PHP extensions are configured server-wide with `abstrax config` (default: `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, `pcntl`, `posix`, `sqlite3`). See [Config](/docs/commands/config).
 
 Use `--dry-run` to preview the prompt and installation steps without making changes.
 

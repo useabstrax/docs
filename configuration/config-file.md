@@ -21,7 +21,7 @@ Example file after customising PHP extensions:
 ```json
 {
   "php": {
-    "extensions": ["mysql", "xml", "curl", "mbstring", "zip", "intl"]
+    "extensions": ["mysql", "xml", "curl", "mbstring", "zip", "bcmath", "gd", "intl", "redis", "readline"]
   }
 }
 ```

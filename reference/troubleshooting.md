@@ -202,30 +202,16 @@ If you are already locked out, you will need console access to run `sudo abstrax
 - Or choose the matching project user for the target home directory.
 - For ownership conflicts, remove or reassign the existing directory manually; Abstrax will not recursively `chown` another user's files.
 
-## `setfacl is not installed`
-
-**Symptom.** User isolated project creation fails mentioning `setfacl` or the `acl` package.
-
-**Cause.** Nginx runs as `www-data` and needs filesystem ACLs to read public files in a user-owned home directory.
-
-**Fix.**
-
-```bash
-sudo apt install acl
-```
-
-Then re-run `project add`.
-
 ## HTTP 403 on a user isolated site
 
 **Symptom.** nginx returns 403 for a user isolated project.
 
-**Cause.** Missing traversal permissions on parent directories, missing public directory ACLs, or SELinux/AppArmor blocking access.
+**Cause.** Missing traversal permissions on parent directories, an unreadable document root, or SELinux/AppArmor blocking access.
 
 **Fix.**
 
-- Confirm the project was created with `project add --user=...` (ACLs are applied during creation).
-- Ensure the document root (`public` by default) exists and is readable.
+- Confirm the project was created with `project add --user=...` (traverse permissions are applied during creation).
+- Ensure the document root exists and is readable after you deploy your application. Intermediate directories on the path to the document root must allow web server traverse (for example `755` directories).
 - On SELinux enforcing systems under `/home`, you may need appropriate file contexts (`semanage fcontext` / `restorecon`).
 - Check AppArmor profiles for nginx if access is denied despite correct Unix permissions.
 

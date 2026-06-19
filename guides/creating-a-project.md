@@ -50,7 +50,7 @@ sudo abstrax project add myapp \
 
 Omit `--php-version` to use the default (`8.5`). Pass `--php-version=8.4` (or another installed version) when you need something else.
 
-If PHP is not installed yet, Abstrax asks whether to install the requested version before continuing. Answer yes to install it, or no to abort. Pass `--yes` to install without prompting. PHP is installed with FPM, CLI, and the extension packages configured in [`abstrax config`](/docs/commands/config) (defaults include `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, and `gd`).
+If PHP is not installed yet, Abstrax asks whether to install the requested version before continuing. Answer yes to install it, or no to abort. Pass `--yes` to install without prompting. PHP is installed with FPM, CLI, and the extension packages configured in [`abstrax config`](/docs/commands/config) (defaults include `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, `pcntl`, `posix`, and `sqlite3`).
 
 For **user isolated** PHP projects, Abstrax also creates a dedicated PHP-FPM pool running as the project user and configures nginx to use the project socket.
 
@@ -166,7 +166,7 @@ By default this keeps your files and removes the nginx virtual host (it asks for
 sudo abstrax project remove myapp --remove-vhost
 ```
 
-For user isolated projects, Abstrax also removes the dedicated PHP-FPM pool and managed ACL entries recorded in project state.
+For user isolated projects, Abstrax also removes the dedicated PHP-FPM pool recorded in project state.
 
 To also delete the files:
 

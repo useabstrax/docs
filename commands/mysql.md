@@ -11,7 +11,7 @@ abstrax mysql user <action> [arguments] [flags]
 
 ## Permissions
 
-`config set` and `install` require root. Other MySQL commands do not enforce a root check in code; they rely on the saved connection config to authenticate to the database. Note that reading the config file at `/etc/abstrax/mysql.json` (mode 0600, root only) typically requires root.
+`config set`, `install`, and `reset-root-password` require root. Other MySQL commands do not enforce a root check in code; they rely on the saved connection config to authenticate to the database. Note that reading the config file at `/etc/abstrax/mysql.json` (mode 0600, root only) typically requires root.
 
 ## Connection configuration
 
@@ -44,13 +44,39 @@ Runs `SELECT 1` against the configured connection and reports success or failure
 
 ```bash
 sudo abstrax mysql install
-sudo abstrax mysql install --secure
+sudo abstrax mysql install --root-password='YourPassword'
 ```
 
 | Flag | Description |
 |---|---|
 | `--version` | Version to install |
-| `--secure` | Run `mysql_secure_installation` after installing |
+| `--root-password` | Root password (a secure random password is generated if omitted) |
+
+Install runs `apt install mysql-server`, enables and starts the service, applies secure defaults (removes anonymous users, drops the test database, restricts remote root), and sets the root password.
+
+The root password is displayed once after install and is **not** stored anywhere on the server. Abstrax does not write it to `/etc/abstrax/mysql.json`.
+
+For automation, you can set `ABSTRAX_MYSQL_ROOT_PASSWORD` instead of `--root-password`. Note that a password passed on the command line may be visible in process listings.
+
+If MySQL is already configured with a password, install will not overwrite it. Use `reset-root-password` if you have lost the root password.
+
+## Reset root password
+
+```bash
+sudo abstrax mysql reset-root-password
+sudo abstrax mysql reset-root-password --root-password='NewPassword' --yes
+```
+
+| Flag | Description |
+|---|---|
+| `--root-password` | New root password (generated if omitted) |
+| `--yes` | Skip confirmation prompt |
+
+Requires root on the host. Does not require knowing the current MySQL root password. The command stops MySQL, starts it briefly in recovery mode, sets a new root password, and restarts the service normally.
+
+The new password is displayed once and is not stored on the server. If `/etc/abstrax/mysql.json` contains a saved password, Abstrax warns that the config may be stale — run `mysql config set --password` to update it.
+
+For automation, `ABSTRAX_MYSQL_ROOT_PASSWORD` can be used instead of `--root-password`.
 
 ## Databases
 
