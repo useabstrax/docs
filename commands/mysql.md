@@ -166,7 +166,7 @@ abstrax mysql revoke <user> <database>
 | Preset | Privileges |
 |---|---|
 | `readonly` | `SELECT` |
-| `app` | `SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, INDEX, DROP` |
+| `app` | `SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, INDEX, DROP, REFERENCES` |
 | `admin` | `ALL PRIVILEGES` |
 
 ```bash
