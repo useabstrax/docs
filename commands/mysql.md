@@ -129,6 +129,8 @@ abstrax mysql user info <name>
 | Flag | Default | Description |
 |---|---|---|
 | `--host` | `localhost` | Host the user may connect from |
+
+When `--host` is `localhost` (the default), Abstrax creates both `'user'@'localhost'` and `'user'@'127.0.0.1'` with the same password and grants. Laravel and other apps often connect via TCP to `127.0.0.1`, which MySQL treats as a separate account from `'user'@'localhost'` (socket).
 | `--password` | `false` | Prompt for a password instead of generating one |
 | `--grant-db` | | Grant access to this database |
 | `--privileges` | | Specific privileges to grant |
@@ -156,10 +158,13 @@ abstrax mysql revoke <user> <database>
 
 | Flag | Default | Description |
 |---|---|---|
-| `--privileges` | | Specific privileges to grant |
-| `--preset` | `app` | Privilege preset (`readonly`, `app`, `admin`) |
+| `--privileges` | | Specific privileges to grant (overrides `--preset`) |
+| `--preset` | `app` when `--privileges` is omitted | Privilege preset (`readonly`, `app`, `admin`) |
+| `--host` | all local app hosts | Limit the grant to one host (`localhost` or `127.0.0.1`) |
 
-`revoke` asks for confirmation unless `--yes` is given.
+When `--host` is omitted, Abstrax grants on both `'user'@'localhost'` and `'user'@'127.0.0.1'`. If only one local account exists, Abstrax creates the missing one by copying the authentication hash from the existing account.
+
+`revoke` accepts `--host` with the same semantics and asks for confirmation unless `--yes` is given.
 
 ## Privilege presets
 
