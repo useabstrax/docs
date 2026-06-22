@@ -48,6 +48,8 @@ Plugin registry configuration can be stored in `config.json`:
 | `registry_url` | Base URL for the plugin registry (default: `https://plugins.useabstrax.com/api/v1`) |
 | `allow_blocked` | Plugin names permitted to run despite blocked registry status |
 
+These keys are read from the config file but are not managed by `abstrax config set`. Edit `/etc/abstrax/config.json` directly, or set `ABSTRAX_PLUGIN_REGISTRY` to override the registry URL for a single command. The `allow_blocked` list is merged with any `--allow-blocked-plugin` flags.
+
 See [Plugins](/docs/plugins/) for how plugins work and how to build them.
 
 ### Project settings

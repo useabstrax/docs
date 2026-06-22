@@ -53,6 +53,7 @@ You do not need to be a Linux expert to use Abstrax, but you should understand t
 | Cache | Install and manage Redis or Memcached |
 | Firewall | Enable UFW and manage allow/deny rules |
 | Server status | View CPU, memory, disk, load, and running services |
+| Plugins | Install CLI plugins from the registry and run them as top-level commands |
 
 ## What it does not try to be
 

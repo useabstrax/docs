@@ -1,6 +1,6 @@
 # Environment variables
 
-Abstrax does not define environment variables to configure core CLI behaviour. Plugin-related variables are documented below.
+Abstrax does not define environment variables to configure core CLI behaviour. The exceptions below are for MySQL automation and plugin registry overrides.
 
 ## Global flags instead of environment variables
 
@@ -14,8 +14,17 @@ Abstrax behaviour is controlled by flags rather than the environment:
 | `--quiet` | Reduce output |
 | `--verbose` | Increase output, including the underlying commands run |
 | `--no-color` | Disable coloured output |
+| `--allow-blocked-plugin` | Allow execution of registry-blocked plugins (repeatable) |
 
 You can apply these per command. There is no configuration file or environment variable to set them globally.
+
+## MySQL automation
+
+| Variable | Effect |
+|---|---|
+| `ABSTRAX_MYSQL_ROOT_PASSWORD` | Root password for `mysql install` and `mysql reset-root-password` when `--root-password` is omitted |
+
+Use this for automation instead of passing a password on the command line. A value in the environment may still be visible to other processes on the host.
 
 ## Plugin environment variables
 

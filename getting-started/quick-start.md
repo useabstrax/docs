@@ -10,7 +10,7 @@ Confirm the binary runs and see the top-level help:
 abstrax --help
 ```
 
-You should see the list of command groups (user, ssh, package, service, cron, daemon, project, web, ssl, mysql, cache, firewall, server, and so on).
+You should see the list of command groups (user, ssh, package, service, cron, daemon, project, plugin, web, ssl, mysql, cache, firewall, server, and so on).
 
 ## 2. Inspect the system
 

@@ -34,5 +34,6 @@ Instead of a config file, Abstrax uses global flags to control output and safety
 | `--quiet` | Reduce output |
 | `--verbose` | Show the underlying commands being run |
 | `--no-color` | Disable coloured output |
+| `--allow-blocked-plugin` | Allow execution of registry-blocked plugins (repeatable) |
 
 These are described in [Environment variables](/docs/configuration/environment-variables) and the [command reference](/docs/reference/index).

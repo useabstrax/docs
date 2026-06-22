@@ -17,13 +17,14 @@ Abstrax creates and uses these directories. They are not removed automatically w
 ```text
 /etc/abstrax        Configuration (config.json, mysql.json, projects/)
 /var/lib/abstrax    Runtime state (plugin records and caches)
+/usr/local/lib/abstrax/plugins   Installed plugin binaries (when installed as root)
 /var/log/abstrax    Logs
 ```
 
 If you want to remove them as well:
 
 ```bash
-sudo rm -rf /etc/abstrax /var/lib/abstrax /var/log/abstrax
+sudo rm -rf /etc/abstrax /var/lib/abstrax /var/log/abstrax /usr/local/lib/abstrax/plugins
 ```
 
 ## Important: changes made by Abstrax remain in place

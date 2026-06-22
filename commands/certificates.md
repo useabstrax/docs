@@ -8,7 +8,17 @@ abstrax ssl <action> [arguments] [flags]
 
 ## Permissions
 
-`add`, `remove`, and `renew` require root. The read-only command `status` does not require root.
+`install`, `add`, `remove`, and `renew` require root. The read-only command `status` does not require root.
+
+## `ssl install`
+
+Install Certbot and the nginx plugin from apt.
+
+```bash
+sudo abstrax ssl install
+```
+
+Run this when `abstrax doctor` reports certbot as not found. `ssl add` and `ssl renew` require Certbot to be installed.
 
 ## `ssl add`
 

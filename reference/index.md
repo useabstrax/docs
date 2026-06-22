@@ -12,6 +12,7 @@ A single-page listing of every Abstrax command and its flags. Each command links
 | `--quiet` | Reduce output |
 | `--verbose` | Increase output, including the underlying commands run |
 | `--no-color` | Disable coloured output |
+| `--allow-blocked-plugin` | Allow execution of registry-blocked plugins (repeatable) |
 | `--help`, `-h` | Show help for a command |
 | `--version`, `-v` | Show the version (root command only) |
 
@@ -172,16 +173,20 @@ See [Projects](/docs/commands/projects).
 | `project enable <name>` | Yes | |
 | `project disable <name>` | Yes | |
 | `project reload <name>` | Yes | |
+| `project inspect <name>` | No | Stable v1 JSON API for plugins |
+| `project service restart <project> <service>` | Yes | |
+| `project service reload <project> <service>` | Yes | |
 
 ## web
 
 See [Web server](/docs/commands/web).
 
-| Command | Root | Description |
+| Command | Root | Key flags |
 |---|---|---|
-| `web test` | No | Test the web server config |
-| `web reload` | Yes | Reload gracefully |
-| `web restart` | Yes | Restart the web server |
+| `web install` | Yes | `--apache` (not implemented), `--enable`, `--start` |
+| `web test` | No | |
+| `web reload` | Yes | |
+| `web restart` | Yes | |
 
 ## ssl
 
@@ -189,6 +194,7 @@ See [Certificates](/docs/commands/certificates).
 
 | Command | Root | Key flags |
 |---|---|---|
+| `ssl install` | Yes | Install Certbot and the nginx plugin |
 | `ssl add <project>` | Yes | `--domains`, `--email`, `--staging`, `--redirect-http` |
 | `ssl remove <project>` | Yes | |
 | `ssl renew` | Yes | `--project` |
@@ -275,7 +281,7 @@ See [Plugins](/docs/commands/plugins).
 | `plugin update <name>` | Yes | |
 | `plugin remove <name>` | Yes | |
 
-Global flag: `--allow-blocked-plugin` (repeatable) allows execution of registry-blocked plugins.
+Blocked plugins can also be allowed via `plugins.allow_blocked` in `/etc/abstrax/config.json`. See [Plugin security](/docs/plugins/security).
 
 ## Action names
 

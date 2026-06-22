@@ -374,7 +374,7 @@ abstrax project inspect myapp --json
 }
 ```
 
-This API exposes non-secret information only. The existing `project info --json` output remains unchanged for backward compatibility.
+This API exposes non-secret information only. The response may also include `group` and `ownership_mode` when set. The existing `project info --json` output remains unchanged for backward compatibility.
 
 ## `project service`
 

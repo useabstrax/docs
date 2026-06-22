@@ -20,6 +20,7 @@ These flags are available on every command:
 | `--quiet` | Reduce output |
 | `--verbose` | Increase output, including the underlying commands being run |
 | `--no-color` | Disable coloured output |
+| `--allow-blocked-plugin` | Allow execution of registry-blocked plugins (repeatable) |
 
 Every command also supports `--help` (alias `-h`). The root command additionally supports `--version` (alias `-v`).
 

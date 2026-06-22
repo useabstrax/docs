@@ -29,6 +29,8 @@ Keys use dot notation. Only known keys are accepted.
 | `php.extensions` | list of strings | `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, `sqlite3` |
 | `projects.approved_roots` | list of absolute paths | (none) |
 
+Plugin settings (`plugins.registry_url`, `plugins.allow_blocked`) can also live in this file but are not managed by `config set`. Edit the JSON file directly or use `ABSTRAX_PLUGIN_REGISTRY` for a one-off registry override. See [Config file](/docs/configuration/config-file#plugin-settings).
+
 Values for `php.extensions` are apt package **suffixes**, not full package names. When PHP 8.5 is installed for a project, Abstrax expands `mysql` to `php8.5-mysql`, and so on. The `php*-cli` package is always installed and includes `pcntl` and `posix`; do not add those suffixes to `php.extensions`.
 
 `projects.approved_roots` lists directories where **user isolated** projects (created with `--user`) may be placed outside the selected user's home directory. Example: `/srv/sites`. Paths inside another user's home are never allowed.

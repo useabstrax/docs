@@ -128,7 +128,15 @@ abstrax project list
 
 ## 4. Add a TLS certificate
 
-Make sure ports 80 and 443 are open and the domains resolve to this server, then request a certificate. Use `--staging` first to test without hitting Let's Encrypt rate limits:
+Make sure ports 80 and 443 are open and the domains resolve to this server.
+
+If Certbot is not installed, install it first:
+
+```bash
+sudo abstrax ssl install
+```
+
+Use `--staging` on the first request to test without hitting Let's Encrypt rate limits:
 
 ```bash
 sudo abstrax ssl add myapp --email=admin@example.com --staging

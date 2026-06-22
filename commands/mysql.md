@@ -128,13 +128,13 @@ abstrax mysql user info <name>
 
 | Flag | Default | Description |
 |---|---|---|
-| `--host` | `localhost` | Host the user may connect from |
-
-When `--host` is `localhost` (the default), Abstrax creates both `'user'@'localhost'` and `'user'@'127.0.0.1'` with the same password and grants. Laravel and other apps often connect via TCP to `127.0.0.1`, which MySQL treats as a separate account from `'user'@'localhost'` (socket).
+| `--host` | `localhost` | Host the user may connect from. When `localhost`, Abstrax creates both `'user'@'localhost'` and `'user'@'127.0.0.1'` with the same password and grants. |
 | `--password` | `false` | Prompt for a password instead of generating one |
 | `--grant-db` | | Grant access to this database |
 | `--privileges` | | Specific privileges to grant |
 | `--preset` | `app` | Privilege preset (`readonly`, `app`, `admin`) |
+
+When `--host` is `localhost` (the default), Laravel and other apps that connect via TCP to `127.0.0.1` still work because MySQL treats that as a separate account from `'user'@'localhost'` (socket).
 
 If `--password` is omitted, a secure random password is generated and displayed once. Abstrax does not store application user passwords. Use `--password` to enter your own password at a prompt.
 

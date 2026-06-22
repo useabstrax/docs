@@ -20,6 +20,7 @@ sudo abstrax user add deploy --grant-sudo
 
 The following change system state and require root:
 
+- **config**: `set`, `add`, `remove`, `reset`
 - **user**: `add`, `remove`, `grant-sudo`, `revoke-sudo`, `set-groups`, `add-groups`, `remove-groups`, `set-shell`, `lock`, `unlock`
 - **self**: `update`
 - **ssh**: `config set-port`, `config set-timeout`, `config disable-root-login`, `config enable-root-login`, `config disable-password-auth`, `config enable-password-auth`, `reload`, `restart`
@@ -27,12 +28,13 @@ The following change system state and require root:
 - **service**: `start`, `stop`, `restart`, `reload`, `enable`, `disable`
 - **cron**: `add`, `remove`, `modify`
 - **daemon**: `add`, `remove`, `modify`, `start`, `stop`, `restart`
-- **project**: `add`, `remove`, `modify`, `enable`, `disable`, `reload`
-- **web**: `reload`, `restart`
-- **ssl**: `add`, `remove`, `renew`
+- **project**: `add`, `remove`, `modify`, `enable`, `disable`, `reload`, `service restart`, `service reload`
+- **web**: `install`, `reload`, `restart`
+- **ssl**: `install`, `add`, `remove`, `renew`
 - **mysql**: `config set`, `install`, `reset-root-password`
 - **cache**: `install`, `remove`, `start`, `stop`, `restart`
 - **firewall**: `enable`, `disable`, `allow`, `deny`, `allow-ip`, `deny-ip`, `rule remove`
+- **plugin**: `install` (registry installs), `update`, `remove`
 
 ## Commands that do not enforce a root check
 
@@ -40,25 +42,28 @@ These read-only or query commands do not call the root check in code:
 
 - `doctor`, `version`, `log`
 - `self update --dry-run` (preview only; the actual update requires root)
+- `config show`, `config get`
 - `user info`, `user list`
 - `ssh config show`
 - `package search`, `package info`, `package list`
 - `service status`
 - `cron list`, `cron info`, `cron enable`, `cron disable`
 - `daemon status`, `daemon list`, `daemon logs`
-- `project list`, `project info`
+- `project list`, `project info`, `project inspect`
 - `web test`
 - `ssl status`
 - All `server` commands (`status`, `cpu`, `memory`, `disk`, `load`, `services`)
 - `cache status`, `cache config`
 - `firewall status`, `firewall rule list`
 - All `ssh-key` commands (`add`, `remove`, `list`, `info`)
+- `plugin list`, `plugin info`, `plugin search`
 - Most `mysql` commands except `config set`, `install`, and `reset-root-password`
 
-A note on two groups:
+A note on three groups:
 
 - **ssh-key**: the commands do not enforce root, but editing another user's `~/.ssh/authorized_keys` requires file permissions you usually only have as root or as that user. Use `sudo` when managing another user's keys.
 - **mysql**: most commands do not enforce a root check because they authenticate to the database using the saved connection config rather than relying on OS privileges. However, reading the config file at `/etc/abstrax/mysql.json` (mode 0600, owned by root) generally requires root.
+- **plugin install**: registry installs require root. Install from a direct manifest URL with `--manifest` does not enforce root, but still writes to the plugin install directory for the current user.
 - **cron enable/disable/list/info**: these do not enforce root, but reading or writing files in `/etc/cron.d` may still require root depending on file permissions.
 
 ## Why elevated permissions are needed
