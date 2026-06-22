@@ -35,11 +35,11 @@ The web server defaults to nginx. The `--apache` flag selects Apache, but Apache
 
 `project` commands set up server-side infrastructure: the project directory, intended ownership (recorded in state), nginx virtual host, and runtime. They do not deploy application source code.
 
-After creating a project, deploy your code separately — for example with CI/CD, `git clone`/`git pull`, rsync, or another deployment tool. Abstrax does not clone repositories or check out branches as part of `project add`.
+After creating a project, deploy your code separately - for example with CI/CD, `git clone`/`git pull`, rsync, or another deployment tool. Abstrax does not clone repositories or check out branches as part of `project add`.
 
 ## Ownership
 
-Abstrax supports two project ownership modes. **No separate isolation flag is required** — the mode is inferred from whether you supply `--user`.
+Abstrax supports two project ownership modes. **No separate isolation flag is required** - the mode is inferred from whether you supply `--user`.
 
 ### Shared web user mode (default)
 
@@ -385,7 +385,7 @@ sudo abstrax project service restart <project> <service>
 sudo abstrax project service reload <project> <service>
 ```
 
-Services must belong to the project — either recorded in project state or named `abstrax-<project>-<service>` in supervisor. These commands do not wrap arbitrary systemctl calls.
+Services must belong to the project - either recorded in project state or named `abstrax-<project>-<service>` in supervisor. These commands do not wrap arbitrary systemctl calls.
 
 ## Enable, disable, and reload
 

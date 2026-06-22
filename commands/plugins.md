@@ -15,7 +15,7 @@ abstrax plugin <action> [arguments] [flags]
 | `plugin list` | No |
 | `plugin info` | No |
 | `plugin search` | No |
-| `plugin install` | Yes (except `--manifest` without root — see below) |
+| `plugin install` | Yes (except `--manifest` without root - see below) |
 | `plugin update` | Yes |
 | `plugin remove` | Yes |
 

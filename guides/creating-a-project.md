@@ -91,13 +91,13 @@ If you omit `--path` and `--user`, the path defaults to `/var/www/<name>`.
 
 - Paths inside the selected user's home are allowed.
 - Paths inside another user's home are rejected.
-- Paths outside home require an approved shared root — configure with `sudo abstrax config set projects.approved_roots /srv/sites`.
+- Paths outside home require an approved shared root - configure with `sudo abstrax config set projects.approved_roots /srv/sites`.
 
 Abstrax never recursively changes ownership of another user's directories. See [Projects](/docs/commands/projects) for full details.
 
 ### Deploy your application code
 
-`project add` creates the directory and nginx configuration but does not put your application files on the server. Deploy source code separately — for example with CI/CD, `git clone`/`git pull`, rsync, or your existing deployment process — once the project path and virtual host are in place.
+`project add` creates the directory and nginx configuration but does not put your application files on the server. Deploy source code separately - for example with CI/CD, `git clone`/`git pull`, rsync, or your existing deployment process - once the project path and virtual host are in place.
 
 For user isolated projects, run deploy and build commands as the project user so files are owned correctly.
 
