@@ -19,7 +19,7 @@ Use the `abstrax plugin` command group to install, update, and remove plugins fr
 | [Metadata protocol](/docs/plugins/metadata-protocol) | The `plugin metadata` subcommand and required JSON fields |
 | [Integrating with Abstrax](/docs/plugins/integrating-with-abstrax) | Environment variables and stable JSON APIs for project data |
 | [Creating a plugin](/docs/plugins/creating-a-plugin) | Build, test, and publish a plugin |
-| [Registry submission](/docs/plugins/registry-submission) | Submit a plugin to the official registry |
+| [Registry submission](/docs/plugins/registry-submission) | Submit a plugin via the [plugin-registry repository](https://github.com/useabstrax/plugin-registry) |
 | [Registry API](/docs/plugins/registry-api) | HTTP endpoints, request parameters, and response shapes |
 
 ## Quick example

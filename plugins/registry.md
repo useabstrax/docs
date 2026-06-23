@@ -4,6 +4,10 @@ The public plugin registry is hosted at [plugins.useabstrax.com](https://plugins
 
 For HTTP endpoints, request parameters, response shapes, error codes, and release manifest format, see [Registry API](/docs/plugins/registry-api).
 
+## Submitting a plugin
+
+Plugin authors submit definitions to the [useabstrax/plugin-registry](https://github.com/useabstrax/plugin-registry) repository. See [Registry submission](/docs/plugins/registry-submission) for the full process.
+
 ## CLI configuration
 
 Override the registry API base URL in `/etc/abstrax/config.json`:

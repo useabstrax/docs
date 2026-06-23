@@ -37,7 +37,7 @@ Place the binary on your `PATH` or in a plugin directory to test delegation thro
 
 ## Publishing to the registry
 
-To submit a plugin to the official registry, follow [Registry submission](/docs/plugins/registry-submission). Release manifest format and checksum requirements are documented in [Registry API](/docs/plugins/registry-api#release-manifest-format).
+To submit a plugin to the official registry, open a pull request in the [useabstrax/plugin-registry](https://github.com/useabstrax/plugin-registry) repository. See [Registry submission](/docs/plugins/registry-submission) for the full process, required metadata, and review expectations. Release manifest format and checksum requirements are documented in [Registry API](/docs/plugins/registry-api#release-manifest-format).
 
 ## Related
 

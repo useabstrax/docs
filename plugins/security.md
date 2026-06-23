@@ -28,7 +28,7 @@ The registry distributes metadata only. It does not execute plugin code on your 
 
 Blocked plugins cannot be installed through the registry. On the server, execution is blocked unless you pass `--allow-blocked-plugin` (repeatable global flag) or list the plugin in `allow_blocked` in `/etc/abstrax/config.json`.
 
-Registry operators may block a compromised plugin by setting `status: blocked` in the registry source YAML and running `php artisan plugins:sync`.
+If a plugin is compromised, registry operators set `status: blocked` in its YAML definition in the [plugin-registry repository](https://github.com/useabstrax/plugin-registry). Once that change is merged, the live registry is updated and installation is blocked for new users.
 
 Use `--allow-blocked-plugin` only when you understand the risk.
 
