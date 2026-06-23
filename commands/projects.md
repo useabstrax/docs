@@ -215,6 +215,17 @@ The same check runs for `project modify` when the project uses a PHP, Node.js, o
 
 PHP extensions are configured server-wide with `abstrax config` (default: `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, `sqlite3`; `pcntl` and `posix` are included in `php*-cli`). See [Config](/docs/commands/config).
 
+### PHP on the command line
+
+Abstrax routes web requests to the correct PHP-FPM version per project. For command-line tasks (Artisan, Composer, queue workers, and cron jobs), use the matching versioned binary installed with `php{version}-cli`:
+
+```bash
+php8.5 artisan migrate
+php8.4 artisan queue:work
+```
+
+The unversioned `php` command is managed separately by `update-alternatives` and may not match a given project. Check the configured version with `abstrax project info <name>`.
+
 Use `--dry-run` to preview the prompt and installation steps without making changes.
 
 ### Examples

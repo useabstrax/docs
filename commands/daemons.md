@@ -50,9 +50,11 @@ abstrax daemon add <name> --command="<command>" [flags]
 
 ### Examples
 
+When the command runs PHP, use the versioned binary that matches the project (`php8.5`, `php8.4`, and so on). The unversioned `php` command follows the system default and may not match the project's runtime. Check the version with `abstrax project info <name>`.
+
 ```bash
 sudo abstrax daemon add queue-worker \
-  --command="php artisan queue:work" \
+  --command="php8.5 artisan queue:work" \
   --directory=/var/www/myapp \
   --user=www-data \
   --processes=2 \
@@ -60,7 +62,7 @@ sudo abstrax daemon add queue-worker \
   --autorestart=unexpected
 
 # Install Supervisor at the same time if it is missing
-sudo abstrax daemon add queue-worker --command="php artisan queue:work" --install-supervisor
+sudo abstrax daemon add queue-worker --command="php8.5 artisan queue:work" --install-supervisor
 ```
 
 ### Example output

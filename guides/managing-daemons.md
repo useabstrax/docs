@@ -8,7 +8,7 @@ Adding, modifying, removing, and controlling daemons requires root. Supervisor m
 
 ```bash
 sudo abstrax daemon add queue-worker \
-  --command="php artisan queue:work" \
+  --command="php8.5 artisan queue:work" \
   --directory=/var/www/myapp \
   --user=www-data \
   --processes=2 \
@@ -20,7 +20,7 @@ If Supervisor is not installed yet:
 
 ```bash
 sudo abstrax daemon add queue-worker \
-  --command="php artisan queue:work" \
+  --command="php8.5 artisan queue:work" \
   --install-supervisor
 ```
 

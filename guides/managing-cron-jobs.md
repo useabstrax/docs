@@ -17,7 +17,7 @@ sudo abstrax cron add backup --command="/usr/local/bin/backup.sh" --daily --user
 Using a custom 5-field cron expression:
 
 ```bash
-sudo abstrax cron add report --command="php artisan report" --schedule="0 8 * * 1" --user=www-data
+sudo abstrax cron add report --command="php8.5 artisan report" --schedule="0 8 * * 1" --user=www-data
 ```
 
 Expected output:
@@ -59,7 +59,7 @@ abstrax cron list
 ```text
 ID       SCHEDULE       USER       ENABLED   COMMAND
 backup   0 0 * * *      root       yes       /usr/local/bin/backup.sh
-report   0 8 * * 1      www-data   yes       php artisan report
+report   0 8 * * 1      www-data   yes       php8.5 artisan report
 ```
 
 ```bash

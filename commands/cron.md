@@ -63,10 +63,12 @@ A `--schedule` value takes priority. It must have exactly 5 fields (minute, hour
 
 ### Examples
 
+When the command runs PHP, use the versioned binary that matches the project (`php8.5`, `php8.4`, and so on). The unversioned `php` command follows the system default and may not match the project's runtime. Check the version with `abstrax project info <name>`.
+
 ```bash
 sudo abstrax cron add backup --command="/usr/local/bin/backup.sh" --daily --user=root
-sudo abstrax cron add report --command="php artisan report" --schedule="0 8 * * 1" --user=www-data
-sudo abstrax cron add queue --command="php artisan queue:work" --every-minute
+sudo abstrax cron add report --command="php8.5 artisan report" --schedule="0 8 * * 1" --user=www-data
+sudo abstrax cron add queue --command="php8.5 artisan queue:work" --every-minute
 sudo abstrax cron add cleanup --command="/usr/local/bin/cleanup.sh" --daily \
   --output=/var/log/cleanup.log --env=APP_ENV=production
 ```
@@ -122,7 +124,7 @@ abstrax cron list
 ```text
 ID       SCHEDULE       USER       ENABLED   COMMAND
 backup   0 0 * * *      root       yes       /usr/local/bin/backup.sh
-queue    * * * * *      www-data   yes       php artisan queue:work
+queue    * * * * *      www-data   yes       php8.5 artisan queue:work
 ```
 
 ## `cron info`

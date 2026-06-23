@@ -52,6 +52,12 @@ Omit `--php-version` to use the default (`8.5`). Pass `--php-version=8.4` (or an
 
 If PHP is not installed yet, Abstrax asks whether to install the requested version before continuing. Answer yes to install it, or no to abort. Pass `--yes` to install without prompting. PHP is installed with FPM, CLI, and the extension packages configured in [`abstrax config`](/docs/commands/config) (defaults include `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, and `sqlite3`; `pcntl` and `posix` come with `php*-cli`).
 
+For Artisan, Composer, and other CLI tasks, use the versioned binary that matches the project (`php8.5`, `php8.4`, and so on) rather than the unversioned `php` command. The default project version is `8.5`, so a typical migrate command looks like:
+
+```bash
+php8.5 artisan migrate
+```
+
 For **user isolated** PHP projects, Abstrax also creates a dedicated PHP-FPM pool running as the project user and configures nginx to use the project socket.
 
 ### Node.js or Ruby application (reverse proxy)
@@ -188,6 +194,7 @@ sudo abstrax project remove myapp --delete-files --force
 - Make sure the firewall allows HTTP and HTTPS: `sudo abstrax firewall allow 80` and `sudo abstrax firewall allow 443 --protocol=tcp`.
 - On systems with SELinux enforcing, projects under `/home` may need additional file contexts. Abstrax prints a warning when this may apply.
 - Supervisor daemons and other project processes should run as the project user in isolated mode (`daemon add --user=mike`).
+- Cron jobs and daemons that run PHP should use the versioned binary (`php8.5 artisan ...`, not bare `php artisan ...`). See [Projects](/docs/commands/projects#php-on-the-command-line).
 
 ## Related
 

@@ -62,7 +62,7 @@ Some commands let you set environment variables for the processes they create. T
 Both flags can be repeated to set multiple variables.
 
 ```bash
-sudo abstrax cron add report --command="php artisan report" --daily --env=APP_ENV=production
+sudo abstrax cron add report --command="php8.5 artisan report" --daily --env=APP_ENV=production
 sudo abstrax daemon add worker --command="node worker.js" --environment=NODE_ENV=production
 ```
 

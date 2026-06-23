@@ -53,7 +53,7 @@ sudo abstrax cron add backup --command="/usr/local/bin/backup.sh" --daily
 **Fix.** Add a frequency flag (such as `--daily`) or a `--schedule` expression. A `--schedule` must have exactly 5 fields:
 
 ```bash
-sudo abstrax cron add report --command="php artisan report" --schedule="0 8 * * 1"
+sudo abstrax cron add report --command="php8.5 artisan report" --schedule="0 8 * * 1"
 ```
 
 ## "cron expression must have 5 fields ..."
