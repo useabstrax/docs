@@ -1,6 +1,6 @@
 # Supported platforms
 
-Abstrax targets Debian and Ubuntu based Linux systems. This page describes what is supported today, how detection works, and what is not yet implemented.
+Abstrax currently supports Debian/Ubuntu-based Linux distributions. This page describes what is supported today, how detection works, and what is not yet implemented.
 
 ## Architecture
 
@@ -13,29 +13,63 @@ Check your architecture with `uname -m`.
 
 ## Operating systems
 
-Abstrax reads `/etc/os-release` and treats these `ID` values as supported:
+Abstrax reads `/etc/os-release` and builds a platform profile from the distribution `ID`, `ID_LIKE`, `VERSION_ID`, and related fields.
 
-- `ubuntu`
-- `debian`
-- `linuxmint`
-- `pop`
-- `raspbian`
+### Fully supported
 
-On any other distribution, Abstrax reports the platform as not fully supported, with a message such as:
+These distributions are officially tested and receive `official` support level:
 
-```text
-OS "fedora" is not fully supported; Abstrax targets Debian and Ubuntu based systems
-```
+- Ubuntu 20.04+
+- Debian 11+
+- Linux Mint
+- Pop!_OS
+- Raspbian / Raspberry Pi OS
 
-If the OS cannot be detected at all, it reports `could not detect OS`.
+Recognised `ID` values include `ubuntu`, `debian`, `linuxmint`, `pop`, `raspbian`, and `raspberrypi`.
 
-Detection of the surrounding tools also matters:
+### Compatible (best-effort)
 
-- **Package manager**: the `package` commands use `apt`. Abstrax can detect `apt`, `dnf`, `yum`, `apk`, and `pacman`, but the package commands are implemented for `apt`.
-- **Service manager**: service operations assume `systemd`. Abstrax detects `systemd` and `sysvinit`.
-- **Firewall backend**: the `firewall` commands use UFW. Abstrax detects `ufw`, `firewalld`, and `iptables`.
+Other Debian/Ubuntu-based distributions may work but are not officially tested. Examples include:
 
-Run `abstrax doctor` to see what was detected on your server.
+- Ubuntu releases older than 20.04
+- Debian releases older than 11
+- Debian/Ubuntu derivatives detected via `ID_LIKE` but with an unlisted `ID`
+
+These receive `compatible` support level. Abstrax allows mutating commands on compatible platforms, but behaviour is best-effort.
+
+### Unsupported
+
+Non-Debian-family distributions are not currently supported and receive `unsupported` support level. Mutating commands exit cleanly before making system changes.
+
+If the OS cannot be detected at all, Abstrax reports `could not detect operating system from /etc/os-release`.
+
+Run `abstrax doctor` to see the detected profile on your server, including:
+
+- distro ID, name, and version
+- distro family
+- package manager and service manager
+- nginx layout
+- web user and default project root
+- PHP-FPM naming strategy
+- firewall strategy
+- support level
+
+## Platform conventions (Debian family)
+
+On supported Debian/Ubuntu-based systems, Abstrax assumes:
+
+| Area | Convention |
+|---|---|
+| Package manager | `apt` |
+| Service manager | `systemd` (with sysvinit fallback where detected) |
+| Nginx layout | `sites-available` / `sites-enabled` under `/etc/nginx` |
+| Web user / group | `www-data` |
+| Default project root | `/var/www` |
+| PHP-FPM services | `php{version}-fpm` (for example `php8.5-fpm`) |
+| PHP-FPM sockets | `/run/php/php{version}-fpm.sock` |
+| Firewall | UFW where installed |
+
+Abstrax can detect other package managers (`dnf`, `yum`, `apk`, `pacman`) and firewall backends (`firewalld`, `iptables`), but the implemented commands use the Debian-family conventions above.
 
 ## Tools Abstrax manages
 

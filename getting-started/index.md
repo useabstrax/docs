@@ -12,15 +12,23 @@ To build from source you also need Go 1.22 or newer.
 
 ## Supported operating systems
 
-Abstrax targets Debian and Ubuntu based systems. The platform detection in the code treats the following as supported:
+Abstrax currently supports Debian/Ubuntu-based distributions.
 
-- Ubuntu
-- Debian
+### Fully supported
+
+- Ubuntu 20.04+
+- Debian 11+
 - Linux Mint
 - Pop!_OS
-- Raspbian
+- Raspbian / Raspberry Pi OS
 
-On any other distribution Abstrax reports the platform as not fully supported. Detection is based on the `ID` field in `/etc/os-release`.
+### Compatible (best-effort)
+
+Other Debian/Ubuntu-based distributions may work but are not officially tested. Abstrax detects these via `/etc/os-release` (including `ID_LIKE`) and marks them as compatible.
+
+### Unsupported
+
+Non-Debian-family distributions are not currently supported. Mutating commands detect the platform and exit cleanly without making system changes.
 
 The package management commands use `apt`, and many service operations assume `systemd`, so the most reliable experience is on current Ubuntu and Debian releases.
 

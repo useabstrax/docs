@@ -24,16 +24,22 @@ Example output:
 
 ```text
   OS:                  Ubuntu 22.04.3 LTS
+  Distro ID:           ubuntu
   Version:             22.04
+  Family:              debian
   Kernel:              5.15.0-91-generic
   Architecture:        x86_64
 
   Package manager:     apt
   Service manager:     systemd
-  Firewall backend:    ufw
+  Firewall strategy:   ufw
+  Nginx layout:        sites-available-enabled
+  Web user:            www-data
+  Project root:        /var/www
+  PHP-FPM strategy:    php{version}-fpm
 
   Running as root:     no
-  Platform support:    full
+  Support level:       official
 
   Tools:
     nginx:           available

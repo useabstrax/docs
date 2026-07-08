@@ -61,7 +61,7 @@ abstrax self update --dry-run
 
 ### doctor
 
-`abstrax doctor` reads `/etc/os-release`, detects the package manager, service manager, and firewall backend, checks whether it is running as root, and reports which managed tools are installed.
+`abstrax doctor` reads `/etc/os-release`, builds a platform profile, detects the package manager, service manager, and firewall backend, checks whether it is running as root, and reports which managed tools are installed.
 
 ```bash
 abstrax doctor
@@ -71,12 +71,13 @@ abstrax doctor --json
 It reports:
 
 ```text
-OS, version, architecture, kernel version
-Package manager (apt, dnf, yum, apk, pacman)
-Service manager (systemd, sysvinit)
-Firewall backend (ufw, firewalld, iptables, none)
-Whether running as root
-Whether the platform is fully supported
+OS, distro ID, version, family, architecture, kernel version
+Package manager (apt, dnf, yum, apk, pacman, unknown)
+Service manager (systemd, sysvinit, unknown)
+Firewall strategy (ufw, unknown)
+Nginx layout (sites-available-enabled on Debian family)
+Web user, default project root, PHP-FPM strategy
+Support level (official, compatible, unsupported)
 Available tools: nginx, apache2, certbot, mysql, mariadb, supervisor, redis, memcached, ufw, curl, git
 ```
 

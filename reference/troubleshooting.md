@@ -66,11 +66,11 @@ sudo abstrax cron add report --command="php8.5 artisan report" --schedule="0 8 *
 
 ## Unsupported platform warning
 
-**Symptom.** `abstrax doctor` shows a warning that the platform is not fully supported.
+**Symptom.** `abstrax doctor` shows `unsupported` support level, or a mutating command exits with a message that the operating system is not supported.
 
-**Cause.** The OS `ID` in `/etc/os-release` is not one of the supported Debian/Ubuntu based systems.
+**Cause.** The detected distro is not Debian/Ubuntu-based, or `/etc/os-release` could not be read.
 
-**Fix.** Run Abstrax on Ubuntu or Debian (or a close derivative). On other distributions, package and service operations may not work because they assume `apt` and `systemd`. See [Supported platforms](/docs/reference/supported-platforms).
+**Fix.** Run Abstrax on a supported Debian/Ubuntu-based distribution. Fully supported targets are Ubuntu 20.04+, Debian 11+, Linux Mint, Pop!_OS, and Raspbian / Raspberry Pi OS. Other Debian/Ubuntu derivatives may work with `compatible` support level but are not officially tested. See [Supported platforms](/docs/reference/supported-platforms).
 
 ## A tool is "not found" in doctor
 

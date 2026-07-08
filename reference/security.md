@@ -48,17 +48,9 @@ Pass `--yes` to skip the prompt in scripts. Use this only when you are sure of t
 
 `--dry-run` prints the underlying commands Abstrax would run, without running them. Use it to review a change before applying it.
 
-### SSH configuration is validated and backed up
+### SSH configuration is validated
 
-SSH settings are written to a dedicated include file (`/etc/ssh/sshd_config.d/99-abstrax.conf`) rather than editing the main `sshd_config`. Before that managed file is rewritten, its current contents are backed up with a timestamped suffix, for example:
-
-```text
-99-abstrax.conf.abstrax-bak.20240101T120000
-```
-
-Before the change is reloaded, the configuration is validated with `sshd -t` (when the `sshd` binary is available). If validation fails, the reload does not proceed.
-
-The same timestamped backup is taken before Abstrax overwrites other managed files: cron files in `/etc/cron.d`, Supervisor configs in `/etc/supervisor/conf.d`, a user's `authorized_keys`, and nginx virtual host files. The backup sits alongside the original with an `.abstrax-bak.<timestamp>` suffix.
+SSH settings are written to a dedicated include file (`/etc/ssh/sshd_config.d/99-abstrax.conf`) rather than editing the main `sshd_config`. Before the change is reloaded, the configuration is validated with `sshd -t` (when the `sshd` binary is available). If validation fails, the reload does not proceed.
 
 ### Warnings before risky changes
 
@@ -97,7 +89,7 @@ Arguments such as usernames, package names, database names, domains, ports, and 
 
 ## Accurate scope
 
-Abstrax reduces the chance of certain mistakes through confirmations, validation, dry-run, and SSH config validation. It does not sandbox commands, does not roll back changes automatically (beyond the file backups noted above), and does not prevent you from running a valid but unwanted command. You remain responsible for the changes you apply.
+Abstrax reduces the chance of certain mistakes through confirmations, validation, dry-run, and SSH config validation. It does not sandbox commands, does not roll back changes automatically, and does not prevent you from running a valid but unwanted command. You remain responsible for the changes you apply.
 
 ## Plugins
 

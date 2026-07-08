@@ -19,13 +19,12 @@ cli/
   internal/
     cli/                  Cobra command definitions, one file per command group
     actions/              Stable action name constants used in output and the future agent
-    backup/               Timestamped file/directory backup helpers
     confirm/              Interactive yes/no confirmation prompts
     exec/                 Wrapper around os/exec with dry-run and verbose support
     globals/              Parsed global flag values
     output/               Human-readable and JSON output helpers
-    platform/             OS detection and Debian/Ubuntu constants
-      debian/             Paths and constants for Debian/Ubuntu
+    platform/             OS detection, platform profiles, and providers
+      debian/             Debian/Ubuntu paths, naming, and provider
     services/             One package per area, holding the real logic
       user/ sshkey/ sshcfg/ pkgmanager/ svcmanager/ cron/ daemon/
       project/ web/ ssl/ mysql/ cache/ firewall/ serverinfo/
