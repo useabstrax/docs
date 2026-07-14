@@ -43,7 +43,7 @@ You do not need to be a Linux expert to use Abstrax, but you should understand t
 |---|---|
 | Users | Create and remove users, manage groups, grant or revoke sudo, lock accounts |
 | SSH | Add authorised keys, change the SSH port, disable root login or password auth |
-| Packages | Install, remove, update, and upgrade apt packages |
+| Packages | Install, remove, update, and upgrade system packages (apt/dnf) |
 | Services | Start, stop, restart, enable, and check systemd services |
 | Cron | Add, modify, list, enable, and disable scheduled jobs |
 | Daemons | Run long-lived processes under Supervisor |
@@ -51,14 +51,14 @@ You do not need to be a Linux expert to use Abstrax, but you should understand t
 | Certificates | Obtain and renew Let's Encrypt certificates with Certbot |
 | Databases | Manage MySQL/MariaDB databases, users, and grants |
 | Cache | Install and manage Redis or Memcached |
-| Firewall | Enable UFW and manage allow/deny rules |
+| Firewall | Enable UFW or firewalld and manage allow/deny rules |
 | Server status | View CPU, memory, disk, load, and running services |
 | Plugins | Install CLI plugins from the registry and run them as top-level commands |
 
 ## What it does not try to be
 
 - It is not a configuration management system like Ansible, Puppet, or Chef. It does not enforce a desired state over time.
-- It is not a replacement for the underlying tools. It calls `apt`, `systemctl`, `ufw`, `certbot`, `supervisorctl`, and `mysql` on your behalf.
+- It is not a replacement for the underlying tools. It calls `apt`/`dnf`, `systemctl`, `ufw`/`firewall-cmd`, `certbot`, `supervisorctl`, and `mysql` on your behalf.
 - It does not currently provide a hosted control plane or remote agent. A future agent is described in the code and README, but it is not implemented yet. See [Supported platforms](/docs/reference/supported-platforms) for current scope.
 
 ## A short example

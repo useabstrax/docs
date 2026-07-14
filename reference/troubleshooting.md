@@ -68,9 +68,9 @@ sudo abstrax cron add report --command="php8.5 artisan report" --schedule="0 8 *
 
 **Symptom.** `abstrax doctor` shows `unsupported` support level, or a mutating command exits with a message that the operating system is not supported.
 
-**Cause.** The detected distro is not Debian/Ubuntu-based, or `/etc/os-release` could not be read.
+**Cause.** The detected distro is outside the supported Debian/Ubuntu or RHEL-compatible families, the RHEL-family major version is older than 9, or `/etc/os-release` could not be read.
 
-**Fix.** Run Abstrax on a supported Debian/Ubuntu-based distribution. Fully supported targets are Ubuntu 20.04+, Debian 11+, Linux Mint, Pop!_OS, and Raspbian / Raspberry Pi OS. Other Debian/Ubuntu derivatives may work with `compatible` support level but are not officially tested. See [Supported platforms](/docs/reference/supported-platforms).
+**Fix.** Run Abstrax on a supported distribution. Fully supported targets are Ubuntu 20.04+, Debian 11+, Linux Mint, Pop!_OS, Raspbian / Raspberry Pi OS, Rocky Linux 9+, and AlmaLinux 9+. RHEL 9+, CentOS Stream 9+, and Oracle Linux 9+ are experimental. See [Supported platforms](/docs/reference/supported-platforms).
 
 ## A tool is "not found" in doctor
 
@@ -95,9 +95,9 @@ sudo abstrax daemon add worker --command="..." --install-supervisor
 
 **Symptom.** `package install` or `package update` fails.
 
-**Cause.** The package commands use `apt`. On a system without `apt`, or where `apt` is busy/locked, they will fail.
+**Cause.** The package commands use `apt` on Debian-family systems and `dnf` on RHEL-family systems. On a host without the expected manager, or where the manager is busy/locked, they will fail.
 
-**Fix.** Confirm `apt` is the detected package manager with `abstrax doctor`. Make sure no other package operation is running, then retry. Use `--verbose` to see the exact command.
+**Fix.** Confirm the detected package manager with `abstrax doctor`. Make sure no other package operation is running, then retry. Use `--verbose` to see the exact command.
 
 ## Service commands fail
 

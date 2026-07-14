@@ -111,7 +111,7 @@ The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) a
 | `user` | Manage Linux users and groups | [Users](/docs/commands/users) |
 | `ssh-key` | Manage SSH authorised keys for users | [SSH keys](/docs/commands/ssh-keys) |
 | `ssh` | Manage SSH server configuration | [SSH keys](/docs/commands/ssh-keys#ssh-server-configuration) |
-| `package` | Manage apt packages | [Packages](/docs/commands/packages) |
+| `package` | Manage system packages (apt/dnf) | [Packages](/docs/commands/packages) |
 | `service` | Manage systemd services | [Services](/docs/commands/service) |
 | `cron` | Manage scheduled cron jobs | [Cron](/docs/commands/cron) |
 | `daemon` | Manage background processes with Supervisor | [Daemons](/docs/commands/daemons) |
@@ -121,7 +121,8 @@ The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) a
 | `ssl` | Manage Let's Encrypt certificates with Certbot | [Certificates](/docs/commands/certificates) |
 | `mysql` | Manage MySQL/MariaDB databases and users | [MySQL](/docs/commands/mysql) |
 | `cache` | Manage Redis and Memcached | [Cache](/docs/commands/cache) |
-| `firewall` | Manage the UFW firewall | [Firewall](/docs/commands/firewall) |
+| `firewall` | Manage the firewall (UFW or firewalld) | [Firewall](/docs/commands/firewall) |
+| `repo` | Enable required repositories (EPEL, CRB, Remi) | [Repositories](/docs/commands/repo) |
 | `server` | Show server status and resource usage | [Server](/docs/commands/server) |
 
 For a single page listing every command and flag, see the [command reference](/docs/reference/index).

@@ -1,6 +1,6 @@
 # Installing packages
 
-This guide covers the common package workflow on Debian and Ubuntu systems. The package commands use `apt` and require root.
+This guide covers the common package workflow. The package commands use `apt` on Debian-family systems and `dnf` on RHEL-family systems, and require root.
 
 ## 1. Update the package lists
 
@@ -88,8 +88,8 @@ sudo abstrax package remove nginx --purge
 
 ## Notes
 
-- These commands only work where `apt` is available. Run `abstrax doctor` to confirm the detected package manager is `apt`.
-- Use `--verbose` to see the underlying `apt` command Abstrax runs.
+- These commands use the detected package manager (`apt` or `dnf`). Run `abstrax doctor` to confirm which backend is active.
+- Use `--verbose` to see the underlying package-manager command Abstrax runs.
 
 ## Related
 

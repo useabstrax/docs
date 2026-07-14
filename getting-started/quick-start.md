@@ -34,7 +34,8 @@ Example output:
   Service manager:     systemd
   Firewall strategy:   ufw
   Nginx layout:        sites-available-enabled
-  Web user:            www-data
+  Nginx config dir:    /etc/nginx/sites-available
+  Web user/group:      www-data/www-data
   Project root:        /var/www
   PHP-FPM strategy:    php{version}-fpm
 
@@ -43,11 +44,13 @@ Example output:
 
   Tools:
     nginx:           available
-    apache2:         not found
+    apache2/httpd:   not found
     certbot:         available
     mysql:           available
     ...
 ```
+
+On Rocky Linux or AlmaLinux, `doctor` reports family `rhel`, package manager `dnf`, nginx layout `conf.d`, web user/group `nginx/nginx`, firewall strategy `firewalld`, and SELinux status.
 
 This tells you which underlying tools are installed. Abstrax relies on these tools, so the list is useful before you try a command in a given area.
 

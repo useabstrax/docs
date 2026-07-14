@@ -35,6 +35,13 @@ sudo abstrax cache install memcached
 sudo abstrax cache install redis --bind=127.0.0.1 --memory=256mb
 ```
 
+On Rocky Linux / AlmaLinux **10+**, Redis is not in AppStream (Valkey is). Abstrax installs Redis via Remi. Pass `--enable-required-repos` (or enable Remi first with `abstrax repo enable remi --enable-required-repos`):
+
+```bash
+sudo abstrax cache install redis --enable-required-repos
+```
+
+Rocky/Alma **9** still uses the AppStream `redis` package and does not require Remi for cache install.
 ## `cache remove`
 
 ```bash

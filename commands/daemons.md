@@ -1,10 +1,9 @@
 # Daemons
 
-The `daemon` command group manages long-running background processes using [Supervisor](http://supervisord.org/). Abstrax writes a Supervisor program configuration for each daemon to:
+The `daemon` command group manages long-running background processes using [Supervisor](http://supervisord.org/). Abstrax writes a Supervisor program configuration for each daemon using the platform provider:
 
-```text
-/etc/supervisor/conf.d/abstrax-<name>.conf
-```
+- Debian/Ubuntu family: `/etc/supervisor/conf.d/abstrax-<name>.conf` (service `supervisor`)
+- RHEL-compatible family: `/etc/supervisord.d/abstrax-<name>.ini` (service `supervisord`)
 
 Use daemons for processes that should run continuously (queue workers, websocket servers, and similar). For scheduled tasks that run and exit, use [cron](/docs/commands/cron) instead.
 

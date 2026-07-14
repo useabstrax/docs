@@ -254,6 +254,18 @@ See [Firewall](/docs/commands/firewall).
 | `firewall deny-ip <ip-or-cidr>` | Yes | |
 | `firewall rule list` | No | |
 | `firewall rule remove <id>` | Yes | |
+| `firewall remove service <name>` | Yes | firewalld |
+| `firewall remove port <port[/proto]>` | Yes | firewalld |
+
+## repo
+
+See [Repositories](/docs/commands/repo).
+
+| Command | Root | Key flags |
+|---|---|---|
+| `repo enable <epel\|crb\|remi>` | Yes | `--enable-required-repos` (required on RHEL/Oracle for EPEL/Remi) |
+
+Global flag `--enable-required-repos` also applies to commands that need Remi/EPEL (for example `project add` with PHP, `ssl install` on RHEL/Oracle).
 
 ## server
 

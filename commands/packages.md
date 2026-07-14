@@ -1,6 +1,6 @@
 # Packages
 
-The `package` command group manages system packages through `apt`. It is intended for Debian and Ubuntu based systems.
+The `package` command group manages system packages through the platform package manager (`apt` on Debian-family systems, `dnf` on RHEL-family systems).
 
 ```text
 abstrax package <action> [arguments] [flags]
@@ -50,7 +50,7 @@ sudo abstrax package remove nginx --purge
 
 ## `package update`
 
-Update the package lists (equivalent to `apt update`).
+Update the package lists (equivalent to `apt update` or `dnf makecache`).
 
 ```bash
 sudo abstrax package update
@@ -117,7 +117,7 @@ curl       8.5.0-2ubuntu10      amd64
 
 ## Notes
 
-- These commands use `apt`. On systems without `apt`, they will not work. Run `abstrax doctor` to confirm the detected package manager.
+- These commands use the detected package manager (`apt` or `dnf`). Run `abstrax doctor` to confirm which backend is active.
 - Long-running operations such as `upgrade` may take time. Use `--verbose` to see the underlying command being run.
 
 ## Related

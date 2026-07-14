@@ -14,7 +14,8 @@ Most subcommands accept a `--nginx` flag for selecting the backend. nginx is the
 
 ## `web install`
 
-Install and configure a web server for hosting standard websites. By default this installs nginx from apt, sets up the `sites-available` / `sites-enabled` virtual host layout, ensures `nginx.conf` includes enabled sites, disables the default Debian welcome site, validates the configuration, and enables the service at boot.
+Install and configure a web server for hosting standard websites. On Debian-family systems this installs nginx via `apt`, sets up the `sites-available` / `sites-enabled` layout, ensures `nginx.conf` includes enabled sites, and disables the default welcome site. On RHEL-family systems this installs nginx via `dnf` and uses `/etc/nginx/conf.d` (no sites-available/enabled symlinks). The configuration is validated and the service is enabled at boot.
+
 
 ```bash
 sudo abstrax web install
@@ -31,7 +32,8 @@ sudo abstrax web install
 sudo abstrax web install --no-start
 ```
 
-After installing nginx, use [Projects](/docs/commands/projects) to add virtual hosts for your applications. Abstrax writes site configs to `/etc/nginx/sites-available` and enables them via symlinks in `/etc/nginx/sites-enabled`.
+After installing nginx, use [Projects](/docs/commands/projects) to add virtual hosts for your applications. On Debian-family systems Abstrax writes site configs to `/etc/nginx/sites-available` and enables them via symlinks in `/etc/nginx/sites-enabled`. On RHEL-family systems configs are written to `/etc/nginx/conf.d/{site}.conf`.
+
 
 ## `web test`
 

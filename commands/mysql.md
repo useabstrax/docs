@@ -52,7 +52,15 @@ sudo abstrax mysql install --root-password='YourPassword'
 | `--version` | Version to install |
 | `--root-password` | Root password (a secure random password is generated if omitted) |
 
-Install runs `apt install mysql-server`, enables and starts the service, applies secure defaults (removes anonymous users, drops the test database, restricts remote root), and sets the root password for both `root@localhost` (socket) and `root@127.0.0.1` (TCP). This replaces the default `auth_socket` plugin on Debian/Ubuntu so root can log in with a password from database apps and SSH tunnels.
+Install behaviour depends on the platform family:
+
+- **Debian/Ubuntu family:** installs `mysql-server` via `apt`, enables/starts the `mysql` service, and sets root password auth with `caching_sha2_password` (replacing Debian's default `auth_socket` where present).
+- **RHEL-compatible family:** installs MariaDB as the MySQL-compatible database server (`mariadb-server` via `dnf`), enables/starts `mariadb`, and sets root password auth with MariaDB-compatible `IDENTIFIED BY` SQL. The CLI command remains `mysql` for compatibility; this is not Oracle MySQL.
+
+In both cases Abstrax applies secure defaults (removes anonymous users, drops the test database, restricts remote root) and sets the root password for both `root@localhost` (socket) and `root@127.0.0.1` (TCP).
+
+On RHEL-family systems, `--version` is ignored and the stock AppStream MariaDB package is installed.
+
 
 The root password is displayed once after install and is saved to `/etc/abstrax/mysql.json` so Abstrax commands such as `mysql database add` work immediately without a separate `config set` step.
 

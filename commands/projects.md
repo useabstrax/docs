@@ -209,22 +209,32 @@ The same check runs for `project modify` when the project uses a PHP, Node.js, o
 
 | Runtime | How Abstrax checks | What it installs |
 |---|---|---|
-| PHP | `php{version}-fpm` package | `php{version}-fpm`, `php{version}-cli`, plus extensions from [`config php.extensions`](/docs/commands/config); enables and starts PHP-FPM |
-| Node.js | `node --version` major matches | NodeSource repository for the requested major, then `nodejs` |
-| Ruby | `ruby --version` matches major.minor | `ruby{version}` via apt, or `ruby-full` as a fallback |
+| PHP | Provider PHP-FPM package for the version | Debian: `php{version}-fpm` / `php{version}-cli` via apt. RHEL-family: Remi SCL packages such as `php83-php-fpm` / `php83-php-cli` (requires Remi; pass `--enable-required-repos` or run [`repo enable remi`](/docs/commands/repo) first). Extensions come from [`config php.extensions`](/docs/commands/config); Abstrax enables and starts the versioned PHP-FPM service |
+| Node.js | `node --version` major matches | NodeSource setup for the requested major (`deb.nodesource.com` on Debian-family, `rpm.nodesource.com` on RHEL-family), then `nodejs` |
+| Ruby | `ruby --version` matches major.minor on Debian-family | Debian: `ruby{version}` via apt, or `ruby-full` as a fallback. RHEL-family: stock `ruby` + `ruby-devel`. Exact version pinning on RHEL is a deliberate product limitation until a shared runtime manager is added |
 
 PHP extensions are configured server-wide with `abstrax config` (default: `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, `sqlite3`; `pcntl` and `posix` are included in `php*-cli`). See [Config](/docs/commands/config).
 
+On RHEL-family systems, supported Remi PHP versions are currently 8.1–8.5. Unsupported versions fail with a clear error before any install attempt.
+
 ### PHP on the command line
 
-Abstrax routes web requests to the correct PHP-FPM version per project. For command-line tasks (Artisan, Composer, queue workers, and cron jobs), use the matching versioned binary installed with `php{version}-cli`:
+Abstrax routes web requests to the correct PHP-FPM version per project. For command-line tasks (Artisan, Composer, queue workers, and cron jobs), use the matching versioned binary:
+
+**Debian/Ubuntu:**
 
 ```bash
 php8.5 artisan migrate
 php8.4 artisan queue:work
 ```
 
-The unversioned `php` command is managed separately by `update-alternatives` and may not match a given project. Check the configured version with `abstrax project info <name>`.
+**RHEL-family (Remi):**
+
+```bash
+/opt/remi/php85/root/usr/bin/php artisan migrate
+```
+
+The unversioned `php` command may not match a given project. Check the configured version with `abstrax project info <name>`.
 
 Use `--dry-run` to preview the prompt and installation steps without making changes.
 

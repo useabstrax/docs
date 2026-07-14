@@ -24,6 +24,7 @@
 - [MySQL](/docs/commands/mysql)
 - [Cache](/docs/commands/cache)
 - [Firewall](/docs/commands/firewall)
+- [Repositories](/docs/commands/repo)
 - [Server](/docs/commands/server)
 - [Cron](/docs/commands/cron)
 - [Daemons](/docs/commands/daemons)

@@ -7,7 +7,8 @@ Abstrax is a single Go binary. There is no web frontend, no database, and no ser
 ## Requirements
 
 - Go 1.22 or newer (the module declares `go 1.22`).
-- A Linux environment for running most commands. The binary builds on any platform Go supports, but the commands themselves target Debian/Ubuntu.
+- A Linux environment for running most commands. The binary builds on any platform Go supports, but the commands themselves target Debian/Ubuntu and RHEL-compatible Linux servers.
+
 
 ## Repository layout
 
@@ -25,6 +26,7 @@ cli/
     output/               Human-readable and JSON output helpers
     platform/             OS detection, platform profiles, and providers
       debian/             Debian/Ubuntu paths, naming, and provider
+      rhel/               RHEL-compatible paths, naming, and provider
     services/             One package per area, holding the real logic
       user/ sshkey/ sshcfg/ pkgmanager/ svcmanager/ cron/ daemon/
       project/ web/ ssl/ mysql/ cache/ firewall/ serverinfo/

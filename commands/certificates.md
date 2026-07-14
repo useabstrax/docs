@@ -12,13 +12,23 @@ abstrax ssl <action> [arguments] [flags]
 
 ## `ssl install`
 
-Install Certbot and the nginx plugin from apt.
+Install Certbot and the nginx plugin using the platform package manager (`apt` on Debian-family systems, `dnf` on RHEL-family systems).
 
 ```bash
 sudo abstrax ssl install
 ```
 
+On Rocky Linux, AlmaLinux, and CentOS Stream, Abstrax installs the EPEL repository (`epel-release`) when needed before installing Certbot. On RHEL or Oracle Linux, enable EPEL explicitly first:
+
+```bash
+sudo abstrax repo enable epel --enable-required-repos
+sudo abstrax ssl install
+```
+
+or pass `--enable-required-repos` to `ssl install`.
+
 Run this when `abstrax doctor` reports certbot as not found. `ssl add` and `ssl renew` require Certbot to be installed.
+
 
 ## `ssl add`
 

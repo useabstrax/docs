@@ -12,9 +12,11 @@ To build from source you also need Go 1.22 or newer.
 
 ## Supported operating systems
 
-Abstrax currently supports Debian/Ubuntu-based distributions.
+Abstrax supports Debian/Ubuntu-based and RHEL-compatible distributions.
 
 ### Fully supported
+
+Debian/Ubuntu family:
 
 - Ubuntu 20.04+
 - Debian 11+
@@ -22,17 +24,24 @@ Abstrax currently supports Debian/Ubuntu-based distributions.
 - Pop!_OS
 - Raspbian / Raspberry Pi OS
 
-### Compatible (best-effort)
+RHEL-compatible family:
 
-Other Debian/Ubuntu-based distributions may work but are not officially tested. Abstrax detects these via `/etc/os-release` (including `ID_LIKE`) and marks them as compatible.
+- Rocky Linux 9+
+- AlmaLinux 9+
+
+### Experimental or compatible
+
+- Other Debian/Ubuntu-based distributions (best-effort)
+- Red Hat Enterprise Linux 9+
+- CentOS Stream 9+
+- Oracle Linux 9+
 
 ### Unsupported
 
-Non-Debian-family distributions are not currently supported. Mutating commands detect the platform and exit cleanly without making system changes.
+Distributions outside those families, and RHEL-family releases older than major version 9, are not supported. Mutating commands detect the platform and exit cleanly without making system changes.
 
-The package management commands use `apt`, and many service operations assume `systemd`, so the most reliable experience is on current Ubuntu and Debian releases.
+See [Supported platforms](/docs/reference/supported-platforms) for family conventions (`apt` vs `dnf`, nginx layouts, firewall backends, and SELinux behaviour).
 
-See [Supported platforms](/docs/reference/supported-platforms) for more detail.
 
 ## Option 1: Install from a release archive (recommended)
 
