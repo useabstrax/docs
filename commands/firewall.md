@@ -12,6 +12,27 @@ Run `abstrax doctor` to see which firewall strategy is active (`ufw` or `firewal
 
 Most firewall commands require root. `firewall status` and `firewall rule list` do not require root.
 
+## `firewall install`
+
+Install the platform firewall package without enabling it.
+
+| Distro family | Package |
+|---|---|
+| Debian/Ubuntu | `ufw` |
+| Rocky/Alma/RHEL | `firewalld` |
+
+```bash
+sudo abstrax firewall install
+```
+
+After install, enable the firewall with SSH protection:
+
+```bash
+sudo abstrax firewall enable --allow-ssh
+```
+
+`firewall enable` will also install the package automatically if it is missing.
+
 ## `firewall status`
 
 Show whether the firewall is active and list current rules.
@@ -23,6 +44,8 @@ abstrax firewall status
 ## `firewall enable`
 
 Enable the firewall. On Debian-family hosts this enables UFW. On RHEL-family hosts this enables and starts the `firewalld` service.
+
+If the firewall package is not installed yet (`ufw` or `firewalld`), Abstrax installs it first, then enables the firewall. Prefer `--allow-ssh` so SSH is opened before/while enabling.
 
 ```bash
 sudo abstrax firewall enable --allow-ssh

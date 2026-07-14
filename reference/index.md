@@ -246,6 +246,7 @@ See [Firewall](/docs/commands/firewall).
 | Command | Root | Key flags |
 |---|---|---|
 | `firewall status` | No | |
+| `firewall install` | Yes | installs `ufw` or `firewalld` |
 | `firewall enable` | Yes | `--allow-ssh`, `--ssh-port` |
 | `firewall disable` | Yes | |
 | `firewall allow <port>` | Yes | `--protocol`, `--from`, `--comment` |
