@@ -174,7 +174,7 @@ Abstrax will not silently enable policy-sensitive third-party repositories on en
 | Repository helpers | Not required | `abstrax repo enable` + `--enable-required-repos` |
 | SELinux warnings | Detected where present | Detected and warned |
 | Apache support | Not implemented | Not implemented |
-| Hosted agent | Not implemented | Not implemented |
+| Hosted agent | Planned as optional plugin | Planned as optional plugin |
 
 ## Remaining non-parity areas
 
@@ -183,7 +183,7 @@ Abstrax will not silently enable policy-sensitive third-party repositories on en
 | Exact Ruby version pinning on RHEL | Deliberate product limitation | Distro packages do not provide Debian-style exact pinning; a shared runtime manager (rbenv/asdf) is a larger feature and is not implemented yet |
 | Rich-rule / complex firewalld deny policies | Temporary implementation gap | Simple service/port allow and remove are supported; complex rich-rule editing is not fully abstracted |
 | Apache | Not implemented on any family | Product decision |
-| Hosted agent | Not implemented on any family | Product decision |
+| Hosted agent | Planned as an optional official plugin (`abstrax plugin install agent`), not part of the core CLI package | Product direction |
 
 ## Tools Abstrax manages
 
@@ -210,15 +210,9 @@ The `project` commands accept an `--apache` flag and the platform detection repo
 
 ## Future agent
 
-The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) are placeholders. Running any of them prints:
+The core CLI does not ship a built-in `agent` command. A hosted agent is planned as an optional official plugin (`abstrax plugin install agent`), installed from the plugin registry rather than the core package. The agent binary would connect outbound to a hosted API, fetch structured jobs keyed by stable action names, run them locally, and report results - without requiring inbound SSH.
 
-```text
-Agent mode is not yet implemented.
-```
-
-The code and README describe a planned hosted agent that would connect outbound to a hosted API, fetch structured jobs, run them locally through the same action layer as the CLI, and report results - without requiring inbound SSH. This is not built yet. A systemd unit file for the agent is installed by the packages at `/etc/systemd/system/abstrax-agent.service`, but it is intentionally left disabled.
-
-Do not rely on agent functionality; it does nothing today.
+Agent systemd installation will be handled by the plugin (for example `abstrax agent install-service`), not by core CLI packages. Do not expect `abstrax agent` or an `abstrax-agent.service` unit from the core install today.
 
 ## Related
 

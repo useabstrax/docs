@@ -15,6 +15,7 @@ These flags are available on every command:
 | Flag | Description |
 |---|---|
 | `--json` | Output machine-readable JSON instead of text |
+| `--json-stream` | Output NDJSON progress events plus a final result line (mutually exclusive with `--json`) |
 | `--dry-run` | Show the commands that would run without making changes |
 | `--yes` | Skip confirmation prompts for destructive commands |
 | `--quiet` | Reduce output |
@@ -33,7 +34,6 @@ Every command also supports `--help` (alias `-h`). The root command additionally
 | `abstrax doctor` | Inspect the system and report platform capabilities | No |
 | `abstrax config` | Manage Abstrax configuration | Depends on subcommand |
 | `abstrax log [path]` | Tail a log file (defaults to the Abstrax log) | No |
-| `abstrax agent` | Placeholder for the future hosted agent (not implemented) | No |
 | `abstrax help` | Show help for any command | No |
 | `abstrax completion` | Generate a shell autocompletion script | No |
 
@@ -97,10 +97,6 @@ abstrax log /var/log/nginx/error.log --lines=200
 |---|---|---|
 | `--lines` | `50` | Number of lines to show |
 | `--follow`, `-f` | `true` | Follow the log output |
-
-### agent
-
-The `agent` command and its subcommands (`connect`, `status`, `run`, `update`) are placeholders. They print a message stating that agent mode is not yet implemented and make no changes. See [Supported platforms](/docs/reference/supported-platforms#future-agent).
 
 ## Command groups
 

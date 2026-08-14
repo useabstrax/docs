@@ -274,6 +274,28 @@ sudo abstrax project add myapp --path=/var/www/myapp \
   --domains=myapp.com --ruby --ruby-version=3.4 --proxy-port=3000
 ```
 
+### Machine-readable progress (`--json-stream`)
+
+For agents and other control-plane consumers, use `--json-stream` (with `--yes` for non-interactive runs). Abstrax prints flushed NDJSON lines: zero or more `type=progress` events, then one `type=result` line.
+
+```bash
+sudo abstrax project add myapp \
+  --domains=myapp.com --php --public-dir=public \
+  --json-stream --yes
+```
+
+Example stream (abbreviated):
+
+```json
+{"type":"progress","action":"project.add","step":"validate","message":"Validating options"}
+{"type":"progress","action":"project.add","step":"directories","message":"Creating project directories"}
+{"type":"result","status":"success","action":"project.add","summary":"Project myapp created.","data":{...}}
+```
+
+Progress `step` values align with the hosted-agent style stages where practical (`validate`, `identity`, `path`, `runtime`, `directories`, `ownership`, `php_pool`, `nginx_vhost`, `state`, `complete`, plus install steps such as `package_update` / `ensure_php` when a runtime is installed). See [Exit codes and output](/docs/reference/exit-codes#json-stream-ndjson) for the full contract.
+
+`--json` remains a single indented result object with no progress lines. `--json` and `--json-stream` cannot be combined.
+
 ### Example output
 
 ```text

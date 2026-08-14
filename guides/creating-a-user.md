@@ -29,6 +29,8 @@ User deploy created.
   Sudo:   granted
 ```
 
+`--grant-sudo` also installs passwordless sudo via `/etc/sudoers.d/abstrax-<name>`, so the user can run `sudo` without a password. That matters when the account has no password (the default, or when you pass `--disabled-password`).
+
 If you also want a password, add `--password`, which prompts for it securely:
 
 ```bash

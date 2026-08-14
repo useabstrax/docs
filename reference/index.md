@@ -7,6 +7,7 @@ A single-page listing of every Abstrax command and its flags. Each command links
 | Flag | Description |
 |---|---|
 | `--json` | Output machine-readable JSON |
+| `--json-stream` | Output NDJSON progress events plus a final result line (mutually exclusive with `--json`) |
 | `--dry-run` | Show what would happen without making changes |
 | `--yes` | Skip confirmation prompts for destructive commands |
 | `--quiet` | Reduce output |
@@ -24,7 +25,6 @@ A single-page listing of every Abstrax command and its flags. Each command links
 | `abstrax self update [version]` | Yes | Update the CLI from GitHub releases | [self](/docs/commands/self) |
 | `abstrax doctor` | No | Inspect the system | [commands](/docs/commands/index#doctor) |
 | `abstrax log [path]` | No | Tail a log file (defaults to the Abstrax log) | [commands](/docs/commands/index#log) |
-| `abstrax agent ...` | No | Placeholder, not implemented | [platforms](/docs/reference/supported-platforms#future-agent) |
 | `abstrax help` | No | Show help for any command | [commands](/docs/commands/index#top-level-commands) |
 | `abstrax completion <shell>` | No | Generate a shell autocompletion script | [commands](/docs/commands/index#top-level-commands) |
 
@@ -298,4 +298,4 @@ Blocked plugins can also be allowed via `plugins.allow_blocked` in `/etc/abstrax
 
 ## Action names
 
-Every command maps to a stable action name used in JSON output (the `action` field) and reserved for the future agent. Examples: `user.add`, `firewall.enable`, `project.add`, `mysql.database.add`, `cron.modify`. See the [JSON output](/docs/reference/exit-codes#json-result-shape) reference for the result shape.
+Every command maps to a stable action name used in JSON output (the `action` field) and reserved as a stable job API for a future hosted agent. Examples: `user.add`, `firewall.enable`, `project.add`, `mysql.database.add`, `cron.modify`. See the [JSON output](/docs/reference/exit-codes#json-result-shape) reference for the result shape.

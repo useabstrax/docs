@@ -11,7 +11,7 @@ Abstrax uses two exit codes:
 | `0` | The command completed successfully |
 | `1` | The command failed for any reason |
 
-There is no finer-grained set of exit codes for most commands. Any error - invalid input, missing permissions, a failed underlying command, an unsupported platform - results in exit code `1`. To distinguish between causes in a script, read the error message, or use `--json` and inspect the `error_code` and `message` fields.
+There is no finer-grained set of exit codes for most commands. Any error - invalid input, missing permissions, a failed underlying command, an unsupported platform - results in exit code `1`. To distinguish between causes in a script, read the error message, or use `--json` / `--json-stream` and inspect the `error_code` and `message` fields.
 
 **Exception:** When Abstrax delegates to a plugin command (for example `abstrax deploy`), the plugin process exit code is propagated to the shell. A plugin that exits with code `2` will cause Abstrax to exit with `2`.
 
@@ -55,6 +55,42 @@ Failure results have this shape:
 | `error_code` | A short error category |
 | `message` | The error detail |
 
+`--json` always prints a single indented JSON object. Do not combine it with `--json-stream`.
+
+## JSON stream (NDJSON)
+
+Add `--json-stream` for machine-readable progress on long-running commands. Output is NDJSON on stdout: one JSON object per line, flushed after each line.
+
+Progress lines:
+
+```json
+{"type":"progress","action":"project.add","step":"validate","message":"Validating options"}
+```
+
+| Field | Description |
+|---|---|
+| `type` | Always `progress` |
+| `action` | The stable action name |
+| `step` | Stable step identifier (for example `validate`, `directories`, `nginx_vhost`) |
+| `message` | Human-readable status for that step |
+
+The final line wraps the normal result fields with `"type":"result"`:
+
+```json
+{"type":"result","status":"success","action":"project.add","summary":"Project demo created.","data":{...}}
+```
+
+```json
+{"type":"result","status":"error","action":"project.add","error_code":"command_error","message":"..."}
+```
+
+Rules:
+
+- `--json` and `--json-stream` are mutually exclusive.
+- Commands with no progress still emit a single `type=result` line under `--json-stream`, so consumers can always line-read.
+- Today, staged progress is emitted by `project add`. Other commands emit only the final result line.
+- Agents and control-plane consumers should use `--json-stream --yes` when they need live `step` / `message` updates (for example to relay as `job.progress`). Scripts that want a single object for `jq` should keep using `--json`.
+
 ## Error codes
 
 The error codes currently produced by the application are:
@@ -77,7 +113,7 @@ Most failures use `command_error`. The `message` field carries the specific deta
 
 ## Text output conventions
 
-Without `--json`, Abstrax prints human-readable text:
+Without `--json` or `--json-stream`, Abstrax prints human-readable text:
 
 - Success lines are printed to standard output (green, unless `--no-color`).
 - Warnings are printed to standard error, prefixed with `WARNING:` (yellow).

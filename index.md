@@ -59,7 +59,7 @@ You do not need to be a Linux expert to use Abstrax, but you should understand t
 
 - It is not a configuration management system like Ansible, Puppet, or Chef. It does not enforce a desired state over time.
 - It is not a replacement for the underlying tools. It calls `apt`/`dnf`, `systemctl`, `ufw`/`firewall-cmd`, `certbot`, `supervisorctl`, and `mysql` on your behalf.
-- It does not currently provide a hosted control plane or remote agent. A future agent is described in the code and README, but it is not implemented yet. See [Supported platforms](/docs/reference/supported-platforms) for current scope.
+- It does not currently provide a hosted control plane or remote agent. A hosted agent is planned as an optional official plugin (`abstrax plugin install agent`), not as part of the core CLI package. See [Supported platforms](/docs/reference/supported-platforms#future-agent).
 
 ## A short example
 

@@ -19,7 +19,7 @@ cli/
   cmd/abstrax/            Program entry point (main.go)
   internal/
     cli/                  Cobra command definitions, one file per command group
-    actions/              Stable action name constants used in output and the future agent
+    actions/              Stable action name constants used in JSON output and as a job API for a future agent
     confirm/              Interactive yes/no confirmation prompts
     exec/                 Wrapper around os/exec with dry-run and verbose support
     globals/              Parsed global flag values
@@ -32,7 +32,7 @@ cli/
       project/ web/ ssl/ mysql/ cache/ firewall/ serverinfo/
     validate/             Input validation helpers
     version/              Version variables set at build time
-  packaging/              systemd unit and package post-install script
+  packaging/              Package post-install script
   .github/workflows/      CI (test) and release workflows
   .goreleaser.yaml        Release build configuration
 ```
@@ -54,9 +54,9 @@ CLI command (internal/cli)
 Key conventions:
 
 - **Commands** live in `internal/cli`, one file per group (`user.go`, `firewall.go`, and so on). They are built with [Cobra](https://github.com/spf13/cobra).
-- **Services** in `internal/services/<area>` hold the real logic and are kept separate from the CLI layer. This separation is intentional so the planned hosted agent can reuse the same logic.
-- **Action names** in `internal/actions` are stable identifiers (for example `user.add`). They appear in JSON output and are reserved for the future agent. Treat them as a stable API.
-- **Output** always goes through `internal/output`, which renders either human text or JSON based on the `--json` flag.
+- **Services** in `internal/services/<area>` hold the real logic and are kept separate from the CLI layer. This separation keeps command wiring thin and makes the service packages easier to reason about and test.
+- **Action names** in `internal/actions` are stable identifiers (for example `user.add`). They appear in JSON output and are a stable job API for a future hosted agent. Treat them as a stable API.
+- **Output** always goes through `internal/output`, which renders human text, a single `--json` object, or `--json-stream` NDJSON depending on global flags.
 - **Global flags** are read from `internal/globals`, not threaded through every function.
 - **Command execution** goes through `internal/exec`, which supports `--dry-run` (printing the command instead of running it) and `--verbose` (printing the command before running it).
 

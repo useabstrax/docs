@@ -29,6 +29,7 @@ Instead of a config file, Abstrax uses global flags to control output and safety
 | Flag | Effect |
 |---|---|
 | `--json` | Output structured JSON |
+| `--json-stream` | Output NDJSON progress events plus a final result line |
 | `--dry-run` | Preview changes without applying them |
 | `--yes` | Skip confirmation prompts |
 | `--quiet` | Reduce output |

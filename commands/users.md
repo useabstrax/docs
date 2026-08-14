@@ -36,7 +36,7 @@ By default a home directory is created.
 |---|---|---|
 | `--create-home` | `true` | Create the home directory |
 | `--no-create-home` | `false` | Do not create the home directory |
-| `--grant-sudo` | `false` | Add the user to the `sudo` group |
+| `--grant-sudo` | `false` | Grant passwordless sudo (adds the user to the `sudo` group and installs a sudoers drop-in) |
 | `--groups` | | Additional groups, comma-separated |
 | `--shell` | | Login shell (must be an absolute path) |
 | `--uid` | | Custom UID |
@@ -120,7 +120,7 @@ sudo abstrax user remove deploy --yes
 
 ## `user grant-sudo` and `user revoke-sudo`
 
-Add or remove a user from the `sudo` group.
+Add or remove passwordless sudo for a user. Granting sudo adds the user to the `sudo` group and installs `/etc/sudoers.d/abstrax-<name>` with `NOPASSWD`. Revoking sudo removes both.
 
 ```bash
 sudo abstrax user grant-sudo <name>

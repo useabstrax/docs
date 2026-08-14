@@ -9,6 +9,7 @@ Abstrax behaviour is controlled by flags rather than the environment:
 | Flag | Effect |
 |---|---|
 | `--json` | Output machine-readable JSON |
+| `--json-stream` | Output NDJSON progress events plus a final result line |
 | `--dry-run` | Show what would happen without making changes |
 | `--yes` | Skip confirmation prompts |
 | `--quiet` | Reduce output |
