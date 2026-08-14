@@ -2,7 +2,7 @@
 
 The `plugin` command group installs, updates, and removes plugins from the Abstrax registry. Installed plugins extend the CLI with additional top-level commands (for example `abstrax deploy`).
 
-For how plugins work, the registry, and plugin development, see the [Plugins](/docs/plugins/) section.
+For how plugins work, the registry, and plugin development, see the [Plugins](/docs/plugins/) section. For Abstrax-maintained plugins such as Deploy, see [Official plugins](/docs/plugins/official/).
 
 ```text
 abstrax plugin <action> [arguments] [flags]

@@ -44,6 +44,10 @@
 - [Plugin security](/docs/plugins/security)
 - [Registry API](/docs/plugins/registry-api)
 
+## Official plugins
+- [Official plugins](/docs/plugins/official/)
+- [Deploy](/docs/plugins/official/deploy)
+
 ## Reference
 - [Command reference](/docs/reference/)
 - [Exit codes](/docs/reference/exit-codes)

@@ -89,3 +89,4 @@ abstrax server status --json
 - [Contributing](/docs/contributing/index) - build, test, and develop Abstrax.
 - [Licence](/docs/reference/license) - open source licence and trademark notice.
 - [Plugins](/docs/plugins/) - extend Abstrax with plugins.
+- [Official plugins](/docs/plugins/official/) - Deploy and other Abstrax-maintained plugins.

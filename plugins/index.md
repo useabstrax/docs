@@ -11,6 +11,7 @@ Use the `abstrax plugin` command group to install, update, and remove plugins fr
 | [How plugins work](/docs/plugins/how-it-works) | Command delegation, naming, and where binaries are found |
 | [Registry](/docs/plugins/registry) | The public registry, trust levels, status, and release channels |
 | [Security](/docs/plugins/security) | What to know before installing, running, or publishing a plugin |
+| [Official plugins](/docs/plugins/official/) | Plugins maintained by the Abstrax team (for example Deploy) |
 
 ## For plugin authors
 

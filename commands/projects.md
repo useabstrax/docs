@@ -445,6 +445,7 @@ sudo abstrax project reload <name>
 ## Related
 
 - [Integrating with Abstrax](/docs/plugins/integrating-with-abstrax)
+- [Deploy plugin](/docs/plugins/official/deploy) — zero-downtime application deployments on top of project infra
 - [Creating a project](/docs/guides/creating-a-project)
 - [Web server](/docs/commands/web)
 - [Certificates (SSL)](/docs/commands/certificates)
