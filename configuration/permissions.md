@@ -63,7 +63,7 @@ A note on three groups:
 
 - **ssh-key**: the commands do not enforce root, but editing another user's `~/.ssh/authorized_keys` requires file permissions you usually only have as root or as that user. Use `sudo` when managing another user's keys.
 - **mysql**: most commands do not enforce a root check because they authenticate to the database using the saved connection config rather than relying on OS privileges. However, reading the config file at `/etc/abstrax/mysql.json` (mode 0600, owned by root) generally requires root.
-- **plugin install**: registry installs require root. Install from a direct manifest URL with `--manifest` does not enforce root, but still writes to the plugin install directory for the current user.
+- **plugin install**: registry installs require root. Install from a direct manifest URL with `--manifest`, or from a local binary with `--path` (or a filesystem path argument), does not enforce root, but still writes to the plugin install directory for the current user. Local installs create a symlink and never copy or delete the original binary.
 - **cron enable/disable/list/info**: these do not enforce root, but reading or writing files in `/etc/cron.d` may still require root depending on file permissions.
 
 ## Why elevated permissions are needed

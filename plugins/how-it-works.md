@@ -56,6 +56,8 @@ Abstrax never searches the current working directory.
 
 When running as root, `abstrax plugin install` installs to `/usr/local/lib/abstrax/plugins/`. Installation records and caches are stored under `/var/lib/abstrax/plugins/`.
 
+Registry and manifest installs place a real binary in the install directory. Local installs (`--path`) place a symlink there that points at the user-supplied binary; `plugin remove` deletes only that symlink.
+
 ## Related
 
 - [Plugin commands](/docs/commands/plugins)

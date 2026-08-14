@@ -33,7 +33,15 @@ go build -o abstrax-example ./cmd/abstrax-example
 ./abstrax-example plugin metadata
 ```
 
-Place the binary on your `PATH` or in a plugin directory to test delegation through the main `abstrax` binary.
+Install it as a local (non-registry) plugin so Abstrax records it and can remove the link later without deleting your binary:
+
+```bash
+abstrax plugin install example --path ./abstrax-example --yes
+# or:
+abstrax plugin install ./abstrax-example --yes
+```
+
+You can also place an `abstrax-<name>` binary on your `PATH` or in a plugin directory to test delegation without an install record. See [Plugin commands](/docs/commands/plugins#local-binary-installation) for local install details.
 
 ## Publishing to the registry
 

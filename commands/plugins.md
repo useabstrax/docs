@@ -15,7 +15,7 @@ abstrax plugin <action> [arguments] [flags]
 | `plugin list` | No |
 | `plugin info` | No |
 | `plugin search` | No |
-| `plugin install` | Yes (registry installs; `--manifest` does not enforce root) |
+| `plugin install` | Yes (registry installs; `--manifest` and `--path` do not enforce root) |
 | `plugin update` | Yes |
 | `plugin remove` | Yes |
 
@@ -60,7 +60,7 @@ abstrax plugin search deploy --json
 
 ## `plugin install`
 
-Install a plugin from the registry.
+Install a plugin from the registry, a direct manifest URL, or a local binary.
 
 ```bash
 sudo abstrax plugin install <name>
@@ -71,6 +71,9 @@ abstrax plugin install example --json
 | Flag | Description |
 |---|---|
 | `--manifest` | Install from a direct manifest JSON URL instead of the registry |
+| `--path` | Install from a local plugin binary path (creates a symlink; does not copy) |
+
+`--manifest` and `--path` are mutually exclusive.
 
 ### Direct manifest installation
 
@@ -81,6 +84,26 @@ abstrax plugin install myplugin --manifest https://example.com/manifest.json
 This shows a warning and requires confirmation unless `--yes` is supplied. Manifest-installed plugins are recorded with `source: manifest` and default to community trust when `trust_level` is omitted.
 
 See [Release manifest format](/docs/plugins/registry-api#release-manifest-format) for the expected JSON shape.
+
+### Local binary installation
+
+Install a plugin that is not in the registry by pointing at an existing binary on the server:
+
+```bash
+abstrax plugin install myplugin --path /opt/custom/abstrax-myplugin
+abstrax plugin install /opt/custom/abstrax-myplugin
+```
+
+When the positional argument looks like a filesystem path, Abstrax treats it as the binary path and reads the plugin name from `plugin metadata`.
+
+Local installs:
+
+- Print a warning that the plugin is not official or verified from the registry, and require confirmation (skipped with `--yes`)
+- Create a symlink in the plugin install directory to the given binary (the original file is never copied)
+- Record `source: local` and community trust
+- Do not require root (same as `--manifest`); root still writes under `/usr/local/lib/abstrax/plugins/`
+
+`plugin update` cannot update local plugins; reinstall with `--path` instead.
 
 ## `plugin update`
 
@@ -100,6 +123,7 @@ sudo abstrax plugin remove <name>
 sudo abstrax plugin remove example
 ```
 
+For registry and manifest installs, this deletes the installed binary and the installation record. For local (`--path`) installs, only the symlink in the plugin install directory and the installation record are removed; the original binary on disk is left intact.
 ## Running installed plugins
 
 After installation, a plugin's commands are available as top-level Abstrax commands:

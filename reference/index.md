@@ -290,7 +290,7 @@ See [Plugins](/docs/commands/plugins).
 | `plugin list` | No | |
 | `plugin info <name>` | No | |
 | `plugin search <query>` | No | |
-| `plugin install <name>` | Yes | `--manifest` |
+| `plugin install` | Yes (registry only) | `--manifest`, `--path` |
 | `plugin update <name>` | Yes | |
 | `plugin remove <name>` | Yes | |
 
