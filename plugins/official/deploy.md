@@ -49,7 +49,9 @@ There is **no** in-place `git pull`, no bare/mirror git cache in v1, no PHP-FPM 
 
 Abstrax PHP nginx blocks already use `$realpath_root` for `SCRIPT_FILENAME` / `DOCUMENT_ROOT`, so flipping `current` does not require reloading PHP-FPM.
 
-## Happy path
+## Quick start
+
+Typical flow from an existing Abstrax project to a first deploy:
 
 ```bash
 # 1. Create the project (infra only)
@@ -294,7 +296,7 @@ Distro differences for nginx and PHP stay Abstrax’s concern. This plugin owns 
 
 ## Machine-readable output
 
-For agents and scripts:
+For scripts and automation:
 
 ```bash
 sudo abstrax deploy now example.com --yes --json-stream
@@ -309,16 +311,6 @@ sudo abstrax deploy now example.com --yes --json-stream
 - Shared `www-data` (or equivalent) ownership is respected when that is the project owner
 - Failed deploys clean up incomplete releases and never flip `current`
 - Rollback never invents service restarts; it only re-runs `after_activate`
-
-## Non-goals (v1)
-
-- No Saturn-style in-place `git pull` deploys
-- No migration from legacy in-place git trees
-- No bare/mirror git cache
-- No Apache support
-- No GitLab/Bitbucket-specific UX
-- No automatic PHP-FPM or supervisor restarts
-- No web UI / TUI
 
 ## Related
 
