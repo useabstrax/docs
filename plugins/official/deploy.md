@@ -223,7 +223,9 @@ sudo abstrax deploy hooks example.com before_activate --clear
 | `static` | none | none |
 | `none` | none | none |
 
-Laravel includes migrate. No preset restarts services. For Node/Ruby apps or queue workers, add restarts in `after_activate`.
+Laravel includes migrate. On `setup` / `init` / `deploy now`, the Laravel preset also scaffolds `shared/storage` (app, framework cache/sessions/views, logs) and a minimal `shared/.env` with a generated `APP_KEY` when that file is missing or empty. Existing non-empty `.env` files are never overwritten — replace DB and URL settings before go-live.
+
+No preset restarts services. For Node/Ruby apps or queue workers, add restarts in `after_activate`.
 
 ## Config (`deploy.json`)
 
