@@ -90,6 +90,7 @@ Rules:
 - Commands with no progress still emit a single `type=result` line under `--json-stream`, so consumers can always line-read.
 - Today, staged progress is emitted by `project add`. Other commands emit only the final result line.
 - Agents and control-plane consumers should use `--json-stream --yes` when they need live `step` / `message` updates (for example to relay as `job.progress`). Scripts that want a single object for `jq` should keep using `--json`.
+- Hosted agents can also invoke any action with `abstrax --json-stream --yes --action <name> --payload '<json>'`. Builtin actions (such as `user.add`) run in-process. Plugin actions (such as `plugin.deploy.now`) exec the plugin binary. See [Action dispatch](/docs/plugins/how-it-works#action-dispatch).
 
 ## Error codes
 
@@ -108,6 +109,7 @@ The error codes currently produced by the application are:
 | `unsupported_plugin_protocol` | Plugin uses an unsupported metadata protocol version |
 | `blocked_plugin` | Plugin is blocked by registry policy |
 | `plugin_process_failure` | Plugin process failed to start |
+| `unknown_action` | `--action` did not match a builtin command or an installed plugin command |
 
 Most failures use `command_error`. The `message` field carries the specific detail.
 

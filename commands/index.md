@@ -23,6 +23,8 @@ These flags are available on every command:
 | `--no-color` | Disable coloured output |
 | `--allow-blocked-plugin` | Allow execution of registry-blocked plugins (repeatable) |
 
+Root-only flags for agents: `--action` (stable action name) and `--payload` (JSON object, or `-` for stdin). See [Action dispatch](/docs/plugins/how-it-works#action-dispatch).
+
 Every command also supports `--help` (alias `-h`). The root command additionally supports `--version` (alias `-v`).
 
 ## Top-level commands

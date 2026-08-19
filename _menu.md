@@ -47,6 +47,7 @@
 ## Official plugins
 - [Official plugins](/docs/plugins/official/)
 - [Deploy](/docs/plugins/official/deploy)
+- [Composer](/docs/plugins/official/composer)
 
 ## Reference
 - [Command reference](/docs/reference/)

@@ -17,17 +17,20 @@ This must print JSON only to stdout (protocol version 1):
   "version": "0.1.0",
   "requires_abstrax": ">=0.1.0",
   "homepage": "https://plugins.useabstrax.com/plugins/example",
-  "commands": [
+	"commands": [
     {
       "name": "hello",
+      "action": "plugin.example.hello",
       "description": "Print a greeting"
     },
     {
       "name": "project",
+      "action": "plugin.example.project",
       "description": "Read project information from Abstrax"
     },
     {
       "name": "version",
+      "action": "plugin.example.version",
       "description": "Display plugin version information"
     }
   ]
@@ -44,7 +47,9 @@ This must print JSON only to stdout (protocol version 1):
 | `description` | Short description |
 | `version` | Plugin semver |
 | `requires_abstrax` | Semver constraint for the Abstrax CLI |
-| `commands` | List of subcommands, each with `name` and `description` |
+| `commands` | List of subcommands, each with `name`, `description`, and optional `action` (for example `plugin.example.hello`) |
+
+`action` is optional. When omitted, Abstrax derives `plugin.<plugin-name>.<command-name>` with hyphens turned into underscores (`self-update` → `plugin.composer.self_update`).
 
 Abstrax reads this metadata after installation and when you run `abstrax plugin info`.
 

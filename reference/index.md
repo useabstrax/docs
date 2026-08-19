@@ -14,6 +14,8 @@ A single-page listing of every Abstrax command and its flags. Each command links
 | `--verbose` | Increase output, including the underlying commands run |
 | `--no-color` | Disable coloured output |
 | `--allow-blocked-plugin` | Allow execution of registry-blocked plugins (repeatable) |
+| `--action` | Run a stable action (`user.add`, `plugin.deploy.now`, …). Root only. |
+| `--payload` | JSON object for `--action` (`-` reads stdin). Root only. |
 | `--help`, `-h` | Show help for a command |
 | `--version`, `-v` | Show the version (root command only) |
 
@@ -298,4 +300,4 @@ Blocked plugins can also be allowed via `plugins.allow_blocked` in `/etc/abstrax
 
 ## Action names
 
-Every command maps to a stable action name used in JSON output (the `action` field) and reserved as a stable job API for a future hosted agent. Examples: `user.add`, `firewall.enable`, `project.add`, `mysql.database.add`, `cron.modify`. See the [JSON output](/docs/reference/exit-codes#json-result-shape) reference for the result shape.
+Every command maps to a stable action name used in JSON output (the `action` field) and as a job API for a hosted agent. Agents run those actions with root `--action` / `--payload` flags; see [How plugins work](/docs/plugins/how-it-works#action-dispatch). Examples: `user.add`, `firewall.enable`, `project.add`, `plugin.deploy.now`. See the [JSON output](/docs/reference/exit-codes#json-result-shape) reference for the result shape.

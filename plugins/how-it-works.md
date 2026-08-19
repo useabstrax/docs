@@ -58,6 +58,29 @@ When running as root, `abstrax plugin install` installs to `/usr/local/lib/abstr
 
 Registry and manifest installs place a real binary in the install directory. Local installs (`--path`) place a symlink there that points at the user-supplied binary; `plugin remove` deletes only that symlink.
 
+## Action dispatch
+
+Agents and other control-plane clients can run any builtin or plugin command without knowing Cobra flags:
+
+```bash
+sudo abstrax --json-stream --yes \
+  --action user.add \
+  --payload '{"args":["alice"]}'
+
+sudo abstrax --json-stream --yes \
+  --action plugin.deploy.now \
+  --payload '{"args":["example.com"],"ref":"main"}'
+```
+
+`--action` and `--payload` are flags on the root `abstrax` command (not a subcommand). `--payload` is a JSON object. `--payload -` reads the object from stdin. The reserved key `args` is the list of positional arguments; every other key becomes a `--flag`. `--yes` is always injected so the run is non-interactive.
+
+Routing:
+
+- `plugin.<name>.<command>` with three or more dotted segments (for example `plugin.deploy.now`) runs the installed plugin binary.
+- Every other action, including `plugin.install`, is a core CLI command and runs in-process.
+
+The agent is a separate binary, so it starts this `abstrax` process the same way plugins already call `abstrax project inspect --json`.
+
 ## Related
 
 - [Plugin commands](/docs/commands/plugins)
