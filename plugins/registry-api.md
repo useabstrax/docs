@@ -149,6 +149,8 @@ Stable error codes:
 
 ## Release manifest format
 
+Each `platforms` entry is a downloadable artifact for that OS/architecture. Official plugins publish a gzip-compressed tar archive containing a single `abstrax-<name>` binary. The SHA-256 checksum is of the downloaded file (the archive, not the extracted binary). After verification, the CLI extracts `abstrax-<name>` and installs it.
+
 Direct installation with `abstrax plugin install <name> --manifest=<url>` uses the same core fields as the version endpoint:
 
 ```json
