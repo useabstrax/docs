@@ -65,6 +65,12 @@ Disable root login over SSH:
 sudo abstrax ssh config disable-root-login
 ```
 
+`disable-root-login` writes `PermitRootLogin no` and blocks root for every method. If root still needs to log in while password authentication is on, `--keys-only` is the safer choice. It writes `prohibit-password`, so root can use an SSH key and not a password. Without the flag, `enable-root-login` writes `yes`.
+
+```bash
+sudo abstrax ssh config enable-root-login --keys-only
+```
+
 Apply the changes:
 
 ```bash
