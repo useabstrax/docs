@@ -50,13 +50,13 @@ Pass `--yes` to skip the prompt in scripts. Use this only when you are sure of t
 
 ### SSH configuration is validated
 
-SSH settings are written to a dedicated include file (`/etc/ssh/sshd_config.d/99-abstrax.conf`) rather than editing the main `sshd_config`. Before the change is reloaded, the configuration is validated with `sshd -t` (when the `sshd` binary is available). If validation fails, the reload does not proceed.
+SSH settings are written to `/etc/ssh/sshd_config.d/00-abstrax.conf`, which sshd reads before later drop-ins such as `50-cloud-init.conf`. An existing `99-abstrax.conf` is moved into that file on the next write. If `sshd_config` does not include the drop-in directory, or sets the same keyword before `Include`, Abstrax updates that keyword in `sshd_config`. Before the change is reloaded, the configuration is validated with `sshd -t` when `sshd` is available. After reload, `sshd -T` is checked. If the new value did not take effect, the command fails and names the file that still wins. `--dry-run` writes nothing.
 
 ### Warnings before risky changes
 
 Abstrax warns before actions that commonly cause lockouts or exposure:
 
-- Changing the SSH port warns that it can lock you out if the firewall is not updated.
+- Changing the SSH port without `--allow-firewall` warns that the firewall was left unchanged. With `--allow-firewall`, the new port is opened before sshd reloads, and the previous port stays open until `--close-old-port`. If the new port does not answer, the change is rolled back.
 - Disabling password authentication warns you to confirm you have a working key.
 - Restarting SSH warns that active sessions will briefly disconnect.
 - Enabling the firewall without `--allow-ssh` warns that you may be locked out. Abstrax also auto-protects your current IP on the SSH port when you run `firewall enable`, `allow`, `deny`, `allow-ip`, or `deny-ip` (see [Firewall](/docs/commands/firewall#automatic-ssh-lockout-protection)).
@@ -68,7 +68,7 @@ User passwords and the MySQL connection password are entered at a secure prompt 
 
 ### Input validation
 
-Arguments such as usernames, package names, database names, domains, ports, and CIDR ranges are validated before any change is made. Invalid input is rejected with a clear error.
+Arguments such as usernames, package names, database names, domains, ports, and CIDR ranges are validated before any change is made. Cron and daemon values cannot contain line breaks, carriage returns, or null bytes. MySQL privileges are limited to an allowlist, and column-level privileges are rejected. Invalid input is rejected with a clear error.
 
 ## What to review before running a command
 
@@ -89,7 +89,7 @@ Arguments such as usernames, package names, database names, domains, ports, and 
 
 ## Accurate scope
 
-Abstrax reduces the chance of certain mistakes through confirmations, validation, dry-run, and SSH config validation. It does not sandbox commands, does not roll back changes automatically, and does not prevent you from running a valid but unwanted command. You remain responsible for the changes you apply.
+Abstrax reduces the chance of certain mistakes through confirmations, validation, dry-run, and SSH config validation. Commands run with the privileges of the user who invokes them, and a valid command is applied as written. `ssh config set-port` restores the previous port when the new port does not answer. You remain responsible for the changes you apply.
 
 ## Plugins
 

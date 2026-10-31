@@ -128,8 +128,8 @@ abstrax mysql database remove myapp_db
 ```bash
 abstrax mysql user add <name> [flags]
 abstrax mysql user remove <name> [flags]
-abstrax mysql user list
-abstrax mysql user info <name>
+abstrax mysql user list [flags]
+abstrax mysql user info <name> [flags]
 ```
 
 `user add` flags:
@@ -148,12 +148,44 @@ If `--password` is omitted, a secure random password is generated and displayed 
 
 `user remove` asks for confirmation unless `--yes` is given. It accepts `--host` (default `localhost`).
 
+Database names passed to `--grant-db` are checked the same way as `mysql grant`: letters, digits, and underscores only, up to 64 characters. The host must match a safe character set (letters, digits, and `.` `%` `_` `:` `/` `-`) and is escaped in SQL.
+
 ```bash
 abstrax mysql user add appuser --grant-db=myapp_db --preset=app
 abstrax mysql user add appuser --password --grant-db=myapp_db --preset=app
 abstrax mysql user info appuser
 abstrax mysql user remove appuser
 ```
+
+### `user list`
+
+Without flags, the list is each account's name and host.
+
+```bash
+abstrax mysql user list
+abstrax mysql user list --grants
+abstrax mysql user list --grants --exclude-system
+```
+
+| Flag | Description |
+|---|---|
+| `--grants` | Include each user's raw grants and the parsed privileges for each database |
+| `--exclude-system` | Hide built-in accounts |
+
+With `--grants`, the text table adds a `DATABASES` column. `--json` adds `grants` (the raw `SHOW GRANTS` lines), `databases` (name, privileges, and a matching preset when one applies), and `global_privileges`. Without `--grants`, those fields are omitted.
+
+### `user info`
+
+Show grants for every host the user exists on, including a specific IP. JSON output is a list, one entry per host.
+
+```bash
+abstrax mysql user info appuser
+abstrax mysql user info appuser --host=10.0.4.12
+```
+
+| Flag | Description |
+|---|---|
+| `--host` | Limit the result to one host |
 
 ## Grants
 
@@ -168,9 +200,11 @@ abstrax mysql revoke <user> <database>
 |---|---|---|
 | `--privileges` | | Specific privileges to grant (overrides `--preset`) |
 | `--preset` | `app` when `--privileges` is omitted | Privilege preset (`readonly`, `app`, `admin`) |
-| `--host` | all local app hosts | Limit the grant to one host (`localhost` or `127.0.0.1`) |
+| `--host` | local app hosts | Limit the grant to one host, including a specific IP |
 
-When `--host` is omitted, Abstrax grants on both `'user'@'localhost'` and `'user'@'127.0.0.1'`. If only one local account exists, Abstrax creates the missing one by copying the authentication hash from the existing account.
+When `--host` is omitted, Abstrax grants on the local accounts (`'user'@'localhost'` and `'user'@'127.0.0.1'`). If only one local account exists, Abstrax creates the missing one by copying the authentication hash from the existing account. Pass `--host` to grant a different account, such as `'user'@'10.0.4.12'`.
+
+Privileges are checked against an allowlist and the `GRANT` statement is built from that list. Column-level privileges, such as `SELECT(id)`, are rejected. Hosts must use letters, digits, and `.` `%` `_` `:` `/` `-`, and are escaped in SQL.
 
 `revoke` accepts `--host` with the same semantics and asks for confirmation unless `--yes` is given.
 

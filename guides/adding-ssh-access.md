@@ -51,7 +51,7 @@ Do not skip this step if you plan to disable password authentication in the next
 
 ## 4. Optionally harden the SSH server
 
-Once key-based login works, you can tighten the SSH configuration. Abstrax writes these settings to `/etc/ssh/sshd_config.d/99-abstrax.conf` and validates the configuration with `sshd -t` before reloading.
+Once key-based login works, you can tighten the SSH configuration. Abstrax writes these settings to `/etc/ssh/sshd_config.d/00-abstrax.conf`, which sshd reads before drop-ins such as `50-cloud-init.conf`. It validates the configuration with `sshd -t` before reloading, then checks `sshd -T` and fails if the new value did not take effect.
 
 Disable password authentication (Abstrax warns you to confirm you have a working key first):
 
@@ -78,25 +78,30 @@ abstrax ssh config show
 ```
 
 ```text
-  Port:                        22
-  PermitRootLogin:             prohibit-password
-  PasswordAuthentication:      no
-  ClientAliveInterval:         0
+  Port:                        22 (default)
+  PermitRootLogin:             no (abstrax)
+  PasswordAuthentication:      no (abstrax)
+  ClientAliveInterval:         0 (default)
 ```
+
+The value in parentheses is where sshd got that setting: `abstrax`, `default`, or another config file.
 
 ## 5. Changing the SSH port (optional)
 
-If you change the SSH port, open it in the firewall at the same time so you do not lock yourself out:
+If you change the SSH port, open it in the firewall before sshd reloads. `--allow-firewall` does that, and leaves the previous port open so you can test a new connection. Add `--close-old-port` only after that connection works. If the new port does not answer, Abstrax rolls the change back.
 
 ```bash
 sudo abstrax ssh config set-port 2222 --allow-firewall
-sudo abstrax ssh reload
+sudo abstrax ssh config set-port 2222 --allow-firewall --close-old-port
 ```
 
-If you use the firewall separately, make sure the new port is allowed before reloading SSH:
+`set-port` reloads sshd as part of the change.
+
+If you change the firewall yourself, allow the new port before changing SSH:
 
 ```bash
 sudo abstrax firewall allow 2222 --protocol=tcp
+sudo abstrax ssh config set-port 2222
 ```
 
 ## Safety reminders

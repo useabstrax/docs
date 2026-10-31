@@ -118,13 +118,15 @@ abstrax ssh-key info <user> <key-id>
 
 ## SSH server configuration
 
-The `ssh` group manages the SSH server configuration. Rather than editing the main `sshd_config`, Abstrax writes its settings to a dedicated include file:
+The `ssh` group manages the SSH server configuration. Abstrax writes its settings to a drop-in that sshd reads before files such as `50-cloud-init.conf`:
 
 ```text
-/etc/ssh/sshd_config.d/99-abstrax.conf
+/etc/ssh/sshd_config.d/00-abstrax.conf
 ```
 
-Before reloading, the configuration is validated with `sshd -t` (when `sshd` is available). The managed include file is backed up with a timestamped suffix before it is rewritten (see [Security](/docs/reference/security)).
+The next write moves an existing `/etc/ssh/sshd_config.d/99-abstrax.conf` into that file, so settings that cloud-init was overriding start to apply. If `sshd_config` does not include the drop-in directory, or sets the same keyword before `Include`, Abstrax updates that keyword in `sshd_config` as well.
+
+Before reloading, the configuration is validated with `sshd -t` when `sshd` is available. After reload, Abstrax checks `sshd -T`. If the new value did not take effect, the command fails and names the file that still wins. `--dry-run` writes nothing. See [Security](/docs/reference/security).
 
 ```text
 abstrax ssh <action> [arguments] [flags]
@@ -137,33 +139,43 @@ abstrax ssh config <action> [arguments] [flags]
 
 ### `ssh config show`
 
-Show the current SSH settings managed by Abstrax. Does not require root.
+Show the settings `sshd -T` is using, including defaults. Does not require root. Each value is followed by its source: `abstrax` for the managed drop-in, `default` when sshd is using its built-in value, or the path of another file.
 
 ```bash
 abstrax ssh config show
 ```
 
 ```text
-  Port:                        22
-  PermitRootLogin:             prohibit-password
-  PasswordAuthentication:      yes
-  ClientAliveInterval:         0
+  Port:                        22 (default)
+  PermitRootLogin:             prohibit-password (default)
+  PasswordAuthentication:      no (abstrax)
+  ClientAliveInterval:         0 (default)
 ```
+
+JSON keeps the same keys and adds a source for each value: `port_source`, `permit_root_login_source`, `password_authentication_source`, and `client_alive_interval_source`.
+
+If `sshd -T` is unavailable, the command says so and reads the config files instead.
 
 ### `ssh config set-port`
 
-Change the SSH listening port. Abstrax warns that changing the port can lock you out if the firewall is not updated.
+Change the SSH listening port. Without `--allow-firewall`, Abstrax warns that the firewall was left unchanged.
 
 ```bash
 sudo abstrax ssh config set-port 2222
 sudo abstrax ssh config set-port 2222 --allow-firewall
+sudo abstrax ssh config set-port 2222 --allow-firewall --close-old-port
 ```
 
 | Flag | Description |
 |---|---|
-| `--allow-firewall` | Open the new port in the firewall if a firewall backend is available |
+| `--allow-firewall` | Open the new port in the firewall before sshd is reloaded |
+| `--close-old-port` | Close the previous SSH port after the new one is accepting connections |
 
 The port value is validated as a number in the range 1-65535.
+
+With `--allow-firewall`, the new port is opened before sshd reloads. The previous port stays open until you pass `--close-old-port`, so you can test a new connection first. If the new port does not answer, the change is rolled back.
+
+When SELinux is enforcing, Abstrax labels the new port. When sshd is socket-activated, Abstrax writes `/etc/systemd/system/ssh.socket.d/abstrax-port.conf` so the socket listens on the new port and the previous one until you close the old port.
 
 ### `ssh config set-timeout`
 

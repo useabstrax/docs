@@ -14,11 +14,14 @@ Using a frequency flag:
 sudo abstrax cron add backup --command="/usr/local/bin/backup.sh" --daily --user=root
 ```
 
-Using a custom 5-field cron expression:
+Using a custom 5-field cron expression, or a macro such as `@daily` or `@reboot`:
 
 ```bash
 sudo abstrax cron add report --command="php8.5 artisan report" --schedule="0 8 * * 1" --user=www-data
+sudo abstrax cron add reboot-check --command="/usr/local/bin/check.sh" --schedule="@reboot"
 ```
+
+Each field of a 5-field expression is validated. `@reboot`, `@hourly`, `@daily`, `@weekly`, `@monthly`, `@yearly`, `@annually`, and `@midnight` are accepted.
 
 Expected output:
 
@@ -68,11 +71,16 @@ abstrax cron info backup
 
 ## 4. Modify a job
 
-Only the fields you pass are changed:
+Only the fields you pass are changed. Working directory and output redirects stay separate from the command, so a modify does not nest `cd` or redirects inside it.
 
 ```bash
 sudo abstrax cron modify backup --schedule="0 3 * * *"
+sudo abstrax cron modify backup --append-output --output=/var/log/backup.log
+sudo abstrax cron modify backup --discard-output
+sudo abstrax cron modify backup --no-output
 ```
+
+`cron info` prints the working directory and output paths when they are set. Environment values may contain spaces and are stored as you entered them.
 
 ## 5. Enable or disable a job
 
@@ -104,7 +112,7 @@ sudo abstrax cron remove backup
 | `--monthly` | Midnight on the 1st |
 | `--yearly` | Midnight on 1 January |
 
-A custom `--schedule` takes priority over a frequency flag and must have exactly 5 fields.
+A custom `--schedule` takes priority over a frequency flag. It must be a validated 5-field expression or a macro such as `@daily` or `@reboot`.
 
 ## Cron versus daemons
 

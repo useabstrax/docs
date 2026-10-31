@@ -42,14 +42,25 @@ abstrax daemon status queue-worker
 ```text
   Name:        queue-worker
   Status:      RUNNING
-  Info:        pid 12345, uptime 0:10:00
+  Processes:   2/2
   Config:      /etc/supervisor/conf.d/abstrax-queue-worker.conf
+    queue-worker:queue-worker_00  pid 12345, uptime 0:10:00
+    queue-worker:queue-worker_01  pid 12346, uptime 0:09:58
 ```
 
-List all managed daemons:
+`Status` is the worst process state. `Processes` is running/total.
+
+Show the stored settings as well as live status:
+
+```bash
+abstrax daemon info queue-worker
+```
+
+List Abstrax-managed daemons. Add `--all` to include other Supervisor programs:
 
 ```bash
 abstrax daemon list
+abstrax daemon list --all
 ```
 
 ## 3. View the logs
@@ -59,9 +70,11 @@ abstrax daemon logs queue-worker
 abstrax daemon logs queue-worker --lines=100 --follow
 ```
 
-Use `--stderr` or `--stdout` to choose which log to read.
+`--lines` returns that many lines from the log file. Use `--stderr` or `--stdout` to choose which log to read. When the daemon runs more than one process, `--process` selects one of them. The first process is `0`.
 
 ## 4. Control the process
+
+These commands apply to every process in the daemon:
 
 ```bash
 sudo abstrax daemon restart queue-worker
@@ -71,10 +84,12 @@ sudo abstrax daemon start queue-worker
 
 ## 5. Modify the daemon
 
-Change settings such as the number of processes; only the fields you pass are updated:
+Only the flags you pass are written. Omitted settings stay as they are in the Supervisor config. Modify accepts the same settings as `daemon add`, including restart policy and log paths. `--environment` merges by key. After the file is written, Supervisor restarts the program when the config changed.
 
 ```bash
 sudo abstrax daemon modify queue-worker --processes=4
+sudo abstrax daemon modify queue-worker --autorestart=always
+sudo abstrax daemon modify queue-worker --unset-environment=DEBUG
 ```
 
 ## 6. Remove the daemon

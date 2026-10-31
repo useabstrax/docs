@@ -134,7 +134,7 @@ The config is stored at `/etc/abstrax/mysql.json` with mode 0600, so reading it 
 
 **Symptom.** You cannot reconnect after changing the SSH port, disabling password auth, or disabling root login.
 
-**Cause.** The change removed your only way in (for example you had no working key, or the firewall did not allow the new port).
+**Cause.** The change removed your only way in (for example you had no working key, or the firewall did not allow the new port). `ssh config set-port --allow-firewall` opens the new port before reloading and leaves the previous port open until `--close-old-port`. It also rolls the port change back when the new port does not answer. A lockout still happens if you close the old port before the new connection works, or if you change the port without opening it in the firewall.
 
 **Fix.** Use an existing open session or out-of-band console access to revert:
 

@@ -68,6 +68,8 @@ abstrax user info deploy
   Groups:      deploy, sudo, www-data, docker
   Sudo:        yes
   Locked:      no
+  Expired:     no
+  Login blocked: no
 ```
 
 You can also list users and filter to those with sudo:
@@ -79,7 +81,7 @@ abstrax user list --sudo
 ## Common follow-ups
 
 - Give the user SSH access: see [Adding SSH access](/docs/guides/adding-ssh-access).
-- Lock the account temporarily: `sudo abstrax user lock deploy`, and later `sudo abstrax user unlock deploy`.
+- Lock the account so passwords and SSH keys are refused: `sudo abstrax user lock deploy`, and later `sudo abstrax user unlock deploy`. Add `--password-only` when key logins should keep working.
 - Remove the user (asks for confirmation): `sudo abstrax user remove deploy --delete-home`.
 
 ## Related
