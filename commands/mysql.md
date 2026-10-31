@@ -40,6 +40,46 @@ abstrax mysql test
 
 Runs `SELECT 1` against the configured connection and reports success or failure.
 
+## Status
+
+```bash
+abstrax mysql status
+abstrax mysql status --json
+```
+
+Reports whether a MySQL-compatible server is installed, which engine is present (`mysql` or `mariadb`), and which version. It also reports the service name, whether that service is active and enabled, and the port and socket when those are known.
+
+The command does not fail when MySQL is missing or stopped. Those are normal states and the process exits 0. A connection failure only makes the running fields less detailed: the version is then read from `mysqld --version` or `mariadbd --version`, and the port and socket fall back to the saved connection config.
+
+When nothing is installed, `engine` is the server Abstrax would install on this platform, and `version` is null. Other fields are omitted. A UI can use `engine` to say which server will be installed before install runs. On Ubuntu that value is `mysql`. On Debian and RHEL-family systems it is `mariadb`.
+
+Root is not required, the same as `mysql test`.
+
+`--json` when a server is installed and running:
+
+```json
+{
+  "installed": true,
+  "engine": "mysql",
+  "version": "8.4.3",
+  "service": "mysql",
+  "active": true,
+  "enabled": true,
+  "port": 3306,
+  "socket": "/var/run/mysqld/mysqld.sock"
+}
+```
+
+When nothing is installed, on a platform where Abstrax would install MySQL:
+
+```json
+{
+  "installed": false,
+  "engine": "mysql",
+  "version": null
+}
+```
+
 ## Install MySQL/MariaDB
 
 ```bash
