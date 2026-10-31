@@ -65,7 +65,7 @@ See [SSH keys](/docs/commands/ssh-keys#ssh-key-management).
 
 | Command | Root | Key flags |
 |---|---|---|
-| `ssh-key add <user> <key>` | No* | `--name`, `--comment`, `--from-file`, `--force` |
+| `ssh-key add <user> <key>` | No* | `--name`, `--comment`, `--expires`, `--from`, `--from-file`, `--force` |
 | `ssh-key remove <user> <key-id>` | No* | `--fingerprint`, `--force` |
 | `ssh-key list <user>` | No* | `--managed-only` |
 | `ssh-key info <user> <key-id>` | No* | |
