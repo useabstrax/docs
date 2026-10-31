@@ -190,9 +190,12 @@ sudo abstrax ssh config set-timeout 300
 ```bash
 sudo abstrax ssh config disable-root-login
 sudo abstrax ssh config enable-root-login
+sudo abstrax ssh config enable-root-login --keys-only
 sudo abstrax ssh config disable-password-auth
 sudo abstrax ssh config enable-password-auth
 ```
+
+`enable-root-login` writes `PermitRootLogin yes`, which also allows a password when password authentication is on. `--keys-only` writes `prohibit-password`, so root can log in with an SSH key and not a password. `disable-root-login` writes `no` and blocks root for every method.
 
 `disable-password-auth` prints a warning reminding you to confirm you have a working SSH key before disabling password logins.
 

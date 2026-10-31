@@ -82,7 +82,7 @@ See [SSH configuration](/docs/commands/ssh-keys#ssh-server-configuration).
 | `ssh config set-port <port>` | Yes | `--allow-firewall`, `--close-old-port` |
 | `ssh config set-timeout <seconds>` | Yes | |
 | `ssh config disable-root-login` | Yes | |
-| `ssh config enable-root-login` | Yes | |
+| `ssh config enable-root-login` | Yes | `--keys-only` |
 | `ssh config disable-password-auth` | Yes | |
 | `ssh config enable-password-auth` | Yes | |
 | `ssh reload` | Yes | |
