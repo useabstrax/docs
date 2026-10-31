@@ -48,7 +48,7 @@ These read-only or query commands do not call the root check in code:
 - `package search`, `package info`, `package list`
 - `service status`
 - `cron list`, `cron info`, `cron enable`, `cron disable`
-- `daemon status`, `daemon list`, `daemon logs`
+- `daemon info`, `daemon status`, `daemon list`, `daemon logs`
 - `project list`, `project info`, `project inspect`
 - `web test`
 - `ssl status`

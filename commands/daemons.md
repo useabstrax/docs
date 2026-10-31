@@ -13,7 +13,7 @@ abstrax daemon <action> [arguments] [flags]
 
 ## Permissions
 
-`add`, `remove`, `modify`, `start`, `stop`, and `restart` require root. The read-only commands `status`, `list`, and `logs` do not require root.
+`add`, `remove`, `modify`, `start`, `stop`, and `restart` require root. The read-only commands `info`, `status`, `list`, and `logs` do not require root.
 
 ## Daemon names
 
@@ -91,7 +91,9 @@ sudo abstrax daemon remove queue-worker --stop
 
 ## `daemon modify`
 
-Change a daemon's configuration. Only the fields you pass are updated.
+Change a daemon's configuration. Only the flags you pass are written. Omitted settings are read back from the existing Supervisor config.
+
+`daemon modify` accepts the same settings as `daemon add`, including restart policy and log paths. After the file is written, Abstrax runs `supervisorctl update`, which restarts the program when its config changed.
 
 ```bash
 sudo abstrax daemon modify <name> [flags]
@@ -103,13 +105,28 @@ sudo abstrax daemon modify <name> [flags]
 | `--directory` | Change the working directory |
 | `--user` | Change the user |
 | `--processes` | Change the number of processes |
-| `--environment` | Set an environment variable as `KEY=VALUE` (repeatable) |
+| `--autostart` | Start automatically when Supervisor starts |
+| `--autorestart` | `always`, `unexpected`, or `false` |
+| `--startsecs` | Seconds before the process is considered started |
+| `--startretries` | Number of start retries |
+| `--stopsignal` | Signal used to stop the process |
+| `--stopwaitsecs` | Seconds to wait for the process to stop |
+| `--exitcodes` | Expected exit codes |
+| `--stdout-logfile` | Path for the stdout log file |
+| `--stderr-logfile` | Path for the stderr log file |
+| `--environment` | Set an environment variable as `KEY=VALUE` (repeatable). Merges by key |
+| `--unset-environment` | Remove one environment variable (repeatable) |
+| `--clear-environment` | Remove every environment variable before applying `--environment` |
 
 ```bash
 sudo abstrax daemon modify queue-worker --processes=4
+sudo abstrax daemon modify queue-worker --autorestart=always --stdout-logfile=/var/log/queue.log
+sudo abstrax daemon modify queue-worker --environment=APP_ENV=production --unset-environment=DEBUG
 ```
 
 ## Lifecycle commands
+
+`start`, `stop`, and `restart` apply to every process in the daemon.
 
 ```bash
 sudo abstrax daemon start <name>
@@ -128,22 +145,52 @@ abstrax daemon status queue-worker
 ```text
   Name:        queue-worker
   Status:      RUNNING
-  Info:        pid 12345, uptime 0:10:00
+  Processes:   2/2
   Config:      /etc/supervisor/conf.d/abstrax-queue-worker.conf
+    queue-worker:queue-worker_00  pid 12345, uptime 0:10:00
+    queue-worker:queue-worker_01  pid 12346, uptime 0:09:58
 ```
 
-## `daemon list`
+`Status` is the worst process state. A running process that has a `FATAL` sibling is reported as `FATAL`. With `--json`, processes are grouped under one daemon. Each running process includes `pid`, `uptime`, and `uptime_seconds`.
 
-List managed daemons. Does not require root.
+## `daemon info`
+
+Show the settings stored in the Supervisor config, plus live status. Does not require root. Registered for agents as the `daemon.info` action.
 
 ```bash
-abstrax daemon list
+abstrax daemon info queue-worker
 ```
 
 ```text
-NAME           STATUS    INFO
-queue-worker   RUNNING   pid 12345, uptime 0:10:00
+  Name:        queue-worker
+  Status:      RUNNING
+  Command:     php8.5 artisan queue:work
+  Directory:   /var/www/myapp
+  User:        www-data
+  Processes:   2
+  Running:     2/2
+  Autostart:   true
+  Autorestart: unexpected
+  Config:      /etc/supervisor/conf.d/abstrax-queue-worker.conf
 ```
+
+`--json` also includes restart policy details, environment variables, and the stdout and stderr log paths.
+
+## `daemon list`
+
+List Abstrax-managed daemons. Does not require root. `--all` also includes other Supervisor programs. In JSON, those extra programs have `managed: false` and no `config_path`.
+
+```bash
+abstrax daemon list
+abstrax daemon list --all
+```
+
+```text
+NAME           STATUS     PROCESSES
+queue-worker   RUNNING    2/2
+```
+
+`PROCESSES` is running/total. A fatal process is called out, for example `1/2  (1 FATAL)`. JSON uses the same grouping as `daemon status`: one object per daemon, with a `processes` array.
 
 ## `daemon logs`
 
@@ -155,20 +202,24 @@ abstrax daemon logs <name> [flags]
 
 | Flag | Default | Description |
 |---|---|---|
-| `--lines` | `50` | Number of lines to show |
+| `--lines` | `50` | Number of lines to return from the log file |
 | `--follow` | `false` | Follow the log output |
 | `--stderr` | `false` | Show the stderr log |
 | `--stdout` | `false` | Show the stdout log |
+| `--process` | `0` | Process index when `numprocs` is greater than 1. The first process is `0` |
 
 ```bash
 abstrax daemon logs queue-worker
 abstrax daemon logs queue-worker --lines=100 --follow
+abstrax daemon logs queue-worker --stderr --process=1
 ```
 
 ## Notes
 
 - These commands require Supervisor. If it is not installed, use `--install-supervisor` with `daemon add`, or install it first. Run `abstrax doctor` to check whether Supervisor is present.
-- `--autorestart` accepts `always`, `unexpected`, or `false`. The default, `unexpected`, restarts the process only when it exits with an unexpected code.
+- `--autorestart` accepts `always`, `unexpected`, or `false`. The default on `daemon add` is `unexpected`, which restarts the process only when it exits with an unexpected code.
+- `daemon add` and `daemon modify` reject line breaks, carriage returns, and null bytes. They also reject an invalid user, a relative path, an unknown stop signal, an invalid exit-code list, and an invalid environment name.
+- A `%` in the command is stored as `%%`, so Supervisor treats it as a literal percent. Environment values are double-quoted. A value that contains `"` or `\` is rejected, because Supervisor parses `environment` with a non-POSIX reader that does not treat `\` as an escape.
 
 ## Related
 

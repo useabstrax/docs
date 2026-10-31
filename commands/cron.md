@@ -43,9 +43,9 @@ Provide a raw cron expression, or use a convenience flag:
 | `--weekly` | `0 0 * * 0` |
 | `--monthly` | `0 0 1 * *` |
 | `--yearly` | `0 0 1 1 *` |
-| `--schedule` | A custom 5-field cron expression |
+| `--schedule` | A 5-field cron expression, or a macro such as `@daily` |
 
-A `--schedule` value takes priority. It must have exactly 5 fields (minute, hour, day, month, weekday) or it is rejected.
+A `--schedule` value takes priority over a frequency flag. A 5-field expression is minute, hour, day, month, and weekday. Each field is checked: ranges, lists, steps, and month or weekday names are accepted, and values outside the field's range are rejected. These macros are also accepted: `@reboot`, `@hourly`, `@daily`, `@weekly`, `@monthly`, `@yearly`, `@annually`, and `@midnight`.
 
 ### Other flags
 
@@ -103,14 +103,22 @@ sudo abstrax cron modify <id> [flags]
 |---|---|
 | `--user` | Change the user |
 | `--command` | Change the command |
-| `--schedule` | Change the schedule (validated as a 5-field expression) |
-| `--output` | Change stdout redirection |
-| `--error-output` | Change stderr redirection |
-| `--working-dir` | Change the working directory |
+| `--schedule` | Change the schedule (a 5-field expression or a macro such as `@daily`) |
+| `--output` | Change stdout redirection. An empty value clears it |
+| `--error-output` | Change stderr redirection. An empty value clears it |
+| `--append-output` | Append stdout instead of overwriting |
+| `--discard-output` | Discard stdout and stderr |
+| `--no-output` | Remove stdout and stderr redirects |
+| `--working-dir` | Change the working directory. An empty value clears it |
 | `--env` | Set an environment variable as `KEY=VALUE` (repeatable) |
+
+Working directory and redirects are stored separately from the command, so a later modify does not nest `cd` or redirects inside the command string.
 
 ```bash
 sudo abstrax cron modify backup --schedule="0 3 * * *"
+sudo abstrax cron modify backup --append-output --output=/var/log/backup.log
+sudo abstrax cron modify backup --schedule="@daily"
+sudo abstrax cron modify backup --no-output
 ```
 
 ## `cron list`
@@ -140,9 +148,13 @@ abstrax cron info backup
   Schedule:  0 0 * * *
   User:      root
   Command:   /usr/local/bin/backup.sh
+  Work dir:  /var/backups
+  Output:    /var/log/backup.log (append)
   Enabled:   yes
   File:      /etc/cron.d/abstrax-backup
 ```
+
+`Work dir`, `Output`, and `Errors` are printed only when those fields are set. Discarded output is shown as `Output: discarded`. With `--json`, the same details are `working_dir`, `output`, `error_output`, `append_output`, and `discard_output`. Environment values, including values that contain spaces, are returned in `env`.
 
 ## `cron enable` and `cron disable`
 
@@ -156,7 +168,9 @@ abstrax cron disable backup
 ## Notes
 
 - Only jobs created by Abstrax (files named `abstrax-<id>` in `/etc/cron.d`) are listed and managed. Existing system crontabs are not touched.
-- The `--schedule` value must be a standard 5-field cron expression. Abstrax checks the field count but does not deeply validate each field's syntax.
+- A `%` in the command is stored as `\%`, so cron treats it as a literal percent rather than as a stdin separator. `cron info` shows the original `%`.
+- Working directory and output paths are shell-quoted in the cron file.
+- `cron add` and `cron modify` reject line breaks, carriage returns, and null bytes in every value. They also reject a user name that is not a valid Linux user, and an environment name that is not a valid variable name.
 
 ## Related
 

@@ -159,12 +159,19 @@ sudo abstrax user set-shell deploy /bin/bash
 
 ## `user lock` and `user unlock`
 
-Lock or unlock a user account.
+`user lock` locks the password and expires the account, so new SSH key logins are refused as well as passwords. Processes already running as that user, including daemons and cron jobs, keep running.
+
+`user unlock` unlocks the password and restores the account expiry from before the lock. An account locked by a release older than 2.4.0 has no saved expiry, so unlock clears the expiry.
 
 ```bash
 sudo abstrax user lock deploy
+sudo abstrax user lock deploy --password-only
 sudo abstrax user unlock deploy
 ```
+
+| Flag | Description |
+|---|---|
+| `--password-only` | Lock the password only. SSH keys can still log in |
 
 ## `user info`
 
@@ -185,7 +192,11 @@ abstrax user info deploy
   Groups:      deploy, sudo
   Sudo:        yes
   Locked:      no
+  Expired:     no
+  Login blocked: no
 ```
+
+`Locked` means the password is locked. `Expired` means the account expiry date has passed, which also refuses SSH key logins. `Login blocked` is yes when both are true. JSON uses `locked`, `expired`, and `login_blocked`.
 
 ## `user list`
 
@@ -209,10 +220,12 @@ abstrax user list --system
 ### Example output
 
 ```text
-USERNAME   UID    HOME            SHELL       SUDO
+USERNAME   UID    HOME            SHELL       SUDO   LOCKED   EXPIRED   BLOCKED
 deploy     1001   /home/deploy    /bin/bash   yes
 www-data   33     /var/www        /usr/sbin/nologin
 ```
+
+`LOCKED`, `EXPIRED`, and `BLOCKED` are blank unless that state is set. They match `locked`, `expired`, and `login_blocked` in JSON.
 
 ## Related
 

@@ -137,7 +137,8 @@ Abstrax also writes to standard system locations when you use the relevant comma
 
 | File or directory | Written by |
 |---|---|
-| `/etc/ssh/sshd_config.d/99-abstrax.conf` | `ssh config` commands |
+| `/etc/ssh/sshd_config.d/00-abstrax.conf` | `ssh config` commands. An older `99-abstrax.conf` is moved here on the next write |
+| `/etc/systemd/system/ssh.socket.d/abstrax-port.conf` | `ssh config set-port` when sshd is socket-activated |
 | `/etc/cron.d/abstrax-<id>` | `cron add` / `cron modify` |
 | `/etc/supervisor/conf.d/abstrax-<name>.conf` | `daemon add` / `daemon modify` |
 | `/etc/nginx/sites-available/abstrax-<name>` | `project add` |

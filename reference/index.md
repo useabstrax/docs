@@ -54,7 +54,7 @@ See [Users](/docs/commands/users).
 | `user add-groups <name> <groups>` | Yes | |
 | `user remove-groups <name> <groups>` | Yes | |
 | `user set-shell <name> <shell>` | Yes | |
-| `user lock <name>` | Yes | |
+| `user lock <name>` | Yes | `--password-only` |
 | `user unlock <name>` | Yes | |
 | `user info <name>` | No | |
 | `user list` | No | `--system`, `--regular`, `--sudo` |
@@ -79,7 +79,7 @@ See [SSH configuration](/docs/commands/ssh-keys#ssh-server-configuration).
 | Command | Root | Key flags |
 |---|---|---|
 | `ssh config show` | No | |
-| `ssh config set-port <port>` | Yes | `--allow-firewall` |
+| `ssh config set-port <port>` | Yes | `--allow-firewall`, `--close-old-port` |
 | `ssh config set-timeout <seconds>` | Yes | |
 | `ssh config disable-root-login` | Yes | |
 | `ssh config enable-root-login` | Yes | |
@@ -124,7 +124,7 @@ See [Cron](/docs/commands/cron).
 |---|---|---|
 | `cron add <id>` | Yes | `--command`, `--schedule`, frequency flags, `--user`, `--output`, `--error-output`, `--append-output`, `--discard-output`, `--working-dir`, `--env`, `--enabled`, `--disabled` |
 | `cron remove <id>` | Yes | |
-| `cron modify <id>` | Yes | `--user`, `--command`, `--schedule`, `--output`, `--error-output`, `--working-dir`, `--env` |
+| `cron modify <id>` | Yes | `--user`, `--command`, `--schedule`, `--output`, `--error-output`, `--append-output`, `--discard-output`, `--no-output`, `--working-dir`, `--env` |
 | `cron list` | No | |
 | `cron info <id>` | No | |
 | `cron enable <id>` | No | |
@@ -140,13 +140,14 @@ See [Daemons](/docs/commands/daemons).
 |---|---|---|
 | `daemon add <name>` | Yes | `--command`, `--directory`, `--user`, `--processes`, `--autostart`, `--autorestart`, `--install-supervisor`, `--startsecs`, `--startretries`, `--stopsignal`, `--stopwaitsecs`, `--exitcodes`, `--stdout-logfile`, `--stderr-logfile`, `--environment` |
 | `daemon remove <name>` | Yes | `--stop`, `--delete-logs`, `--force` |
-| `daemon modify <name>` | Yes | `--command`, `--directory`, `--user`, `--processes`, `--environment` |
+| `daemon modify <name>` | Yes | `--command`, `--directory`, `--user`, `--processes`, `--autostart`, `--autorestart`, `--startsecs`, `--startretries`, `--stopsignal`, `--stopwaitsecs`, `--exitcodes`, `--stdout-logfile`, `--stderr-logfile`, `--environment`, `--unset-environment`, `--clear-environment` |
 | `daemon start <name>` | Yes | |
 | `daemon stop <name>` | Yes | |
 | `daemon restart <name>` | Yes | |
 | `daemon status <name>` | No | |
-| `daemon list` | No | |
-| `daemon logs <name>` | No | `--lines`, `--follow`, `--stderr`, `--stdout` |
+| `daemon info <name>` | No | |
+| `daemon list` | No | `--all` |
+| `daemon logs <name>` | No | `--lines`, `--follow`, `--stderr`, `--stdout`, `--process` |
 
 ## config
 
@@ -218,10 +219,10 @@ See [MySQL](/docs/commands/mysql).
 | `mysql database list` | No | |
 | `mysql user add <name>` | No | `--host`, `--password`, `--grant-db`, `--privileges`, `--preset` (password generated if `--password` omitted) |
 | `mysql user remove <name>` | No | `--host` |
-| `mysql user list` | No | |
-| `mysql user info <name>` | No | |
-| `mysql grant <user> <database>` | No | `--privileges`, `--preset` |
-| `mysql revoke <user> <database>` | No | |
+| `mysql user list` | No | `--grants`, `--exclude-system` |
+| `mysql user info <name>` | No | `--host` |
+| `mysql grant <user> <database>` | No | `--privileges`, `--preset`, `--host` |
+| `mysql revoke <user> <database>` | No | `--host` |
 
 Privilege presets: `readonly`, `app`, `admin`.
 
@@ -252,9 +253,9 @@ See [Firewall](/docs/commands/firewall).
 | `firewall enable` | Yes | `--allow-ssh`, `--ssh-port` |
 | `firewall disable` | Yes | |
 | `firewall allow <port>` | Yes | `--protocol`, `--from`, `--comment` |
-| `firewall deny <port>` | Yes | `--protocol` |
-| `firewall allow-ip <ip-or-cidr>` | Yes | `--to`, `--port` |
-| `firewall deny-ip <ip-or-cidr>` | Yes | |
+| `firewall deny <port>` | Yes | `--protocol`, `--from` |
+| `firewall allow-ip <ip-or-cidr>` | Yes | `--to`, `--port`, `--protocol`, `--comment` |
+| `firewall deny-ip <ip-or-cidr>` | Yes | `--comment` |
 | `firewall rule list` | No | |
 | `firewall rule remove <id>` | Yes | |
 | `firewall remove service <name>` | Yes | firewalld |
