@@ -82,6 +82,8 @@ sudo abstrax firewall allow 8080 --from=203.0.113.0/24 --comment="app"
 | `--from` | | Allow only from this IP or CIDR |
 | `--comment` | | Rule comment (UFW) |
 
+Before the rule is added, Abstrax tries to allow your current client IP on the SSH port. That only happens in an interactive SSH session. See [Automatic SSH lockout protection](#automatic-ssh-lockout-protection).
+
 On RHEL-family systems, ports `80`/`http` and `443`/`https` map to firewalld services when `--from` is omitted. With `--from`, Abstrax adds a rich rule that accepts traffic from that source only, including for ports 80 and 443. An IPv6 source uses `family="ipv6"`. Rules are added permanently and firewalld is reloaded afterward.
 
 ## `firewall deny`
@@ -97,8 +99,11 @@ sudo abstrax firewall deny 3306 --from=203.0.113.0/24 --protocol=tcp
 |---|---|---|
 | `--protocol` | | Protocol (`tcp` or `udp`) |
 | `--from` | | Deny only from this IP or CIDR |
+| `--force` | `false` | Deny the port even if it would block SSH |
 
 On firewalld, `firewall deny` adds IPv4 and IPv6 reject rich rules for the port. `--from` limits the reject rule to that source, using `family="ipv6"` for an IPv6 address.
+
+Denying the SSH port is refused when the firewall is active and the change would leave no TCP path to SSH. `--yes` does not skip that check. See [Automatic SSH lockout protection](#automatic-ssh-lockout-protection).
 
 ## `firewall allow-ip`
 
@@ -116,6 +121,8 @@ sudo abstrax firewall allow-ip 203.0.113.10 --port=3306 --protocol=tcp --comment
 | `--protocol` | Protocol (`tcp` or `udp`). When a port is set and this is omitted, both protocols are allowed |
 | `--comment` | Rule comment (UFW) |
 
+Before the rule is added, Abstrax tries to allow your current client IP on the SSH port. That only happens in an interactive SSH session. See [Automatic SSH lockout protection](#automatic-ssh-lockout-protection).
+
 ## `firewall deny-ip`
 
 Deny all traffic from an IP or CIDR.
@@ -127,6 +134,8 @@ sudo abstrax firewall deny-ip 198.51.100.0/24 --comment="blocked"
 | Flag | Description |
 |---|---|
 | `--comment` | Rule comment (UFW) |
+
+Before the rule is added, Abstrax tries to allow your current client IP on the SSH port. That only happens in an interactive SSH session. See [Automatic SSH lockout protection](#automatic-ssh-lockout-protection).
 
 ## `firewall rule list`
 
@@ -165,6 +174,12 @@ sudo abstrax firewall rule remove 3
 - **UFW:** an id deletes the rule by its allow/deny specification. A numeric position deletes that numbered UFW rule.
 - **firewalld:** an id removes the matching service, port, or rich rule permanently and reloads firewalld. Rich rules created with `--from` are removed this way.
 
+| Flag | Default | Description |
+|---|---|---|
+| `--force` | `false` | Remove the rule even if it would block SSH |
+
+The command is refused when this would remove the last TCP path to the SSH port and the firewall is active. `--yes` does not skip that check. See [Automatic SSH lockout protection](#automatic-ssh-lockout-protection).
+
 ## `firewall remove service`
 
 Remove a firewalld service by name (RHEL-family).
@@ -174,6 +189,12 @@ sudo abstrax firewall remove service http
 sudo abstrax firewall remove service https
 ```
 
+| Flag | Default | Description |
+|---|---|---|
+| `--force` | `false` | Remove the service even if it would block SSH |
+
+`firewall remove service ssh` is refused when that service is the last rule allowing TCP to the SSH port and the firewall is active. `--yes` does not skip that check.
+
 ## `firewall remove port`
 
 Remove a firewalld port (RHEL-family).
@@ -182,6 +203,51 @@ Remove a firewalld port (RHEL-family).
 sudo abstrax firewall remove port 8080/tcp
 sudo abstrax firewall remove port 9090/udp
 ```
+
+| Flag | Default | Description |
+|---|---|---|
+| `--force` | `false` | Remove the port even if it would block SSH |
+
+Removing the SSH port is refused when it is the last rule allowing TCP to that port and the firewall is active. `--yes` does not skip that check.
+
+## Automatic SSH lockout protection
+
+Abstrax tries not to cut off the SSH session you are using, and it refuses changes that would leave an active firewall with no way to reach SSH.
+
+### Client IP protection
+
+`firewall enable`, `allow`, `deny`, `allow-ip`, and `deny-ip` allow your current client IP on the SSH port before they change anything else, when Abstrax can see that IP.
+
+That detection only works in an interactive SSH session. Abstrax reads `SSH_CONNECTION`, then `SSH_CLIENT`, then `who`. From a script, a systemd unit, or any other non-interactive run, it does nothing. It does not print an error.
+
+`--allow-ssh` on `firewall enable` is still the way to open SSH for every client. Client-IP protection does not replace it, and it does not run for `firewall rule remove`, `firewall remove service`, or `firewall remove port`.
+
+### Refusing a change that would block SSH
+
+Before `firewall deny`, `firewall rule remove`, `firewall remove service`, and `firewall remove port`, Abstrax reads the SSH port from the sshd configuration and simulates the change against the current rules:
+
+- **remove** uses the rule list without the rule, service, or port being deleted
+- **deny** inserts the new deny before any allow, because UFW uses the first matching rule
+
+If the firewall is active and, after that change, no rule allows TCP to the SSH port, the command stops:
+
+```text
+This would block SSH (port 22), and you could lose access to this server. Add another rule that allows SSH first, or pass --force to do it anyway.
+```
+
+The message uses the actual SSH port. An allow limited to one IP still counts as access, so removing one of two SSH allows is permitted when the other remains. A deny of the SSH port is placed before existing allows, so `firewall deny 22` is refused while the firewall is active even if an allow is already present.
+
+`--force` skips the check and applies the change. `--yes` does not. `--yes` only skips confirmation prompts.
+
+When the firewall is inactive, the change is allowed. Abstrax prints a warning that `firewall enable` will need `--allow-ssh`, because enabling later would apply the rules that no longer let SSH in.
+
+Successful `--json` results for these commands include the check in `data` when it ran:
+
+```json
+"ssh_check": {"port": 22, "blocked": false}
+```
+
+`blocked` is true when the resulting rules would not allow TCP to that port. If the firewall is active in that case, the command errors instead of returning the result. `--force` skips the check, so `ssh_check` is omitted.
 
 ## RHEL-family notes
 
