@@ -96,6 +96,8 @@ sudo abstrax user add deploy --grant-sudo --json
 
 Remove a user. This is a destructive command and asks for confirmation unless `--yes` is given.
 
+Abstrax does not stop daemons or cron jobs that run as this user, and it does not kill running processes unless you pass `--kill-processes`.
+
 ```bash
 abstrax user remove <name> [flags]
 ```
@@ -109,6 +111,28 @@ abstrax user remove <name> [flags]
 | `--remove-cron` | `false` | Remove the user's crontab |
 | `--kill-processes` | `false` | Kill the user's processes before removal |
 | `--force` | `false` | Force removal |
+| `--if-unused` | `false` | Refuse to remove the user when a daemon, cron job, or process still uses it |
+
+### Still in use
+
+Before removing the account, Abstrax checks three places:
+
+- Daemon configs named `abstrax-*.conf` and `abstrax-*.ini` in the Supervisor config directory (`/etc/supervisor/conf.d` on Debian, `/etc/supervisord.d` on RHEL). A config counts when its `user=` value is this account. The process count is `numprocs`, or 1 when `numprocs` is omitted.
+- Cron files named `abstrax-*` in `/etc/cron.d`. A file counts when a schedule line runs as this account. The line is five schedule fields, then the user, then the command, or `@daily` (or another `@` keyword), then the user, then the command. Comment lines and environment assignments such as `MAILTO=` are ignored. The job id is the filename without the `abstrax-` prefix.
+- Processes currently running as this user (`ps -u <user>`).
+
+When something is found, the command prints the list and still removes the user:
+
+```text
+deploy is still used by:
+  daemon platform-queue (4 processes)
+  cron job database-backup
+  process 4242 php artisan queue:work
+```
+
+`--if-unused` prints the same list, removes nothing, and exits non-zero. `--force` does not skip this check.
+
+Those daemons and cron jobs keep running. Remove or edit them separately if they should stop. `--remove-cron` deletes the user's personal crontab only. It does not delete Abstrax files in `/etc/cron.d`. `--kill-processes` kills processes that are running now. It does not stop a Supervisor program, so a daemon can start again.
 
 ### Examples
 
@@ -116,7 +140,29 @@ abstrax user remove <name> [flags]
 sudo abstrax user remove deploy
 sudo abstrax user remove deploy --delete-home --kill-processes
 sudo abstrax user remove deploy --yes
+sudo abstrax user remove deploy --if-unused
 ```
+
+### JSON
+
+`data.still_used_by` is always present. It is an empty array when nothing still uses the account.
+
+```json
+{
+  "status": "success",
+  "action": "user.remove",
+  "summary": "User deploy removed.",
+  "data": {
+    "still_used_by": [
+      {"type": "daemon", "name": "platform-queue", "processes": 4},
+      {"type": "cron", "name": "database-backup"},
+      {"type": "process", "pid": 4242, "args": "php artisan queue:work"}
+    ]
+  }
+}
+```
+
+With `--if-unused`, a user that is still in use is an error (`error_code` `user_in_use`) and `data.still_used_by` is the same list.
 
 ## `user grant-sudo` and `user revoke-sudo`
 
