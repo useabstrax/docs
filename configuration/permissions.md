@@ -26,7 +26,7 @@ The following change system state and require root:
 - **ssh**: `config set-port`, `config set-timeout`, `config disable-root-login`, `config enable-root-login`, `config disable-password-auth`, `config enable-password-auth`, `reload`, `restart`
 - **package**: `install`, `remove`, `update`, `upgrade`
 - **service**: `start`, `stop`, `restart`, `reload`, `enable`, `disable`
-- **cron**: `add`, `remove`, `modify`
+- **cron**: `add`, `remove`, `modify`, `run`
 - **daemon**: `add`, `remove`, `modify`, `start`, `stop`, `restart`
 - **project**: `add`, `remove`, `modify`, `enable`, `disable`, `reload`, `service restart`, `service reload`
 - **web**: `install`, `reload`, `restart`
