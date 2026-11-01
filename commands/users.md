@@ -194,9 +194,12 @@ abstrax user info deploy
   Locked:      no
   Expired:     no
   Login blocked: no
+  Last login:  2026-01-14T10:11:12Z from 203.0.113.8
 ```
 
 `Locked` means the password is locked. `Expired` means the account expiry date has passed, which also refuses SSH key logins. `Login blocked` is yes when both are true. JSON uses `locked`, `expired`, and `login_blocked`.
+
+`Last login` is printed when a login time is known. JSON always includes `last_login_at` and `last_login_from`. `last_login_at` is an RFC3339 timestamp or `null` when the time is unknown. `last_login_from` is the IP address or hostname of that login, or `null`. The time is read from `lastlog2`, then `lastlog`, then `last`. If none of those are available, both fields are `null` and the command still succeeds.
 
 ## `user list`
 
@@ -220,12 +223,12 @@ abstrax user list --system
 ### Example output
 
 ```text
-USERNAME   UID    HOME            SHELL       SUDO   LOCKED   EXPIRED   BLOCKED
-deploy     1001   /home/deploy    /bin/bash   yes
+USERNAME   UID    HOME            SHELL       SUDO   LOCKED   EXPIRED   BLOCKED   LAST LOGIN
+deploy     1001   /home/deploy    /bin/bash   yes                                2026-01-14T10:11:12Z
 www-data   33     /var/www        /usr/sbin/nologin
 ```
 
-`LOCKED`, `EXPIRED`, and `BLOCKED` are blank unless that state is set. They match `locked`, `expired`, and `login_blocked` in JSON.
+`LOCKED`, `EXPIRED`, and `BLOCKED` are blank unless that state is set. They match `locked`, `expired`, and `login_blocked` in JSON. `LAST LOGIN` is blank when the time is unknown. Each JSON object includes `last_login_at` and `last_login_from`, and those are `null` when unknown. `user list` reads `lastlog2` or `lastlog` once for the whole list, rather than once per user. If neither tool is available, the fields are `null` and the command still succeeds.
 
 ## Related
 
