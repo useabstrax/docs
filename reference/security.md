@@ -59,7 +59,8 @@ Abstrax warns before actions that commonly cause lockouts or exposure:
 - Changing the SSH port without `--allow-firewall` warns that the firewall was left unchanged. With `--allow-firewall`, the new port is opened before sshd reloads, and the previous port stays open until `--close-old-port`. If the new port does not answer, the change is rolled back.
 - Disabling password authentication warns you to confirm you have a working key.
 - Restarting SSH warns that active sessions will briefly disconnect.
-- Enabling the firewall without `--allow-ssh` warns that you may be locked out. Abstrax also auto-protects your current IP on the SSH port when you run `firewall enable`, `allow`, `deny`, `allow-ip`, or `deny-ip` (see [Firewall](/docs/commands/firewall#automatic-ssh-lockout-protection)).
+- Enabling the firewall without `--allow-ssh` warns that you may be locked out. Abstrax also allows your current IP on the SSH port when you run `firewall enable`, `allow`, `deny`, `allow-ip`, or `deny-ip`, but only in an interactive SSH session (`SSH_CONNECTION`, `SSH_CLIENT`, or `who`). From a script, that protection does nothing (see [Firewall](/docs/commands/firewall#automatic-ssh-lockout-protection)).
+- `firewall deny`, `firewall rule remove`, `firewall remove service`, and `firewall remove port` are refused when the firewall is active and the change would leave no rule allowing TCP to the SSH port. An allow limited to one address still counts. `--force` applies the change anyway. `--yes` does not skip the check. When the firewall is inactive, the change is allowed and Abstrax warns that `firewall enable` will need `--allow-ssh`.
 - Binding Redis to `0.0.0.0` warns that it is exposed on all interfaces and asks for confirmation.
 
 ### Passwords are never on the command line
@@ -89,7 +90,7 @@ Arguments such as usernames, package names, database names, domains, ports, and 
 
 ## Accurate scope
 
-Abstrax reduces the chance of certain mistakes through confirmations, validation, dry-run, and SSH config validation. Commands run with the privileges of the user who invokes them, and a valid command is applied as written. `ssh config set-port` restores the previous port when the new port does not answer. You remain responsible for the changes you apply.
+Abstrax reduces the chance of certain mistakes through confirmations, validation, dry-run, and SSH config validation. Firewall changes that would remove the last TCP path to SSH are refused unless you pass `--force`. Commands run with the privileges of the user who invokes them, and a valid command is applied as written. `ssh config set-port` restores the previous port when the new port does not answer. You remain responsible for the changes you apply.
 
 ## Plugins
 

@@ -253,13 +253,13 @@ See [Firewall](/docs/commands/firewall).
 | `firewall enable` | Yes | `--allow-ssh`, `--ssh-port` |
 | `firewall disable` | Yes | |
 | `firewall allow <port>` | Yes | `--protocol`, `--from`, `--comment` |
-| `firewall deny <port>` | Yes | `--protocol`, `--from` |
+| `firewall deny <port>` | Yes | `--protocol`, `--from`, `--force` |
 | `firewall allow-ip <ip-or-cidr>` | Yes | `--to`, `--port`, `--protocol`, `--comment` |
 | `firewall deny-ip <ip-or-cidr>` | Yes | `--comment` |
 | `firewall rule list` | No | |
-| `firewall rule remove <id>` | Yes | |
-| `firewall remove service <name>` | Yes | firewalld |
-| `firewall remove port <port[/proto]>` | Yes | firewalld |
+| `firewall rule remove <id>` | Yes | `--force` |
+| `firewall remove service <name>` | Yes | `--force`, firewalld |
+| `firewall remove port <port[/proto]>` | Yes | `--force`, firewalld |
 
 ## repo
 
