@@ -127,6 +127,7 @@ abstrax mysql database remove myapp_db
 
 ```bash
 abstrax mysql user add <name> [flags]
+abstrax mysql user password <name> [flags]
 abstrax mysql user remove <name> [flags]
 abstrax mysql user list [flags]
 abstrax mysql user info <name> [flags]
@@ -146,7 +147,7 @@ When `--host` is `localhost` (the default), Laravel and other apps that connect 
 
 If `--password` is omitted, a secure random password is generated and displayed once. Abstrax does not store application user passwords. Use `--password` to enter your own password at a prompt.
 
-`user remove` asks for confirmation unless `--yes` is given. It accepts `--host` (default `localhost`).
+`user remove` asks for confirmation unless `--yes` is given. `--host` defaults to `localhost`, which drops both `'user'@'localhost'` and `'user'@'127.0.0.1'`. Any other `--host` drops only that account.
 
 Database names passed to `--grant-db` are checked the same way as `mysql grant`: letters, digits, and underscores only, up to 64 characters. The host must match a safe character set (letters, digits, and `.` `%` `_` `:` `/` `-`) and is escaped in SQL.
 
@@ -155,6 +156,28 @@ abstrax mysql user add appuser --grant-db=myapp_db --preset=app
 abstrax mysql user add appuser --password --grant-db=myapp_db --preset=app
 abstrax mysql user info appuser
 abstrax mysql user remove appuser
+```
+
+### `user password`
+
+Change the password for an existing user. Grants and the authentication plugin stay as they are.
+
+```bash
+abstrax mysql user password <name> [flags]
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `--host` | every host the user exists on | With no `--host`, update every account for this user. `localhost` updates both `localhost` and `127.0.0.1`. Any other host updates only that account. |
+| `--password` | `false` | Prompt for a password instead of generating one |
+
+If `--password` is omitted, a secure random password is generated and displayed once. Abstrax does not store it. The user must already exist on a matching host; otherwise the command returns an error and runs no `ALTER USER`.
+
+```bash
+abstrax mysql user password appuser
+abstrax mysql user password appuser --password
+abstrax mysql user password appuser --host=localhost
+abstrax mysql user password appuser --host=10.0.4.12
 ```
 
 ### `user list`
