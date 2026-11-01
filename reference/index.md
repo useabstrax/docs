@@ -214,6 +214,9 @@ See [MySQL](/docs/commands/mysql).
 | `mysql test` | No | |
 | `mysql install` | Yes | `--version`, `--root-password` |
 | `mysql reset-root-password` | Yes | `--root-password` |
+| `mysql remote enable` | Yes | `--bind` (default `0.0.0.0`). Asks for confirmation. Does not open the firewall. |
+| `mysql remote disable` | Yes | Removes Abstrax's drop-in only |
+| `mysql remote status` | No | Reports the running server's `bind_address` |
 | `mysql database add <name>` | No | `--charset`, `--collation`, `--if-not-exists` |
 | `mysql database remove <name>` | No | |
 | `mysql database list` | No | |

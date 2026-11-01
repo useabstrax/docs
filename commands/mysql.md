@@ -7,11 +7,12 @@ abstrax mysql <action> [arguments] [flags]
 abstrax mysql config <action> [flags]
 abstrax mysql database <action> [arguments] [flags]
 abstrax mysql user <action> [arguments] [flags]
+abstrax mysql remote <action> [flags]
 ```
 
 ## Permissions
 
-`config set`, `install`, and `reset-root-password` require root. Other MySQL commands do not enforce a root check in code; they rely on the saved connection config to authenticate to the database. Note that reading the config file at `/etc/abstrax/mysql.json` (mode 0600, root only) typically requires root.
+`config set`, `install`, `reset-root-password`, `remote enable`, and `remote disable` require root. `remote status` does not. Other MySQL commands do not enforce a root check in code; they rely on the saved connection config to authenticate to the database. Note that reading the config file at `/etc/abstrax/mysql.json` (mode 0600, root only) typically requires root.
 
 ## Connection configuration
 
@@ -99,6 +100,66 @@ Requires root on the host. Does not require knowing the current MySQL root passw
 The new password is displayed once and is saved to `/etc/abstrax/mysql.json` so Abstrax commands continue to work without running `config set` again.
 
 For automation, `ABSTRAX_MYSQL_ROOT_PASSWORD` can be used instead of `--root-password`.
+
+## Remote access
+
+```bash
+sudo abstrax mysql remote enable
+sudo abstrax mysql remote enable --bind=192.0.2.10
+sudo abstrax mysql remote disable
+abstrax mysql remote status
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `--bind` | `0.0.0.0` | IP address the database server should listen on (`enable` only) |
+| `--yes` | | Skip the confirmation prompt (`enable` only) |
+| `--dry-run` | | Show the change without writing a file or restarting |
+
+`remote enable` and `remote disable` require root. `remote status` does not.
+
+### Drop-in
+
+Enable writes an Abstrax-managed file named `zz-abstrax-remote.cnf`. The `zz-` prefix makes it load last, so this `bind-address` overrides an earlier setting in the same include directory. The directory comes from the platform's database config paths, not a fixed distro path:
+
+- Ubuntu (MySQL): a directory ending in `mysql.conf.d`, usually `/etc/mysql/mysql.conf.d`
+- Debian (MariaDB): `mariadb.conf.d`, usually `/etc/mysql/mariadb.conf.d`
+- RHEL-family (MariaDB): `/etc/my.cnf.d`
+
+The file looks like this:
+
+```ini
+[mysqld]
+bind-address = 0.0.0.0
+```
+
+On MySQL, Abstrax also sets `mysqlx-bind-address` to the same address. MariaDB does not get that line. `--bind` chooses a specific interface address instead of `0.0.0.0`. The value must be an IP address, with no spaces, quotes, or line breaks.
+
+### Confirmation
+
+Before enabling, Abstrax warns that the server will accept connections beyond loopback and asks you to continue. `--yes` skips the prompt. This is the same kind of warning `cache install` shows before binding Redis to `0.0.0.0`.
+
+Abstrax does not change the firewall. If remote clients should connect, allow TCP port 3306 yourself (for example with `firewall allow 3306`).
+
+### Restart and rollback
+
+After writing or removing the drop-in, Abstrax restarts the database service and waits until it accepts connections. If the service does not come back, enable deletes the drop-in and restarts again. Disable puts the file back and restarts again. The database is not left down because of this command.
+
+`--dry-run` writes nothing and restarts nothing.
+
+### Disable when the setting is not Abstrax's
+
+`remote disable` only removes `zz-abstrax-remote.cnf`. If the running server is bound to something other than loopback and that value does not come from Abstrax's file, the command says so and does not claim that remote access was turned off.
+
+### Status
+
+`remote status` reads the effective value from the running server (`SHOW VARIABLES LIKE 'bind_address'`), not only whether the drop-in exists. `enabled` is true only when that address is something other than loopback (`127.0.0.1` or `::1`). If an administrator set `bind-address` in another file, status still reports the value the server is using.
+
+```json
+{ "enabled": true, "bind_address": "0.0.0.0", "managed_file": "/etc/mysql/mysql.conf.d/zz-abstrax-remote.cnf", "port": 3306 }
+```
+
+If the database is stopped, the command does not fail. It reads the drop-in (when one exists) and reports the live bind address as `unknown`.
 
 ## Databases
 
