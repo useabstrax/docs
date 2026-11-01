@@ -1,6 +1,6 @@
 # Server
 
-The `server` group reports server status and resource usage. These commands are read-only and do not require root.
+The `server` group reports server status and resource usage, and can reboot the machine. Status, CPU, memory, disk, load, and services are read-only and do not require root. `server reboot` requires root.
 
 ```text
 abstrax server <action> [flags]
@@ -54,6 +54,32 @@ abstrax server services --failed
 | `server disk` | Disk usage per mount point; `--path` limits to one path |
 | `server load` | Load average (1, 5, 15 minutes) |
 | `server services` | List services; `--failed` shows only failed services |
+
+## `server reboot`
+
+Reboot the machine. Abstrax asks for confirmation unless `--yes` is set. `--yes` is a global flag.
+
+```bash
+sudo abstrax server reboot
+sudo abstrax server reboot --yes
+sudo abstrax server reboot --delay 90
+sudo abstrax server reboot --delay 90 --dry-run
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `--delay` | `0` | Seconds to wait before rebooting. `0` reboots immediately. |
+| `--yes` | `false` | Skip the confirmation prompt. Global flag. |
+
+`--delay 0`, or omitting `--delay`, runs `systemctl reboot`. A positive delay uses `systemd-run --on-active=<seconds>s -- systemctl reboot` when `systemd-run` is available. When it is not, the delay is rounded up to whole minutes and Abstrax runs `shutdown -r +N` (90 seconds becomes `+2`). A negative `--delay` is an error.
+
+Abstrax writes a journal line that the restart was requested through Abstrax, prints the result, then runs the reboot command. With `--json`, that result is printed before the machine restarts. The `data` object looks like:
+
+```json
+{"scheduled": true, "delay_seconds": 0, "command": "systemctl reboot"}
+```
+
+`--dry-run` records the journal and reboot commands and does not reboot the machine.
 
 ## Related
 
