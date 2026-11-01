@@ -218,7 +218,8 @@ See [MySQL](/docs/commands/mysql).
 | `mysql database remove <name>` | No | |
 | `mysql database list` | No | |
 | `mysql user add <name>` | No | `--host`, `--password`, `--grant-db`, `--privileges`, `--preset` (password generated if `--password` omitted) |
-| `mysql user remove <name>` | No | `--host` |
+| `mysql user password <name>` | No | `--host`, `--password` (password generated if `--password` omitted) |
+| `mysql user remove <name>` | No | `--host` (localhost also drops `127.0.0.1`) |
 | `mysql user list` | No | `--grants`, `--exclude-system` |
 | `mysql user info <name>` | No | `--host` |
 | `mysql grant <user> <database>` | No | `--privileges`, `--preset`, `--host` |
