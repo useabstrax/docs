@@ -283,6 +283,7 @@ See [Server](/docs/commands/server).
 | `server disk` | No | `--path` |
 | `server load` | No | |
 | `server services` | No | `--failed` |
+| `server reboot` | Yes | `--delay`, `--yes` |
 
 ## plugin
 

@@ -121,7 +121,7 @@ abstrax log /var/log/nginx/error.log --lines=200
 | `cache` | Manage Redis and Memcached | [Cache](/docs/commands/cache) |
 | `firewall` | Manage the firewall (UFW or firewalld) | [Firewall](/docs/commands/firewall) |
 | `repo` | Enable required repositories (EPEL, CRB, Remi) | [Repositories](/docs/commands/repo) |
-| `server` | Show server status and resource usage | [Server](/docs/commands/server) |
+| `server` | Show server status and reboot the machine | [Server](/docs/commands/server) |
 
 For a single page listing every command and flag, see the [command reference](/docs/reference/index).
 
