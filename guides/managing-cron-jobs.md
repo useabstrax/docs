@@ -91,6 +91,15 @@ abstrax cron disable backup
 abstrax cron enable backup
 ```
 
+## Run a job now
+
+`cron run` starts a managed job immediately as its user, with that job's environment and working directory. It requires root. Output is shown in the terminal. Pass `--use-job-output` to write it the way the cron file would. `--timeout` defaults to 300 seconds; the command exits 124 if the job exceeds it. A disabled job still runs, and the result says so.
+
+```bash
+sudo abstrax cron run backup
+sudo abstrax cron run backup --timeout 60
+```
+
 ## 6. Remove a job
 
 ```bash
