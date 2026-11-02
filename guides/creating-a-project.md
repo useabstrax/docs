@@ -82,6 +82,8 @@ Project myapp created.
   Vhost:      /etc/nginx/sites-available/abstrax-myapp
 ```
 
+That virtual host logs to `/var/log/nginx/myapp-access.log` and `/var/log/nginx/myapp-error.log`. `abstrax project info myapp` prints both paths. Pass `--shared-logs` to keep the server-wide nginx logs instead. Existing virtual hosts are not rewritten when you upgrade; the next `project modify` updates the log lines. `project remove` keeps the log files, and `project remove --delete-files` deletes them.
+
 If you omit `--path` and `--user`, the path defaults to `/var/www/<name>`.
 
 ### Path precedence
