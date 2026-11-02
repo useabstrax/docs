@@ -44,6 +44,34 @@ The timezone is the zone the server is using now. `name` is an IANA name such as
 
 Abstrax reads the name from `timedatectl` when that command is available. Otherwise it follows the `/etc/localtime` symlink, then `/etc/timezone`. If none of those exist, the name is `UTC`. This command does not change the timezone.
 
+## `server reboot-required`
+
+Report whether the system needs a reboot. Does not require root.
+
+```bash
+abstrax server reboot-required
+abstrax server reboot-required --json
+```
+
+On Debian and Ubuntu, Abstrax reads `/var/run/reboot-required`. When that file exists, package names are read from `/var/run/reboot-required.pkgs`.
+
+On RHEL-family systems, Abstrax runs `needs-restarting -r` from `dnf-utils`. Exit code 1 means a reboot is required. If `needs-restarting` is not installed, the command succeeds with `required` set to false and a note that it is not installed.
+
+```text
+Reboot required.
+
+Packages:
+  linux-image-5.15.0-91-generic
+```
+
+`--json` returns this object as `data`:
+
+```json
+{"required": true, "packages": ["linux-image-5.15.0-91-generic"]}
+```
+
+When `needs-restarting` is missing, `data` also includes `"note": "needs-restarting is not installed"`.
+
 ## Other server commands
 
 ```bash
@@ -63,6 +91,7 @@ abstrax server services --failed
 | `server disk` | Disk usage per mount point; `--path` limits to one path |
 | `server load` | Load average (1, 5, 15 minutes) |
 | `server services` | List services; `--failed` shows only failed services |
+| `server reboot-required` | Whether a reboot is required, and which packages requested it |
 
 ## `server reboot`
 

@@ -98,6 +98,7 @@ See [Packages](/docs/commands/packages).
 | `package remove <name>` | Yes | `--purge` |
 | `package update` | Yes | |
 | `package upgrade` | Yes | `--security-only` |
+| `package upgrades` | No | `--security-only` |
 | `package search <query>` | No | |
 | `package info <name>` | No | |
 | `package list` | No | |
@@ -286,6 +287,7 @@ See [Server](/docs/commands/server).
 | `server load` | No | |
 | `server services` | No | `--failed` |
 | `server reboot` | Yes | `--delay`, `--yes` |
+| `server reboot-required` | No | |
 
 ## plugin
 
