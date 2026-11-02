@@ -1,6 +1,6 @@
 # Users
 
-The `user` command group manages Linux user accounts: creating and removing users, managing their groups, granting or revoking sudo, setting the login shell, and locking or unlocking accounts.
+The `user` command group manages Linux user accounts: creating and removing users, managing their groups, granting or revoking sudo, setting the login shell, locking or unlocking accounts, and listing or ending interactive login sessions.
 
 ```text
 abstrax user <action> [arguments] [flags]
@@ -8,7 +8,7 @@ abstrax user <action> [arguments] [flags]
 
 ## Permissions
 
-Commands that change accounts (`add`, `remove`, `grant-sudo`, `revoke-sudo`, `set-groups`, `add-groups`, `remove-groups`, `set-shell`, `lock`, `unlock`) require root. The read-only commands `info` and `list` do not require root.
+Commands that change accounts (`add`, `remove`, `grant-sudo`, `revoke-sudo`, `set-groups`, `add-groups`, `remove-groups`, `set-shell`, `lock`, `unlock`, `logout`) require root. The read-only commands `info`, `list`, and `sessions` do not require root.
 
 ## Username validation
 
@@ -172,6 +172,73 @@ sudo abstrax user unlock deploy
 | Flag | Description |
 |---|---|
 | `--password-only` | Lock the password only. SSH keys can still log in |
+
+Locking an account does not end sessions that are already open. Use `user logout` to drop those interactive login sessions.
+
+## `user sessions`
+
+List a user's interactive login sessions. Does not require root. Daemons and cron jobs are not included. When the user has no login sessions, the command succeeds and prints an empty list.
+
+```bash
+abstrax user sessions deploy
+abstrax user sessions deploy --json
+```
+
+Each session includes the session id, TTY, source IP, login time, and idle time. Idle is empty when the system does not report it.
+
+Abstrax reads `loginctl list-sessions` when logind returns JSON, and `who -u` otherwise.
+
+### Example output
+
+```text
+SESSION   TTY     SOURCE         LOGIN                  IDLE
+3         pts/1   203.0.113.5    2026-10-31 12:00:00    00:05
+```
+
+### JSON
+
+```json
+{
+  "status": "success",
+  "action": "user.sessions",
+  "data": [
+    {
+      "id": "3",
+      "tty": "pts/1",
+      "source_ip": "203.0.113.5",
+      "login_time": "2026-10-31 12:00:00",
+      "idle": "00:05"
+    }
+  ]
+}
+```
+
+`idle` is `null` when it was not reported.
+
+## `user logout`
+
+End interactive login sessions for a user. Requires root. Asks for confirmation unless `--yes` is given.
+
+```bash
+sudo abstrax user logout deploy --session 3
+sudo abstrax user logout deploy --all
+sudo abstrax user logout deploy --all --yes
+```
+
+Pass `--session` or `--all`. Passing both is an error, and so is passing neither.
+
+`--session` ends that one login session. `--all` ends each of the user's interactive login sessions. Existing SSH connections drop. Daemons and cron jobs running as that user keep running. Logout does not kill every process the user owns.
+
+With logind, Abstrax runs `loginctl terminate-session` for each selected session. It does not run `loginctl terminate-user`. Without logind, it sends SIGHUP and then SIGKILL only to that session's `sshd: <user>@pts/N` process.
+
+### Flags
+
+| Flag | Description |
+|---|---|
+| `--session <id>` | Session id to end |
+| `--all` | End every interactive login session for this user |
+
+Lock the account, then run `user logout --all`, to refuse new logins and drop the ones already open.
 
 ## `user info`
 

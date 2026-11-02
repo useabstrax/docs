@@ -56,6 +56,8 @@ See [Users](/docs/commands/users).
 | `user set-shell <name> <shell>` | Yes | |
 | `user lock <name>` | Yes | `--password-only` |
 | `user unlock <name>` | Yes | |
+| `user sessions <name>` | No | |
+| `user logout <name>` | Yes | `--session`, `--all` |
 | `user info <name>` | No | |
 | `user list` | No | `--system`, `--regular`, `--sudo` |
 
