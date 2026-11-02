@@ -39,6 +39,8 @@ abstrax ssh-key add <user> <path-to-key> --from-file [flags]
 |---|---|
 | `--name` | Key name / ID stored in the managed marker |
 | `--comment` | Comment stored in the managed marker |
+| `--expires` | UTC time in RFC3339, for example `2026-11-07T23:59:00Z`. Written as OpenSSH `expiry-time`. sshd refuses the key after that time. Requires OpenSSH 8.2 or later |
+| `--from` | Comma-separated IP addresses or CIDRs allowed to use this key. Written as OpenSSH `from` |
 | `--from-file` | Treat the key argument as a file path and read the key from it |
 | `--force` | Overwrite if the key already exists |
 
@@ -48,7 +50,17 @@ abstrax ssh-key add <user> <path-to-key> --from-file [flags]
 sudo abstrax ssh-key add deploy "ssh-ed25519 AAAAC3... ci@example"
 sudo abstrax ssh-key add deploy "ssh-ed25519 AAAAC3..." --name=github-deploy --comment="CI key"
 sudo abstrax ssh-key add deploy /home/deploy/id_ed25519.pub --from-file
+sudo abstrax ssh-key add deploy "ssh-ed25519 AAAAC3..." --name=github-deploy --expires=2026-11-07T23:59:00Z --from=140.82.112.0/20,143.55.64.0/20
 ```
+
+`--expires` and `--from` are optional. Without them, the key line is written exactly as it is today. With them, Abstrax puts the OpenSSH options in front of the key:
+
+```text
+# abstrax:key id=github-deploy name="github-deploy"
+expiry-time="202611072359Z",from="140.82.112.0/20,143.55.64.0/20" ssh-ed25519 AAAAC3... 
+```
+
+`ssh-key list` and `ssh-key info` read those options back as `expires_at` (RFC3339, or null), `from` (the address list, or null), and `expired` (true once `expires_at` is in the past). Keys written by older Abstrax versions, which have no options, still list and remove as before. A past `--expires` value is rejected, and each `--from` item must be an IP address or CIDR with no quotes.
 
 #### Example output
 
@@ -190,9 +202,12 @@ sudo abstrax ssh config set-timeout 300
 ```bash
 sudo abstrax ssh config disable-root-login
 sudo abstrax ssh config enable-root-login
+sudo abstrax ssh config enable-root-login --keys-only
 sudo abstrax ssh config disable-password-auth
 sudo abstrax ssh config enable-password-auth
 ```
+
+`enable-root-login` writes `PermitRootLogin yes`, which also allows a password when password authentication is on. `--keys-only` writes `prohibit-password`, so root can log in with an SSH key and not a password. `disable-root-login` writes `no` and blocks root for every method.
 
 `disable-password-auth` prints a warning reminding you to confirm you have a working SSH key before disabling password logins.
 

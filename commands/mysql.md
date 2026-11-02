@@ -7,11 +7,12 @@ abstrax mysql <action> [arguments] [flags]
 abstrax mysql config <action> [flags]
 abstrax mysql database <action> [arguments] [flags]
 abstrax mysql user <action> [arguments] [flags]
+abstrax mysql remote <action> [flags]
 ```
 
 ## Permissions
 
-`config set`, `install`, and `reset-root-password` require root. Other MySQL commands do not enforce a root check in code; they rely on the saved connection config to authenticate to the database. Note that reading the config file at `/etc/abstrax/mysql.json` (mode 0600, root only) typically requires root.
+`config set`, `install`, `reset-root-password`, `remote enable`, and `remote disable` require root. `remote status` does not. Other MySQL commands do not enforce a root check in code; they rely on the saved connection config to authenticate to the database. Note that reading the config file at `/etc/abstrax/mysql.json` (mode 0600, root only) typically requires root.
 
 ## Connection configuration
 
@@ -39,6 +40,46 @@ abstrax mysql test
 ```
 
 Runs `SELECT 1` against the configured connection and reports success or failure.
+
+## Status
+
+```bash
+abstrax mysql status
+abstrax mysql status --json
+```
+
+Reports whether a MySQL-compatible server is installed, which engine is present (`mysql` or `mariadb`), and which version. It also reports the service name, whether that service is active and enabled, and the port and socket when those are known.
+
+The command does not fail when MySQL is missing or stopped. Those are normal states and the process exits 0. A connection failure only makes the running fields less detailed: the version is then read from `mysqld --version` or `mariadbd --version`, and the port and socket fall back to the saved connection config.
+
+When nothing is installed, `engine` is the server Abstrax would install on this platform, and `version` is null. Other fields are omitted. A UI can use `engine` to say which server will be installed before install runs. On Ubuntu that value is `mysql`. On Debian and RHEL-family systems it is `mariadb`.
+
+Root is not required, the same as `mysql test`.
+
+`--json` when a server is installed and running:
+
+```json
+{
+  "installed": true,
+  "engine": "mysql",
+  "version": "8.4.3",
+  "service": "mysql",
+  "active": true,
+  "enabled": true,
+  "port": 3306,
+  "socket": "/var/run/mysqld/mysqld.sock"
+}
+```
+
+When nothing is installed, on a platform where Abstrax would install MySQL:
+
+```json
+{
+  "installed": false,
+  "engine": "mysql",
+  "version": null
+}
+```
 
 ## Install MySQL/MariaDB
 
@@ -100,6 +141,66 @@ The new password is displayed once and is saved to `/etc/abstrax/mysql.json` so 
 
 For automation, `ABSTRAX_MYSQL_ROOT_PASSWORD` can be used instead of `--root-password`.
 
+## Remote access
+
+```bash
+sudo abstrax mysql remote enable
+sudo abstrax mysql remote enable --bind=192.0.2.10
+sudo abstrax mysql remote disable
+abstrax mysql remote status
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `--bind` | `0.0.0.0` | IP address the database server should listen on (`enable` only) |
+| `--yes` | | Skip the confirmation prompt (`enable` only) |
+| `--dry-run` | | Show the change without writing a file or restarting |
+
+`remote enable` and `remote disable` require root. `remote status` does not.
+
+### Drop-in
+
+Enable writes an Abstrax-managed file named `zz-abstrax-remote.cnf`. The `zz-` prefix makes it load last, so this `bind-address` overrides an earlier setting in the same include directory. The directory comes from the platform's database config paths, not a fixed distro path:
+
+- Ubuntu (MySQL): a directory ending in `mysql.conf.d`, usually `/etc/mysql/mysql.conf.d`
+- Debian (MariaDB): `mariadb.conf.d`, usually `/etc/mysql/mariadb.conf.d`
+- RHEL-family (MariaDB): `/etc/my.cnf.d`
+
+The file looks like this:
+
+```ini
+[mysqld]
+bind-address = 0.0.0.0
+```
+
+On MySQL, Abstrax also sets `mysqlx-bind-address` to the same address. MariaDB does not get that line. `--bind` chooses a specific interface address instead of `0.0.0.0`. The value must be an IP address, with no spaces, quotes, or line breaks.
+
+### Confirmation
+
+Before enabling, Abstrax warns that the server will accept connections beyond loopback and asks you to continue. `--yes` skips the prompt. This is the same kind of warning `cache install` shows before binding Redis to `0.0.0.0`.
+
+Abstrax does not change the firewall. If remote clients should connect, allow TCP port 3306 yourself (for example with `firewall allow 3306`).
+
+### Restart and rollback
+
+After writing or removing the drop-in, Abstrax restarts the database service and waits until it accepts connections. If the service does not come back, enable deletes the drop-in and restarts again. Disable puts the file back and restarts again. The database is not left down because of this command.
+
+`--dry-run` writes nothing and restarts nothing.
+
+### Disable when the setting is not Abstrax's
+
+`remote disable` only removes `zz-abstrax-remote.cnf`. If the running server is bound to something other than loopback and that value does not come from Abstrax's file, the command says so and does not claim that remote access was turned off.
+
+### Status
+
+`remote status` reads the effective value from the running server (`SHOW VARIABLES LIKE 'bind_address'`), not only whether the drop-in exists. `enabled` is true only when that address is something other than loopback (`127.0.0.1` or `::1`). If an administrator set `bind-address` in another file, status still reports the value the server is using.
+
+```json
+{ "enabled": true, "bind_address": "0.0.0.0", "managed_file": "/etc/mysql/mysql.conf.d/zz-abstrax-remote.cnf", "port": 3306 }
+```
+
+If the database is stopped, the command does not fail. It reads the drop-in (when one exists) and reports the live bind address as `unknown`.
+
 ## Databases
 
 ```bash
@@ -127,6 +228,7 @@ abstrax mysql database remove myapp_db
 
 ```bash
 abstrax mysql user add <name> [flags]
+abstrax mysql user password <name> [flags]
 abstrax mysql user remove <name> [flags]
 abstrax mysql user list [flags]
 abstrax mysql user info <name> [flags]
@@ -146,7 +248,7 @@ When `--host` is `localhost` (the default), Laravel and other apps that connect 
 
 If `--password` is omitted, a secure random password is generated and displayed once. Abstrax does not store application user passwords. Use `--password` to enter your own password at a prompt.
 
-`user remove` asks for confirmation unless `--yes` is given. It accepts `--host` (default `localhost`).
+`user remove` asks for confirmation unless `--yes` is given. `--host` defaults to `localhost`, which drops both `'user'@'localhost'` and `'user'@'127.0.0.1'`. Any other `--host` drops only that account.
 
 Database names passed to `--grant-db` are checked the same way as `mysql grant`: letters, digits, and underscores only, up to 64 characters. The host must match a safe character set (letters, digits, and `.` `%` `_` `:` `/` `-`) and is escaped in SQL.
 
@@ -155,6 +257,28 @@ abstrax mysql user add appuser --grant-db=myapp_db --preset=app
 abstrax mysql user add appuser --password --grant-db=myapp_db --preset=app
 abstrax mysql user info appuser
 abstrax mysql user remove appuser
+```
+
+### `user password`
+
+Change the password for an existing user. Grants and the authentication plugin stay as they are.
+
+```bash
+abstrax mysql user password <name> [flags]
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `--host` | every host the user exists on | With no `--host`, update every account for this user. `localhost` updates both `localhost` and `127.0.0.1`. Any other host updates only that account. |
+| `--password` | `false` | Prompt for a password instead of generating one |
+
+If `--password` is omitted, a secure random password is generated and displayed once. Abstrax does not store it. The user must already exist on a matching host; otherwise the command returns an error and runs no `ALTER USER`.
+
+```bash
+abstrax mysql user password appuser
+abstrax mysql user password appuser --password
+abstrax mysql user password appuser --host=localhost
+abstrax mysql user password appuser --host=10.0.4.12
 ```
 
 ### `user list`

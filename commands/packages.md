@@ -8,7 +8,7 @@ abstrax package <action> [arguments] [flags]
 
 ## Permissions
 
-Commands that change installed packages (`install`, `remove`, `update`, `upgrade`) require root. The read-only commands `search`, `info`, and `list` do not require root.
+Commands that change installed packages (`install`, `remove`, `update`, `upgrade`) require root. The read-only commands `search`, `info`, `list`, and `upgrades` do not require root.
 
 ## Package name validation
 
@@ -58,7 +58,7 @@ sudo abstrax package update
 
 ## `package upgrade`
 
-Upgrade installed packages. Use `--security-only` to apply security updates only.
+Upgrade installed packages. Use `--security-only` to install security updates only.
 
 ```bash
 sudo abstrax package upgrade
@@ -67,7 +67,51 @@ sudo abstrax package upgrade --security-only
 
 | Flag | Description |
 |---|---|
-| `--security-only` | Apply security updates only |
+| `--security-only` | Install security updates only |
+
+Without `--security-only`, Abstrax runs a full upgrade (`apt-get upgrade` on Debian and Ubuntu, `dnf upgrade` on RHEL-family systems).
+
+With `--security-only`:
+
+- Debian and Ubuntu: installs only the packages `package upgrades --security-only` would list. If none are pending, the command succeeds without installing anything.
+- RHEL-family: runs `dnf upgrade -y --security`. When the package manager is yum, it runs `yum update -y --security`.
+
+## `package upgrades`
+
+List pending upgrades. Does not require root.
+
+```bash
+abstrax package upgrades
+abstrax package upgrades --security-only
+abstrax package upgrades --json
+```
+
+| Flag | Description |
+|---|---|
+| `--security-only` | Show security updates only |
+
+Each row includes the package name, the installed version, the new version, and whether the update is a security update.
+
+On Debian and Ubuntu, Abstrax parses `apt list --upgradable`. A package is a security update when the candidate version or the origin contains `-security` (the security pocket). On RHEL-family systems, pending upgrades come from `dnf check-update` (or `yum check-update`). A package is a security update when `dnf updateinfo list --security` lists it (`yum updateinfo list security` when yum is the package manager). The installed version is read with `rpm`.
+
+```text
+NAME                  INSTALLED              NEW                    SECURITY
+openssl               3.0.2-0ubuntu1.15      3.0.2-0ubuntu1.18      yes
+nginx                 1.18.0-6ubuntu14.3     1.18.0-6ubuntu14.4     no
+```
+
+`--json` returns that list as `data`:
+
+```json
+[
+  {
+    "name": "openssl",
+    "installed_version": "3.0.2-0ubuntu1.15",
+    "new_version": "3.0.2-0ubuntu1.18",
+    "security": true
+  }
+]
+```
 
 ## `package search`
 

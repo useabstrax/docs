@@ -166,6 +166,7 @@ If `--path` is not given, the default depends on ownership mode: `/var/www/<name
 | `--nginx` | `true` | Use nginx (default) |
 | `--apache` | `false` | Use Apache (not yet implemented) |
 | `--no-vhost` | `false` | Do not create a virtual host |
+| `--shared-logs` | `false` | Keep the server-wide nginx logs instead of per-project log files |
 | `--domains` | | Comma-separated domain names |
 | `--port` | `80` | HTTP port |
 | `--web-root` | | Custom web root directory |
@@ -187,6 +188,23 @@ If `--path` is not given, the default depends on ownership mode: `/var/www/<name
 Domains are validated. Each must be a well-formed domain name.
 
 If a virtual host will be created (the default), Abstrax checks that the requested web server is installed. When nginx is missing, the command stops with a message pointing you to `sudo abstrax web install`. Use `--no-vhost` to create the project directory without this check.
+
+### Nginx logs
+
+By default the virtual host sends this project to its own log files:
+
+```nginx
+access_log /var/log/nginx/<name>-access.log;
+error_log /var/log/nginx/<name>-error.log;
+```
+
+`project info` and `project inspect` include those paths as `access_log_path` and `error_log_path`.
+
+Pass `--shared-logs` to omit both directives and keep the server-wide nginx logs. The choice is stored as `shared_logs` in the project state file. A later `project modify` that does not pass `--shared-logs` leaves that choice as it is. Pass `--shared-logs=false` on `project modify` to switch back to per-project logs.
+
+Projects created before this behaviour keep their current virtual host until the next `project modify` rewrites it. Upgrading Abstrax does not rewrite existing vhosts. `--shared-logs` keeps the previous server-wide log behaviour.
+
+`project remove` leaves the log files in place. `project remove --delete-files` also deletes the two per-project log files.
 
 ### Runtime installation
 
@@ -318,7 +336,7 @@ sudo abstrax project remove <name> [flags]
 |---|---|---|
 | `--remove-vhost` | `true` | Remove the nginx virtual host |
 | `--remove-ssl` | `false` | Remove the SSL certificate |
-| `--delete-files` | `false` | Delete the project files |
+| `--delete-files` | `false` | Delete the project files and the per-project nginx log files |
 | `--keep-files` | `true` | Keep the project files (default) |
 | `--force` | `false` | Force removal without confirmation |
 
@@ -346,6 +364,7 @@ sudo abstrax project modify <name> [flags]
 | `--ruby-version` | Change the Ruby version |
 | `--public-dir` | Change the public directory |
 | `--proxy-port` | Change the proxy port |
+| `--shared-logs` | Use the server-wide nginx logs. Omit the flag to keep the stored choice. `--shared-logs=false` switches back to per-project logs |
 
 ```bash
 sudo abstrax project modify myapp --add-domain=www.myapp.com
@@ -382,6 +401,8 @@ abstrax project info myapp
   Domains:       myapp.com, www.myapp.com
   SSL:           no
   Vhost:         /etc/nginx/sites-available/abstrax-myapp
+  Access log:    /var/log/nginx/myapp-access.log
+  Error log:     /var/log/nginx/myapp-error.log
   Owner:         www-data
   Created:       2024-01-01 12:00:00
   Updated:       2024-01-01 12:00:00
@@ -407,6 +428,8 @@ abstrax project inspect myapp --json
       "version": "8.5"
     },
     "domains": ["myapp.com", "www.myapp.com"],
+    "access_log_path": "/var/log/nginx/myapp-access.log",
+    "error_log_path": "/var/log/nginx/myapp-error.log",
     "services": [
       {
         "name": "worker",
@@ -417,7 +440,7 @@ abstrax project inspect myapp --json
 }
 ```
 
-This API exposes non-secret information only. The response may also include `group` and `ownership_mode` when set. The existing `project info --json` output remains unchanged for backward compatibility.
+This API exposes non-secret information only. The response may also include `group` and `ownership_mode` when set. `access_log_path` and `error_log_path` are omitted when the project uses `--shared-logs`. `project info --json` includes the same log paths.
 
 ## `project service`
 

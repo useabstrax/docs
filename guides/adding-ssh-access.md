@@ -28,6 +28,8 @@ SSH key added for deploy.
 
 Abstrax writes the key into the user's `authorized_keys` with a managed marker comment, so it can be listed and removed later.
 
+To make a key expire, or to limit it to known addresses, pass `--expires` and `--from`. `--expires` is a UTC time (`2026-11-07T23:59:00Z`) and needs OpenSSH 8.2 or later. `--from` is a comma-separated list of IP addresses or CIDRs. `ssh-key info` reports `expires_at`, `from`, and `expired`.
+
 ## 2. Confirm the key
 
 ```bash
@@ -63,6 +65,12 @@ Disable root login over SSH:
 
 ```bash
 sudo abstrax ssh config disable-root-login
+```
+
+`disable-root-login` writes `PermitRootLogin no` and blocks root for every method. If root still needs to log in while password authentication is on, `--keys-only` is the safer choice. It writes `prohibit-password`, so root can use an SSH key and not a password. Without the flag, `enable-root-login` writes `yes`.
+
+```bash
+sudo abstrax ssh config enable-root-login --keys-only
 ```
 
 Apply the changes:

@@ -47,7 +47,7 @@ See [Users](/docs/commands/users).
 | Command | Root | Key flags |
 |---|---|---|
 | `user add <name>` | Yes | `--create-home`, `--no-create-home`, `--grant-sudo`, `--groups`, `--shell`, `--uid`, `--system`, `--password`, `--disabled-password`, `--comment` |
-| `user remove <name>` | Yes | `--delete-home`, `--keep-home`, `--remove-cron`, `--kill-processes`, `--force` |
+| `user remove <name>` | Yes | `--delete-home`, `--keep-home`, `--remove-cron`, `--kill-processes`, `--force`, `--if-unused` |
 | `user grant-sudo <name>` | Yes | |
 | `user revoke-sudo <name>` | Yes | |
 | `user set-groups <name> <groups>` | Yes | |
@@ -56,6 +56,8 @@ See [Users](/docs/commands/users).
 | `user set-shell <name> <shell>` | Yes | |
 | `user lock <name>` | Yes | `--password-only` |
 | `user unlock <name>` | Yes | |
+| `user sessions <name>` | No | |
+| `user logout <name>` | Yes | `--session`, `--all` |
 | `user info <name>` | No | |
 | `user list` | No | `--system`, `--regular`, `--sudo` |
 
@@ -65,7 +67,7 @@ See [SSH keys](/docs/commands/ssh-keys#ssh-key-management).
 
 | Command | Root | Key flags |
 |---|---|---|
-| `ssh-key add <user> <key>` | No* | `--name`, `--comment`, `--from-file`, `--force` |
+| `ssh-key add <user> <key>` | No* | `--name`, `--comment`, `--expires`, `--from`, `--from-file`, `--force` |
 | `ssh-key remove <user> <key-id>` | No* | `--fingerprint`, `--force` |
 | `ssh-key list <user>` | No* | `--managed-only` |
 | `ssh-key info <user> <key-id>` | No* | |
@@ -82,7 +84,7 @@ See [SSH configuration](/docs/commands/ssh-keys#ssh-server-configuration).
 | `ssh config set-port <port>` | Yes | `--allow-firewall`, `--close-old-port` |
 | `ssh config set-timeout <seconds>` | Yes | |
 | `ssh config disable-root-login` | Yes | |
-| `ssh config enable-root-login` | Yes | |
+| `ssh config enable-root-login` | Yes | `--keys-only` |
 | `ssh config disable-password-auth` | Yes | |
 | `ssh config enable-password-auth` | Yes | |
 | `ssh reload` | Yes | |
@@ -98,6 +100,7 @@ See [Packages](/docs/commands/packages).
 | `package remove <name>` | Yes | `--purge` |
 | `package update` | Yes | |
 | `package upgrade` | Yes | `--security-only` |
+| `package upgrades` | No | `--security-only` |
 | `package search <query>` | No | |
 | `package info <name>` | No | |
 | `package list` | No | |
@@ -127,6 +130,7 @@ See [Cron](/docs/commands/cron).
 | `cron modify <id>` | Yes | `--user`, `--command`, `--schedule`, `--output`, `--error-output`, `--append-output`, `--discard-output`, `--no-output`, `--working-dir`, `--env` |
 | `cron list` | No | |
 | `cron info <id>` | No | |
+| `cron run <id>` | Yes | `--timeout`, `--use-job-output` |
 | `cron enable <id>` | No | |
 | `cron disable <id>` | No | |
 
@@ -168,9 +172,9 @@ See [Projects](/docs/commands/projects).
 
 | Command | Root | Key flags |
 |---|---|---|
-| `project add <name>` | Yes | `--path`, `--nginx`, `--apache`, `--no-vhost`, `--domains`, `--port`, `--web-root`, `--user`, `--group`, `--ssl`, `--email`, `--redirect-http`, `--php`, `--node`, `--ruby`, `--static`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port` |
+| `project add <name>` | Yes | `--path`, `--nginx`, `--apache`, `--no-vhost`, `--shared-logs`, `--domains`, `--port`, `--web-root`, `--user`, `--group`, `--ssl`, `--email`, `--redirect-http`, `--php`, `--node`, `--ruby`, `--static`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port` |
 | `project remove <name>` | Yes | `--remove-vhost`, `--remove-ssl`, `--delete-files`, `--keep-files`, `--force` |
-| `project modify <name>` | Yes | `--path`, `--domains`, `--add-domain`, `--remove-domain`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port` |
+| `project modify <name>` | Yes | `--path`, `--domains`, `--add-domain`, `--remove-domain`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port`, `--shared-logs` |
 | `project list` | No | |
 | `project info <name>` | No | |
 | `project enable <name>` | Yes | |
@@ -212,13 +216,18 @@ See [MySQL](/docs/commands/mysql).
 | `mysql config set` | Yes | `--host`, `--port`, `--user`, `--password`, `--socket` |
 | `mysql config show` | No | |
 | `mysql test` | No | |
+| `mysql status` | No | |
 | `mysql install` | Yes | `--version`, `--root-password` |
 | `mysql reset-root-password` | Yes | `--root-password` |
+| `mysql remote enable` | Yes | `--bind` (default `0.0.0.0`). Asks for confirmation. Does not open the firewall. |
+| `mysql remote disable` | Yes | Removes Abstrax's drop-in only |
+| `mysql remote status` | No | Reports the running server's `bind_address` |
 | `mysql database add <name>` | No | `--charset`, `--collation`, `--if-not-exists` |
 | `mysql database remove <name>` | No | |
 | `mysql database list` | No | |
 | `mysql user add <name>` | No | `--host`, `--password`, `--grant-db`, `--privileges`, `--preset` (password generated if `--password` omitted) |
-| `mysql user remove <name>` | No | `--host` |
+| `mysql user password <name>` | No | `--host`, `--password` (password generated if `--password` omitted) |
+| `mysql user remove <name>` | No | `--host` (localhost also drops `127.0.0.1`) |
 | `mysql user list` | No | `--grants`, `--exclude-system` |
 | `mysql user info <name>` | No | `--host` |
 | `mysql grant <user> <database>` | No | `--privileges`, `--preset`, `--host` |
@@ -253,13 +262,13 @@ See [Firewall](/docs/commands/firewall).
 | `firewall enable` | Yes | `--allow-ssh`, `--ssh-port` |
 | `firewall disable` | Yes | |
 | `firewall allow <port>` | Yes | `--protocol`, `--from`, `--comment` |
-| `firewall deny <port>` | Yes | `--protocol`, `--from` |
+| `firewall deny <port>` | Yes | `--protocol`, `--from`, `--force` |
 | `firewall allow-ip <ip-or-cidr>` | Yes | `--to`, `--port`, `--protocol`, `--comment` |
 | `firewall deny-ip <ip-or-cidr>` | Yes | `--comment` |
 | `firewall rule list` | No | |
-| `firewall rule remove <id>` | Yes | |
-| `firewall remove service <name>` | Yes | firewalld |
-| `firewall remove port <port[/proto]>` | Yes | firewalld |
+| `firewall rule remove <id>` | Yes | `--force` |
+| `firewall remove service <name>` | Yes | `--force`, firewalld |
+| `firewall remove port <port[/proto]>` | Yes | `--force`, firewalld |
 
 ## repo
 
@@ -283,6 +292,8 @@ See [Server](/docs/commands/server).
 | `server disk` | No | `--path` |
 | `server load` | No | |
 | `server services` | No | `--failed` |
+| `server reboot` | Yes | `--delay`, `--yes` |
+| `server reboot-required` | No | |
 
 ## plugin
 

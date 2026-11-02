@@ -1,6 +1,6 @@
 # Users
 
-The `user` command group manages Linux user accounts: creating and removing users, managing their groups, granting or revoking sudo, setting the login shell, and locking or unlocking accounts.
+The `user` command group manages Linux user accounts: creating and removing users, managing their groups, granting or revoking sudo, setting the login shell, locking or unlocking accounts, and listing or ending interactive login sessions.
 
 ```text
 abstrax user <action> [arguments] [flags]
@@ -8,7 +8,7 @@ abstrax user <action> [arguments] [flags]
 
 ## Permissions
 
-Commands that change accounts (`add`, `remove`, `grant-sudo`, `revoke-sudo`, `set-groups`, `add-groups`, `remove-groups`, `set-shell`, `lock`, `unlock`) require root. The read-only commands `info` and `list` do not require root.
+Commands that change accounts (`add`, `remove`, `grant-sudo`, `revoke-sudo`, `set-groups`, `add-groups`, `remove-groups`, `set-shell`, `lock`, `unlock`, `logout`) require root. The read-only commands `info`, `list`, and `sessions` do not require root.
 
 ## Username validation
 
@@ -96,6 +96,8 @@ sudo abstrax user add deploy --grant-sudo --json
 
 Remove a user. This is a destructive command and asks for confirmation unless `--yes` is given.
 
+Abstrax does not stop daemons or cron jobs that run as this user, and it does not kill running processes unless you pass `--kill-processes`.
+
 ```bash
 abstrax user remove <name> [flags]
 ```
@@ -109,6 +111,28 @@ abstrax user remove <name> [flags]
 | `--remove-cron` | `false` | Remove the user's crontab |
 | `--kill-processes` | `false` | Kill the user's processes before removal |
 | `--force` | `false` | Force removal |
+| `--if-unused` | `false` | Refuse to remove the user when a daemon, cron job, or process still uses it |
+
+### Still in use
+
+Before removing the account, Abstrax checks three places:
+
+- Daemon configs named `abstrax-*.conf` and `abstrax-*.ini` in the Supervisor config directory (`/etc/supervisor/conf.d` on Debian, `/etc/supervisord.d` on RHEL). A config counts when its `user=` value is this account. The process count is `numprocs`, or 1 when `numprocs` is omitted.
+- Cron files named `abstrax-*` in `/etc/cron.d`. A file counts when a schedule line runs as this account. The line is five schedule fields, then the user, then the command, or `@daily` (or another `@` keyword), then the user, then the command. Comment lines and environment assignments such as `MAILTO=` are ignored. The job id is the filename without the `abstrax-` prefix.
+- Processes currently running as this user (`ps -u <user>`).
+
+When something is found, the command prints the list and still removes the user:
+
+```text
+deploy is still used by:
+  daemon platform-queue (4 processes)
+  cron job database-backup
+  process 4242 php artisan queue:work
+```
+
+`--if-unused` prints the same list, removes nothing, and exits non-zero. `--force` does not skip this check.
+
+Those daemons and cron jobs keep running. Remove or edit them separately if they should stop. `--remove-cron` deletes the user's personal crontab only. It does not delete Abstrax files in `/etc/cron.d`. `--kill-processes` kills processes that are running now. It does not stop a Supervisor program, so a daemon can start again.
 
 ### Examples
 
@@ -116,7 +140,29 @@ abstrax user remove <name> [flags]
 sudo abstrax user remove deploy
 sudo abstrax user remove deploy --delete-home --kill-processes
 sudo abstrax user remove deploy --yes
+sudo abstrax user remove deploy --if-unused
 ```
+
+### JSON
+
+`data.still_used_by` is always present. It is an empty array when nothing still uses the account.
+
+```json
+{
+  "status": "success",
+  "action": "user.remove",
+  "summary": "User deploy removed.",
+  "data": {
+    "still_used_by": [
+      {"type": "daemon", "name": "platform-queue", "processes": 4},
+      {"type": "cron", "name": "database-backup"},
+      {"type": "process", "pid": 4242, "args": "php artisan queue:work"}
+    ]
+  }
+}
+```
+
+With `--if-unused`, a user that is still in use is an error (`error_code` `user_in_use`) and `data.still_used_by` is the same list.
 
 ## `user grant-sudo` and `user revoke-sudo`
 
@@ -173,6 +219,73 @@ sudo abstrax user unlock deploy
 |---|---|
 | `--password-only` | Lock the password only. SSH keys can still log in |
 
+Locking an account does not end sessions that are already open. Use `user logout` to drop those interactive login sessions.
+
+## `user sessions`
+
+List a user's interactive login sessions. Does not require root. Daemons and cron jobs are not included. When the user has no login sessions, the command succeeds and prints an empty list.
+
+```bash
+abstrax user sessions deploy
+abstrax user sessions deploy --json
+```
+
+Each session includes the session id, TTY, source IP, login time, and idle time. Idle is empty when the system does not report it.
+
+Abstrax reads `loginctl list-sessions` when logind returns JSON, and `who -u` otherwise.
+
+### Example output
+
+```text
+SESSION   TTY     SOURCE         LOGIN                  IDLE
+3         pts/1   203.0.113.5    2026-10-31 12:00:00    00:05
+```
+
+### JSON
+
+```json
+{
+  "status": "success",
+  "action": "user.sessions",
+  "data": [
+    {
+      "id": "3",
+      "tty": "pts/1",
+      "source_ip": "203.0.113.5",
+      "login_time": "2026-10-31 12:00:00",
+      "idle": "00:05"
+    }
+  ]
+}
+```
+
+`idle` is `null` when it was not reported.
+
+## `user logout`
+
+End interactive login sessions for a user. Requires root. Asks for confirmation unless `--yes` is given.
+
+```bash
+sudo abstrax user logout deploy --session 3
+sudo abstrax user logout deploy --all
+sudo abstrax user logout deploy --all --yes
+```
+
+Pass `--session` or `--all`. Passing both is an error, and so is passing neither.
+
+`--session` ends that one login session. `--all` ends each of the user's interactive login sessions. Existing SSH connections drop. Daemons and cron jobs running as that user keep running. Logout does not kill every process the user owns.
+
+With logind, Abstrax runs `loginctl terminate-session` for each selected session. It does not run `loginctl terminate-user`. Without logind, it sends SIGHUP and then SIGKILL only to that session's `sshd: <user>@pts/N` process.
+
+### Flags
+
+| Flag | Description |
+|---|---|
+| `--session <id>` | Session id to end |
+| `--all` | End every interactive login session for this user |
+
+Lock the account, then run `user logout --all`, to refuse new logins and drop the ones already open.
+
 ## `user info`
 
 Show details for a user. Does not require root.
@@ -194,9 +307,12 @@ abstrax user info deploy
   Locked:      no
   Expired:     no
   Login blocked: no
+  Last login:  2026-01-14T10:11:12Z from 203.0.113.8
 ```
 
 `Locked` means the password is locked. `Expired` means the account expiry date has passed, which also refuses SSH key logins. `Login blocked` is yes when both are true. JSON uses `locked`, `expired`, and `login_blocked`.
+
+`Last login` is printed when a login time is known. JSON always includes `last_login_at` and `last_login_from`. `last_login_at` is an RFC3339 timestamp or `null` when the time is unknown. `last_login_from` is the IP address or hostname of that login, or `null`. The time is read from `lastlog2`, then `lastlog`, then `last`. If none of those are available, both fields are `null` and the command still succeeds.
 
 ## `user list`
 
@@ -220,12 +336,12 @@ abstrax user list --system
 ### Example output
 
 ```text
-USERNAME   UID    HOME            SHELL       SUDO   LOCKED   EXPIRED   BLOCKED
-deploy     1001   /home/deploy    /bin/bash   yes
+USERNAME   UID    HOME            SHELL       SUDO   LOCKED   EXPIRED   BLOCKED   LAST LOGIN
+deploy     1001   /home/deploy    /bin/bash   yes                                2026-01-14T10:11:12Z
 www-data   33     /var/www        /usr/sbin/nologin
 ```
 
-`LOCKED`, `EXPIRED`, and `BLOCKED` are blank unless that state is set. They match `locked`, `expired`, and `login_blocked` in JSON.
+`LOCKED`, `EXPIRED`, and `BLOCKED` are blank unless that state is set. They match `locked`, `expired`, and `login_blocked` in JSON. `LAST LOGIN` is blank when the time is unknown. Each JSON object includes `last_login_at` and `last_login_from`, and those are `null` when unknown. `user list` reads `lastlog2` or `lastlog` once for the whole list, rather than once per user. If neither tool is available, the fields are `null` and the command still succeeds.
 
 ## Related
 
