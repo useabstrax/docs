@@ -8,7 +8,7 @@ abstrax cron <action> [arguments] [flags]
 
 ## Permissions
 
-`add`, `remove`, and `modify` require root because they write to `/etc/cron.d`. The `list`, `info`, `enable`, and `disable` commands do not enforce a root check in code, but writing to or reading the cron files may still require root depending on file permissions.
+`add`, `remove`, `modify`, and `run` require root. `add`, `remove`, and `modify` write to `/etc/cron.d`. `run` starts the job as its user. The `list`, `info`, `enable`, and `disable` commands do not enforce a root check in code, but writing to or reading the cron files may still require root depending on file permissions.
 
 ## Cron job IDs
 
@@ -155,6 +155,79 @@ abstrax cron info backup
 ```
 
 `Work dir`, `Output`, and `Errors` are printed only when those fields are set. Discarded output is shown as `Output: discarded`. With `--json`, the same details are `working_dir`, `output`, `error_output`, `append_output`, and `discard_output`. Environment values, including values that contain spaces, are returned in `env`.
+
+## `cron run`
+
+Run a managed job immediately, the way cron would, and report the result. This requires root.
+
+```bash
+sudo abstrax cron run <id> [--timeout 300] [--use-job-output]
+sudo abstrax cron run backup
+sudo abstrax cron run backup --timeout 60 --use-job-output
+```
+
+The job runs as its user. Abstrax uses `runuser -u <user>` when `runuser` is available, and `sudo -u <user>` otherwise. The environment is the job's variables plus a cron-like base, and nothing else from the caller:
+
+| Variable | Value |
+|---|---|
+| `SHELL` | `/bin/sh` |
+| `PATH` | `/usr/bin:/bin` |
+| `HOME` | The user's home directory |
+
+`HOME` comes from the local account when it can be looked up. Otherwise it is `/root` for `root` and `/home/<user>` for anyone else. A failed lookup uses that fallback and does not fail the command, including `--dry-run`. Job variables replace these when they use the same name. When the job has a working directory, the shell `cd`s there before the command, the same way the cron file does. The command itself is `/bin/sh -c` with the job command.
+
+A disabled job still runs. The summary says the job is disabled, and JSON includes `"disabled": true`.
+
+By default, stdout and stderr are streamed to the terminal and captured in the result. They are not written to the job's log file. `--use-job-output` applies the job's redirects the way the cron file would: append or overwrite, separate stdout and stderr, or discard.
+
+### Flags
+
+| Flag | Default | Description |
+|---|---|---|
+| `--timeout` | `300` | Seconds to allow the job. `0` means no limit |
+| `--use-job-output` | `false` | Apply the job's output redirects instead of capturing output |
+
+### Exit codes
+
+| Code | Meaning |
+|---|---|
+| Job exit code | The command ran and returned that status |
+| `124` | The timeout elapsed and the process group was killed, matching `timeout(1)` |
+| `1` | Abstrax could not run the job, including an unknown id |
+
+### JSON
+
+`--json` prints one result object. `--json-stream` prints each output line as a progress event (`step` is `output`) and then a final result. The result `data` object has these fields:
+
+| Field | Description |
+|---|---|
+| `id`, `user`, `command` | The job that ran |
+| `disabled` | `true` when the job is disabled |
+| `started_at`, `finished_at` | UTC timestamps |
+| `duration_ms` | How long the run took |
+| `exit_code` | The job's exit code. Omitted on `--dry-run` |
+| `timed_out` | `true` when the timeout killed the process group |
+| `output` | The last 64 KB of combined stdout and stderr. The tail is kept |
+| `output_truncated` | `true` when older output was cut to stay within 64 KB |
+| `dry_run` | `true` on `--dry-run` |
+
+```json
+{
+  "id": "backup",
+  "user": "deploy",
+  "command": "php artisan backup:run",
+  "disabled": false,
+  "started_at": "2026-10-28T03:17:00Z",
+  "finished_at": "2026-10-28T03:17:42Z",
+  "duration_ms": 42118,
+  "exit_code": 0,
+  "timed_out": false,
+  "output": "...",
+  "output_truncated": false
+}
+```
+
+`--dry-run` prints the command it would run and does not execute the job. The result has `dry_run: true` and no `exit_code`.
 
 ## `cron enable` and `cron disable`
 

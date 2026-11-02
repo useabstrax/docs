@@ -127,6 +127,7 @@ See [Cron](/docs/commands/cron).
 | `cron modify <id>` | Yes | `--user`, `--command`, `--schedule`, `--output`, `--error-output`, `--append-output`, `--discard-output`, `--no-output`, `--working-dir`, `--env` |
 | `cron list` | No | |
 | `cron info <id>` | No | |
+| `cron run <id>` | Yes | `--timeout`, `--use-job-output` |
 | `cron enable <id>` | No | |
 | `cron disable <id>` | No | |
 
