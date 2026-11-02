@@ -47,7 +47,7 @@ See [Users](/docs/commands/users).
 | Command | Root | Key flags |
 |---|---|---|
 | `user add <name>` | Yes | `--create-home`, `--no-create-home`, `--grant-sudo`, `--groups`, `--shell`, `--uid`, `--system`, `--password`, `--disabled-password`, `--comment` |
-| `user remove <name>` | Yes | `--delete-home`, `--keep-home`, `--remove-cron`, `--kill-processes`, `--force` |
+| `user remove <name>` | Yes | `--delete-home`, `--keep-home`, `--remove-cron`, `--kill-processes`, `--force`, `--if-unused` |
 | `user grant-sudo <name>` | Yes | |
 | `user revoke-sudo <name>` | Yes | |
 | `user set-groups <name> <groups>` | Yes | |
