@@ -212,6 +212,7 @@ See [MySQL](/docs/commands/mysql).
 | `mysql config set` | Yes | `--host`, `--port`, `--user`, `--password`, `--socket` |
 | `mysql config show` | No | |
 | `mysql test` | No | |
+| `mysql status` | No | |
 | `mysql install` | Yes | `--version`, `--root-password` |
 | `mysql reset-root-password` | Yes | `--root-password` |
 | `mysql database add <name>` | No | `--charset`, `--collation`, `--if-not-exists` |
