@@ -8,7 +8,7 @@ abstrax package <action> [arguments] [flags]
 
 ## Permissions
 
-Commands that change installed packages (`install`, `remove`, `update`, `upgrade`) require root. The read-only commands `search`, `info`, `list`, and `upgrades` do not require root.
+Commands that change installed packages (`install`, `remove`, `update`, `upgrade`, `auto-updates enable`, `auto-updates disable`) require root. The read-only commands `search`, `info`, `list`, `upgrades`, and `auto-updates status` do not require root.
 
 ## Package name validation
 
@@ -112,6 +112,64 @@ nginx                 1.18.0-6ubuntu14.3     1.18.0-6ubuntu14.4     no
   }
 ]
 ```
+
+## `package auto-updates`
+
+Manage automatic security updates. Updates are limited to security origins, and the server is never rebooted automatically. Use [`server reboot-required`](/docs/commands/server#server-reboot-required) when a reboot is needed.
+
+Registered as `package.auto-updates.status`, `package.auto-updates.enable`, and `package.auto-updates.disable`.
+
+### `package auto-updates status`
+
+Show whether automatic security updates are enabled. Changes nothing and does not require root.
+
+```bash
+abstrax package auto-updates status
+abstrax package auto-updates status --json
+```
+
+```text
+  Backend:       unattended-upgrades
+  Installed:     yes
+  Enabled:       yes
+  Managed:       yes
+  Last run:      2026-11-03T06:12:00Z
+  Last result:   success
+```
+
+| Field | Description |
+|---|---|
+| `backend` | `unattended-upgrades` (Debian/Ubuntu) or `dnf-automatic` (RHEL-family) |
+| `installed` | Whether the backend package is installed |
+| `enabled` | Whether automatic upgrades are turned on |
+| `managed` | Whether Abstrax owns the configuration |
+| `config_path` | Path to the Abstrax-managed config file when present |
+| `last_run` | RFC3339 UTC timestamp of the last run, or `null` |
+| `last_result` | `success`, `failed`, `unknown`, or `never_run` |
+
+### `package auto-updates enable`
+
+Enable automatic security updates. Requires root. Installs the backend when it is missing and writes Abstrax-owned configuration (distro files are left alone).
+
+```bash
+sudo abstrax package auto-updates enable
+```
+
+**Debian and Ubuntu:** installs `unattended-upgrades` when missing and writes `/etc/apt/apt.conf.d/52abstrax-auto-updates`. That file sets `APT::Periodic::Unattended-Upgrade "1"`, replaces the distro origin lists with security origins only, and sets `Automatic-Reboot "false"`. Status reads the effective setting from `apt-config`. The last run is the mtime of `/var/lib/apt/periodic/unattended-upgrades-stamp`; the result comes from the last outcome line in `/var/log/unattended-upgrades/unattended-upgrades.log`.
+
+**RHEL-family:** installs `dnf-automatic`, writes `/etc/abstrax/dnf-automatic.conf` (`upgrade_type = security`, `apply_updates = yes`, `reboot = never`), and adds a systemd drop-in `/etc/systemd/system/dnf-automatic-install.service.d/50-abstrax.conf` that runs `dnf-automatic` with that file. Then it runs `systemctl enable --now dnf-automatic-install.timer`. The last run is the mtime of `/var/lib/systemd/timers/stamp-dnf-automatic-install.timer`. The result comes from `systemctl show dnf-automatic-install.service` and is only known for runs since boot; an earlier run reports `unknown`.
+
+### `package auto-updates disable`
+
+Disable automatic security updates. Requires root. The backend package stays installed.
+
+```bash
+sudo abstrax package auto-updates disable
+```
+
+**Debian and Ubuntu:** rewrites the Abstrax apt config with `APT::Periodic::Unattended-Upgrade "0"`. Distro files are not edited.
+
+**RHEL-family:** stops and disables the timer, removes both Abstrax files, and reloads systemd. Leaves `/etc/dnf/automatic.conf` untouched.
 
 ## `package search`
 

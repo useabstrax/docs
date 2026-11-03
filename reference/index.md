@@ -101,6 +101,9 @@ See [Packages](/docs/commands/packages).
 | `package update` | Yes | |
 | `package upgrade` | Yes | `--security-only` |
 | `package upgrades` | No | `--security-only` |
+| `package auto-updates status` | No | Security updates only; never auto-reboots |
+| `package auto-updates enable` | Yes | Installs backend if missing; Abstrax-owned config |
+| `package auto-updates disable` | Yes | Turns off Abstrax config; package stays installed |
 | `package search <query>` | No | |
 | `package info <name>` | No | |
 | `package list` | No | |
@@ -174,13 +177,20 @@ See [Projects](/docs/commands/projects).
 |---|---|---|
 | `project add <name>` | Yes | `--path`, `--nginx`, `--apache`, `--no-vhost`, `--shared-logs`, `--domains`, `--port`, `--web-root`, `--user`, `--group`, `--ssl`, `--email`, `--redirect-http`, `--php`, `--node`, `--ruby`, `--static`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port` |
 | `project remove <name>` | Yes | `--remove-vhost`, `--remove-ssl`, `--delete-files`, `--keep-files`, `--force` |
-| `project modify <name>` | Yes | `--path`, `--domains`, `--add-domain`, `--remove-domain`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port`, `--shared-logs` |
+| `project modify <name>` | Yes | `--path`, `--domains`, `--clear-domains`, `--add-domain`, `--remove-domain`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port`, `--shared-logs`. Empty flag values clear stored fields |
+| `project runtime set <name>` | Yes | Exactly one of `--php`, `--node`, `--ruby`, `--static`; `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port` |
 | `project list` | No | |
-| `project info <name>` | No | |
-| `project enable <name>` | Yes | |
-| `project disable <name>` | Yes | |
+| `project info <name>` | No | Includes SSL metadata and redirect count when set |
+| `project enable <name>` | Yes | Persists `vhost_disabled` in state |
+| `project disable <name>` | Yes | Persists `vhost_disabled` in state |
 | `project reload <name>` | Yes | |
-| `project inspect <name>` | No | Stable v1 JSON API for plugins |
+| `project inspect <name>` | No | Stable v1 JSON API (`web_server`, `vhost`, `ssl`, logs, timestamps) |
+| `project vhost add <name>` | Yes | `--domains`, `--port`, `--web-root` |
+| `project vhost remove <name>` | Yes | Removes vhost; keeps project files and state |
+| `project redirect list <project>` | No | |
+| `project redirect add <project> <source> <destination>` | Yes | `--code` (`301`, `302`, `307`, `308`) |
+| `project redirect modify <project> <id>` | Yes | `--source`, `--destination`, `--code` |
+| `project redirect remove <project> <id>` | Yes | |
 | `project service restart <project> <service>` | Yes | |
 | `project service reload <project> <service>` | Yes | |
 
@@ -205,7 +215,7 @@ See [Certificates](/docs/commands/certificates).
 | `ssl add <project>` | Yes | `--domains`, `--email`, `--staging`, `--redirect-http` |
 | `ssl remove <project>` | Yes | |
 | `ssl renew` | Yes | `--project` |
-| `ssl status [project]` | No | |
+| `ssl status [project]` | No | `project_name`, `certificate_name`, `expiry`, `days_remaining`, `status` (`valid` / `expiring` / `expired` / `missing`), `redirect_http`, `staging` |
 
 ## mysql
 
@@ -257,7 +267,10 @@ See [Firewall](/docs/commands/firewall).
 
 | Command | Root | Key flags |
 |---|---|---|
-| `firewall status` | No | |
+| `firewall status` | No | `--json` may include `defaults` |
+| `firewall defaults` | No | Incoming/outgoing/routed/ping policy |
+| `firewall defaults set` | Yes | `--incoming`, `--outgoing` (UFW only), `--force` |
+| `firewall ping allow\|block` | Yes | Inbound ICMP echo requests |
 | `firewall install` | Yes | installs `ufw` or `firewalld` |
 | `firewall enable` | Yes | `--allow-ssh`, `--ssh-port` |
 | `firewall disable` | Yes | |

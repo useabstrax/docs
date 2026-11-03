@@ -60,7 +60,8 @@ Abstrax warns before actions that commonly cause lockouts or exposure:
 - Disabling password authentication warns you to confirm you have a working key.
 - Restarting SSH warns that active sessions will briefly disconnect.
 - Enabling the firewall without `--allow-ssh` warns that you may be locked out. Abstrax also allows your current IP on the SSH port when you run `firewall enable`, `allow`, `deny`, `allow-ip`, or `deny-ip`, but only in an interactive SSH session (`SSH_CONNECTION`, `SSH_CLIENT`, or `who`). From a script, that protection does nothing (see [Firewall](/docs/commands/firewall#automatic-ssh-lockout-protection)).
-- `firewall deny`, `firewall rule remove`, `firewall remove service`, and `firewall remove port` are refused when the firewall is active and the change would leave no rule allowing TCP to the SSH port. An allow limited to one address still counts. `--force` applies the change anyway. `--yes` does not skip the check. When the firewall is inactive, the change is allowed and Abstrax warns that `firewall enable` will need `--allow-ssh`.
+- `firewall deny`, `firewall defaults set` (when setting `--incoming` to `deny` or `reject`), `firewall rule remove`, `firewall remove service`, and `firewall remove port` are refused when the firewall is active and the change would leave no rule allowing TCP to the SSH port. An allow limited to one address still counts. `--force` applies the change anyway. `--yes` does not skip the check. When the firewall is inactive, the change is allowed and Abstrax warns that `firewall enable` will need `--allow-ssh`.
+- `firewall defaults set --incoming allow` warns and asks for confirmation, because every port without a deny becomes reachable.
 - Binding Redis to `0.0.0.0` warns that it is exposed on all interfaces and asks for confirmation.
 
 ### Passwords are never on the command line

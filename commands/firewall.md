@@ -10,7 +10,7 @@ Run `abstrax doctor` to see which firewall strategy is active (`ufw` or `firewal
 
 ## Permissions
 
-Most firewall commands require root. `firewall status` and `firewall rule list` do not require root.
+Most firewall commands require root. `firewall status`, `firewall defaults`, and `firewall rule list` do not require root.
 
 ## `firewall install`
 
@@ -40,6 +40,72 @@ Show whether the firewall is active and list current rules.
 ```bash
 abstrax firewall status
 ```
+
+`--json` includes a `defaults` object with the same fields as [`firewall defaults`](#firewall-defaults) when those values can be read. It is omitted if the defaults cannot be read.
+
+## `firewall defaults`
+
+Show the default firewall policy. Does not require root. Registered as `firewall.defaults`.
+
+```bash
+abstrax firewall defaults
+```
+
+```text
+  Firewall:    ufw
+  Incoming:    deny
+  Outgoing:    allow
+  Routed:      disabled
+  Ping:        allow
+```
+
+The result is `{backend, defaults}`:
+
+| Field | Values | Notes |
+|---|---|---|
+| `defaults.incoming` | `allow`, `deny`, or `reject` | Default for unmatched inbound traffic |
+| `defaults.outgoing` | `allow`, `deny`, or `reject` | Default for unmatched outbound traffic |
+| `defaults.routed` | for example `disabled` | UFW only |
+| `defaults.ping` | `allow`, `block`, `mixed`, or `unknown` | `mixed` if IPv4 and IPv6 disagree; `unknown` if it cannot be read |
+
+On UFW, Abstrax reads `ufw status verbose`, or `/etc/default/ufw` while UFW is inactive. On firewalld, it reads the target of the default zone: `default` and `REJECT` are `reject`, `DROP` is `deny`, and `ACCEPT` is `allow`. firewalld reports `outgoing` as `allow`.
+
+### `firewall defaults set`
+
+Change the default incoming (and optionally outgoing) policy. Requires root. Registered as `firewall.defaults.set`.
+
+```bash
+sudo abstrax firewall defaults set --incoming deny
+sudo abstrax firewall defaults set --incoming deny --outgoing allow
+sudo abstrax firewall defaults set --incoming allow --yes
+```
+
+| Flag | Description |
+|---|---|
+| `--incoming` | Required. `deny`, `reject`, or `allow` |
+| `--outgoing` | `allow`, `deny`, or `reject`. UFW only; refused on firewalld |
+| `--force` | Apply the policy even if it would block SSH |
+
+- **UFW:** runs `ufw default <policy> incoming|outgoing`.
+- **firewalld:** sets the default zone target (`DROP`, `%%REJECT%%`, `ACCEPT`) and reloads. `--outgoing` is not supported.
+
+`--incoming allow` opens every port that has no rule against it, so Abstrax warns and asks for confirmation. `--yes` skips the prompt.
+
+`--incoming deny` or `reject` is refused while the firewall is active and no rule allows TCP to the SSH port, unless the policy already blocks incoming traffic. `--force` applies it anyway; `--yes` does not. Successful `--json` output includes `ssh_check` when the check ran. See [Automatic SSH lockout protection](#automatic-ssh-lockout-protection).
+
+## `firewall ping`
+
+Allow or block inbound ping (ICMP echo requests). Requires root. Registered as `firewall.ping`.
+
+```bash
+sudo abstrax firewall ping allow
+sudo abstrax firewall ping block
+```
+
+- **UFW:** switches the INPUT `echo-request` rules in `/etc/ufw/before.rules` and `before6.rules` between `ACCEPT` and `DROP`, writes a `.bak` of each changed file, reloads UFW, and restores the files if the reload fails.
+- **firewalld:** adds or removes the `echo-request` ICMP block in the default zone and reloads.
+
+Check the current setting with `abstrax firewall defaults`.
 
 ## `firewall enable`
 
@@ -224,10 +290,11 @@ That detection only works in an interactive SSH session. Abstrax reads `SSH_CONN
 
 ### Refusing a change that would block SSH
 
-Before `firewall deny`, `firewall rule remove`, `firewall remove service`, and `firewall remove port`, Abstrax reads the SSH port from the sshd configuration and simulates the change against the current rules:
+Before `firewall deny`, `firewall defaults set` (when setting `--incoming` to `deny` or `reject`), `firewall rule remove`, `firewall remove service`, and `firewall remove port`, Abstrax reads the SSH port from the sshd configuration and simulates the change against the current rules:
 
 - **remove** uses the rule list without the rule, service, or port being deleted
 - **deny** inserts the new deny before any allow, because UFW uses the first matching rule
+- **defaults set** treats a default incoming `deny` or `reject` as blocking SSH when no allow rule covers the SSH port (unless the policy already blocks incoming traffic)
 
 If the firewall is active and, after that change, no rule allows TCP to the SSH port, the command stops:
 

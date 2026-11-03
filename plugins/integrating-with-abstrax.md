@@ -32,22 +32,37 @@ Example output:
     "name": "example",
     "path": "/var/www/example.com",
     "user": "example",
+    "web_server": "nginx",
     "runtime": {
       "type": "php",
       "version": "8.5"
     },
+    "public_dir": "public",
     "domains": ["example.com"],
+    "vhost": {
+      "present": true,
+      "path": "/etc/nginx/sites-available/abstrax-example",
+      "enabled": true
+    },
+    "shared_logs": false,
+    "access_log_path": "/var/log/nginx/example-access.log",
+    "error_log_path": "/var/log/nginx/example-error.log",
+    "ssl": {
+      "enabled": true
+    },
     "services": [
       {
         "name": "example-worker",
         "type": "worker"
       }
-    ]
+    ],
+    "created_at": "2026-11-01T10:00:00Z",
+    "updated_at": "2026-11-02T12:30:00Z"
   }
 }
 ```
 
-This API exposes non-secret information only. The existing `abstrax project info --json` command remains available for the full internal project state envelope.
+This API exposes non-secret information only. New fields are additive within `api_version: v1` (see [Projects](/docs/commands/projects#project-inspect)). The existing `abstrax project info --json` command remains available for the full internal project state envelope.
 
 ## Project service commands
 

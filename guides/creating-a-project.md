@@ -163,8 +163,8 @@ abstrax ssl status myapp
 ```
 
 ```text
-PROJECT   DOMAINS                    EXPIRY
-myapp     myapp.com, www.myapp.com   2024-04-01
+PROJECT   CERTIFICATE        DOMAINS                    EXPIRY                STATUS
+myapp     abstrax-myapp      myapp.com, www.myapp.com   2026-04-01T00:00:00Z  valid
 ```
 
 ## 5. Add and remove domains later

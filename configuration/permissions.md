@@ -24,7 +24,7 @@ The following change system state and require root:
 - **user**: `add`, `remove`, `grant-sudo`, `revoke-sudo`, `set-groups`, `add-groups`, `remove-groups`, `set-shell`, `lock`, `unlock`
 - **self**: `update`
 - **ssh**: `config set-port`, `config set-timeout`, `config disable-root-login`, `config enable-root-login`, `config disable-password-auth`, `config enable-password-auth`, `reload`, `restart`
-- **package**: `install`, `remove`, `update`, `upgrade`
+- **package**: `install`, `remove`, `update`, `upgrade`, `auto-updates enable`, `auto-updates disable`
 - **service**: `start`, `stop`, `restart`, `reload`, `enable`, `disable`
 - **cron**: `add`, `remove`, `modify`, `run`
 - **daemon**: `add`, `remove`, `modify`, `start`, `stop`, `restart`
@@ -33,7 +33,7 @@ The following change system state and require root:
 - **ssl**: `install`, `add`, `remove`, `renew`
 - **mysql**: `config set`, `install`, `reset-root-password`
 - **cache**: `install`, `remove`, `start`, `stop`, `restart`
-- **firewall**: `enable`, `disable`, `allow`, `deny`, `allow-ip`, `deny-ip`, `rule remove`
+- **firewall**: `enable`, `disable`, `defaults set`, `ping`, `allow`, `deny`, `allow-ip`, `deny-ip`, `rule remove`
 - **plugin**: `install` (registry installs), `update`, `remove`
 
 ## Commands that do not enforce a root check
@@ -45,16 +45,16 @@ These read-only or query commands do not call the root check in code:
 - `config show`, `config get`
 - `user info`, `user list`
 - `ssh config show`
-- `package search`, `package info`, `package list`
+- `package search`, `package info`, `package list`, `package upgrades`, `package auto-updates status`
 - `service status`
 - `cron list`, `cron info`, `cron enable`, `cron disable`
 - `daemon info`, `daemon status`, `daemon list`, `daemon logs`
-- `project list`, `project info`, `project inspect`
+- `project list`, `project info`, `project inspect`, `project redirect list`
 - `web test`
 - `ssl status`
 - All `server` commands (`status`, `cpu`, `memory`, `disk`, `load`, `services`)
 - `cache status`, `cache config`
-- `firewall status`, `firewall rule list`
+- `firewall status`, `firewall defaults`, `firewall rule list`
 - All `ssh-key` commands (`add`, `remove`, `list`, `info`)
 - `plugin list`, `plugin info`, `plugin search`
 - Most `mysql` commands except `config set`, `install`, and `reset-root-password`

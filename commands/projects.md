@@ -12,7 +12,7 @@ abstrax project <action> [arguments] [flags]
 
 ## Permissions
 
-`add`, `remove`, `modify`, `enable`, `disable`, and `reload` require root. The read-only commands `list` and `info` do not require root.
+`add`, `remove`, `modify`, `runtime set`, `vhost add`, `vhost remove`, `redirect add`, `redirect modify`, `redirect remove`, `enable`, `disable`, and `reload` require root. The read-only commands `list`, `info`, `inspect`, and `redirect list` do not require root.
 
 ## Project names
 
@@ -355,19 +355,59 @@ sudo abstrax project modify <name> [flags]
 
 | Flag | Description |
 |---|---|
-| `--path` | Change the project root path |
-| `--domains` | Replace the domain list (comma-separated) |
+| `--path` | Change the stored project root path (does not move files on disk) |
+| `--domains` | Replace the domain list (comma-separated). `--domains=""` clears every domain |
+| `--clear-domains` | Remove every domain. Cannot be combined with `--domains` |
 | `--add-domain` | Add a single domain |
 | `--remove-domain` | Remove a single domain |
-| `--php-version` | Change the PHP version |
-| `--node-version` | Change the Node.js version |
-| `--ruby-version` | Change the Ruby version |
-| `--public-dir` | Change the public directory |
-| `--proxy-port` | Change the proxy port |
+| `--php-version` | Change the PHP version. An empty value clears the stored version; the active PHP runtime keeps its default |
+| `--node-version` | Change the Node.js version (empty clears; active Node.js keeps its default) |
+| `--ruby-version` | Change the Ruby version (empty clears; active Ruby keeps its default) |
+| `--public-dir` | Change the public directory. `--public-dir=""` clears it |
+| `--proxy-port` | Change the proxy port. `--proxy-port=0` clears it |
 | `--shared-logs` | Use the server-wide nginx logs. Omit the flag to keep the stored choice. `--shared-logs=false` switches back to per-project logs |
+
+Flags that are not passed leave the stored field unchanged. A flag passed with an empty value (or `0` for `--proxy-port`) clears that field.
+
+Removing every domain (`--domains=""`, `--clear-domains`, or the last `--remove-domain`) is refused when the project has an nginx vhost, because the vhost would be written with `server_name _` and answer for every host. `--path` must not be empty and is validated the same way as `project add`. `--public-dir` must stay inside the project path.
+
+The runtime install check runs only when the active runtime's version (or the runtime itself) changes. The nginx vhost is rewritten only when a value that appears in it changed. A disabled vhost stays disabled across rewrites. If `nginx -t` rejects the new vhost, the previous file is restored.
+
+To change between PHP, Node.js, Ruby, and static, use [`project runtime set`](#project-runtime-set) instead of `project modify`.
 
 ```bash
 sudo abstrax project modify myapp --add-domain=www.myapp.com
+sudo abstrax project modify myapp --public-dir=""
+sudo abstrax project modify myapp --clear-domains   # only when there is no vhost
+```
+
+## `project runtime set`
+
+Change a project's runtime between PHP, Node.js, Ruby, and static. Exactly one of `--php`, `--node`, `--ruby`, or `--static` is required. Registered as `project.runtime.set`.
+
+```bash
+sudo abstrax project runtime set <name> --php|--node|--ruby|--static [flags]
+```
+
+| Flag | Description |
+|---|---|
+| `--php` / `--node` / `--ruby` / `--static` | Target runtime (exactly one) |
+| `--php-version` | PHP version (only with `--php`) |
+| `--node-version` | Node.js version (only with `--node`) |
+| `--ruby-version` | Ruby version (only with `--ruby`) |
+| `--public-dir` | Public directory (PHP and static) |
+| `--proxy-port` | Local proxy port (Node.js and Ruby) |
+
+Version and port flags that do not match the target runtime are refused. The target runtime is installed first (with confirmation unless `--yes`).
+
+Fields from the old runtime are cleared: PHP keeps `php_version` and `public_dir`; Node.js and Ruby keep their version and `proxy_port` (the port carries over between them); static keeps `public_dir` only. On a user-isolated project, leaving PHP removes its PHP-FPM pool, entering PHP creates one, and changing the PHP version creates the new pool, switches the vhost, then removes the old pool.
+
+The nginx vhost is regenerated. If `nginx -t` rejects it, the previous vhost is restored and the project is left unchanged. A disabled vhost stays disabled. `--dry-run` previews the new state without changing anything.
+
+```bash
+sudo abstrax project runtime set myapp --php --php-version=8.4 --public-dir=public --yes
+sudo abstrax project runtime set myapp --node --node-version=22 --proxy-port=3000 --yes
+sudo abstrax project runtime set myapp --static --yes
 ```
 
 ## `project list`
@@ -408,9 +448,11 @@ abstrax project info myapp
   Updated:       2024-01-01 12:00:00
 ```
 
+When SSL is configured, `project info` (and the project state file) expose an `ssl` object with `certificate_name`, `domains`, `redirect_http`, `staging`, `issued_at`, `expires_at`, and `last_error`. `ssl_enabled` is still written. Projects that only have the older `ssl_enabled` flag are adopted the first time Abstrax needs a certificate name (from the `ssl_certificate` path in the existing vhost, then from the first domain). When redirects exist, the text output notes the count and points at `project redirect list`.
+
 ## `project inspect`
 
-Inspect a project using the stable v1 API designed for plugins and automation. Does not require root.
+Inspect a project using the stable v1 API designed for plugins and automation. Does not require root. Still `api_version: v1`; new fields are additive.
 
 ```bash
 abstrax project inspect myapp --json
@@ -423,24 +465,134 @@ abstrax project inspect myapp --json
     "name": "myapp",
     "path": "/var/www/myapp",
     "user": "www-data",
+    "web_server": "nginx",
     "runtime": {
       "type": "php",
       "version": "8.5"
     },
+    "public_dir": "public",
     "domains": ["myapp.com", "www.myapp.com"],
+    "vhost": {
+      "present": true,
+      "path": "/etc/nginx/sites-available/abstrax-myapp",
+      "enabled": true
+    },
+    "shared_logs": false,
     "access_log_path": "/var/log/nginx/myapp-access.log",
     "error_log_path": "/var/log/nginx/myapp-error.log",
+    "ssl": {
+      "enabled": false
+    },
     "services": [
       {
         "name": "worker",
         "type": "worker"
       }
-    ]
+    ],
+    "created_at": "2026-11-01T10:00:00Z",
+    "updated_at": "2026-11-02T12:30:00Z"
   }
 }
 ```
 
-This API exposes non-secret information only. The response may also include `group` and `ownership_mode` when set. `access_log_path` and `error_log_path` are omitted when the project uses `--shared-logs`. `project info --json` includes the same log paths.
+This API exposes non-secret information only. The response may also include `group` and `ownership_mode` when set, and `proxy_port` when the runtime uses one. `access_log_path` and `error_log_path` are omitted when the project uses `--shared-logs`. `public_dir` and `proxy_port` are omitted when unset.
+
+`vhost.present` is true when the project records a vhost path. `vhost.enabled` is false when `vhost_disabled` is set in state; otherwise it is read from disk (Debian-family: `sites-enabled` symlink; RHEL-family: file in `conf.d`, with a `.disabled` sibling meaning disabled).
+
+When SSL is enabled, `ssl` also includes `certificate_name`, `domains`, `redirect_http`, `staging`, and `expires_at` when known. `created_at` and `updated_at` are RFC3339 UTC strings. `project info --json` includes the same log paths and an `ssl` object with certificate metadata when SSL is configured.
+
+## `project vhost`
+
+Add or remove a project's managed nginx virtual host without deleting the project. Registered as `project.vhost.add` and `project.vhost.remove`.
+
+### `project vhost add`
+
+Create an nginx vhost for a project that has none (for example one created with `--no-vhost`).
+
+```bash
+sudo abstrax project vhost add <name> [flags]
+```
+
+| Flag | Description |
+|---|---|
+| `--domains` | Override stored domains (comma-separated) |
+| `--port` | Override stored HTTP port |
+| `--web-root` | Override stored web root |
+
+`project add` stores `port` and `web_root` so later vhost rewrites keep them. If `nginx -t` rejects the new vhost, the previous file (if any) is restored.
+
+```bash
+sudo abstrax project vhost add myapp --domains=myapp.com,www.myapp.com
+```
+
+### `project vhost remove`
+
+Delete the vhost (and its `.disabled` copy), clear `vhost_path` and `ssl_enabled`, reload nginx, and keep the project files and state.
+
+```bash
+sudo abstrax project vhost remove <name>
+```
+
+## `project redirect`
+
+Manage exact-path redirects in a project's managed nginx vhost. Redirects are stored in project state and written as `location = <source> { return <code> <destination>; }` blocks ahead of the runtime locations, sorted by ID, so `project modify` keeps them. The project needs a managed nginx vhost.
+
+Sources and destinations containing whitespace, quotes, `;`, braces, backslashes, or `$` are rejected. The vhost is written before state is saved; a vhost that nginx rejects is rolled back to its previous contents.
+
+### `project redirect list`
+
+List redirects. Does not require root. Registered as `project.redirect.list`.
+
+```bash
+abstrax project redirect list <project>
+```
+
+```text
+ID      SOURCE      DESTINATION              CODE
+r1a2b3  /old-page   /new-page                301
+r4c5d6  /blog       https://blog.example.com 302
+```
+
+### `project redirect add`
+
+Add a redirect. Registered as `project.redirect.add`.
+
+```bash
+sudo abstrax project redirect add <project> <source> <destination> [--code]
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `--code` | `301` | HTTP status: `301`, `302`, `307`, or `308` |
+
+`<source>` must be a path starting with `/`. `<destination>` is a path starting with `/` or an absolute `http(s)` URL. Each redirect gets a short ID shown by `list`.
+
+```bash
+sudo abstrax project redirect add myapp /old-page /new-page
+sudo abstrax project redirect add myapp /blog https://blog.example.com/ --code 302
+```
+
+### `project redirect modify`
+
+Change a redirect by ID. Registered as `project.redirect.modify`.
+
+```bash
+sudo abstrax project redirect modify <project> <id> [flags]
+```
+
+| Flag | Description |
+|---|---|
+| `--source` | New source path |
+| `--destination` | New destination path or URL |
+| `--code` | New HTTP status code |
+
+### `project redirect remove`
+
+Remove a redirect by ID. Registered as `project.redirect.remove`.
+
+```bash
+sudo abstrax project redirect remove <project> <id>
+```
 
 ## `project service`
 
@@ -461,8 +613,9 @@ sudo abstrax project disable <name>
 sudo abstrax project reload <name>
 ```
 
-- `enable` enables the project's nginx virtual host (symlinks it into `sites-enabled`). The virtual host file is named `abstrax-<name>` in `/etc/nginx/sites-available`.
-- `disable` removes that symlink.
+- `enable` enables the project's nginx virtual host (symlinks it into `sites-enabled` on Debian-family, or restores the conf.d file on RHEL-family). The virtual host file is named `abstrax-<name>`.
+- `disable` disables that vhost.
+- Both store the choice as `vhost_disabled` in project state so a later `project modify` or `project runtime set` that rewrites the file keeps a disabled vhost disabled.
 - `reload` reloads nginx for the project.
 
 ## Related

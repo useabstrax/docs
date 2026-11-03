@@ -12,6 +12,8 @@ Zero-downtime GitHub deployments for Abstrax projects. `abstrax project add` cre
 
 ## Install
 
+Requires Abstrax CLI **>= 2.3.0** (`requires_abstrax`).
+
 ```bash
 sudo abstrax plugin install deploy
 abstrax deploy version
@@ -71,6 +73,21 @@ abstrax deploy list example.com
 Mutating commands require root. `list`, `status`, and `key --show` / `--fingerprint` do not, if the files are readable.
 
 Global flags: `--json`, `--json-stream`, `--yes`, `--dry-run`, `--verbose`, `--quiet`, `--no-color`.
+
+| Command | Root? | Description |
+|---|---|---|
+| `deploy setup <project>` | yes | Init + configure + key + optional first deploy |
+| `deploy init <project>` | yes | Scaffold dirs + `deploy.json`; set web root to `current/{public_dir}` |
+| `deploy configure <project>` | yes (writes) | Show or update config |
+| `deploy key <project>` | yes (writes) | Create/rotate deploy key; `--show` / `--fingerprint` are read-only |
+| `deploy now <project>` | yes | Full release pipeline |
+| `deploy rollback <project> [id]` | yes | Flip `current`; re-runs `after_activate` |
+| `deploy list <project>` | no* | List releases |
+| `deploy status <project>` | no* | Config + current release |
+| `deploy hooks <project> [phase]` | yes (writes) | List/set/append/clear hooks |
+| `deploy remove <project>` | yes | Tear down deploy layout; restore pre-deploy public dir |
+
+\*Read-only when filesystem permissions allow.
 
 ### `deploy setup <project>`
 
@@ -206,13 +223,48 @@ abstrax deploy hooks example.com after_activate
 sudo abstrax deploy hooks example.com after_activate \
   --append='abstrax project service restart example.com example-worker --yes'
 sudo abstrax deploy hooks example.com before_activate --clear
+
+# Replace a phase with multiple commands (order preserved)
+sudo abstrax deploy hooks example.com after_clone \
+  --set='composer install --no-dev' \
+  --set='$ABSTRAX_CLI_PHP artisan migrate --force'
+
+# Same via JSON (agents / Console)
+sudo abstrax deploy hooks example.com after_clone \
+  --set-json='["composer install --no-dev","$ABSTRAX_CLI_PHP artisan migrate --force"]'
 ```
 
 | Flag | Description |
 |---|---|
-| `--set` | Replace the phase with a single command |
+| `--set` | Replace the phase with one or more commands (repeatable; order preserved) |
+| `--set-json` | Replace the phase with a JSON array of commands |
 | `--append` | Append a command |
 | `--clear` | Remove all hooks for the phase |
+
+`--set`, `--set-json`, `--append`, and `--clear` are mutually exclusive.
+
+### `deploy remove <project>`
+
+Tear down per-project deploy state created by setup/init. Removes `deploy.json`, the `current` symlink, and `releases/`. Shared data and the local deploy key are kept unless you pass the optional flags. Restores `previous_public_dir` captured during setup/init (override with `--restore-public-dir`).
+
+```bash
+# Keep shared/ and the local deploy key; restore previous_public_dir from setup
+sudo abstrax deploy remove example.com --yes
+
+# Also delete shared data and the local key pair
+sudo abstrax deploy remove example.com --yes --remove-shared --remove-key
+
+# Override the restored public directory
+sudo abstrax deploy remove example.com --yes --restore-public-dir=public
+```
+
+| Flag | Description |
+|---|---|
+| `--remove-shared` | Also delete `shared/` (`.env`, uploads, and so on) |
+| `--remove-key` | Also delete the local `abstrax_deploy_*` key pair |
+| `--restore-public-dir` | Public dir to restore (defaults to `previous_public_dir` from setup/init) |
+
+Does not remove the deploy key from GitHub/GitLab (Console-owned). `abstrax plugin remove deploy` only removes the plugin binary.
 
 ## Presets
 
@@ -251,6 +303,7 @@ Path: `{project.path}/deploy.json`
   "provider": "github",
   "keep_releases": 5,
   "public_dir": "public",
+  "previous_public_dir": "public",
   "preset": "laravel",
   "shared": [".env", "storage"],
   "hooks": {
@@ -262,7 +315,7 @@ Path: `{project.path}/deploy.json`
 }
 ```
 
-`provider` must be `github`. Shared leaf names that contain a dot (`.env`) are treated as files; others (`storage`) as directories.
+`provider` must be `github`. Shared leaf names that contain a dot (`.env`) are treated as files; others (`storage`) as directories. `setup` / `init` store `previous_public_dir` so `deploy remove` can restore the pre-deploy web root.
 
 Hooks are shell strings run with `bash -lc`. **cwd** is the release path.
 

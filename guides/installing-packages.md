@@ -74,7 +74,18 @@ You can preview an upgrade without applying it:
 sudo abstrax package upgrade --dry-run
 ```
 
-## 6. Remove a package
+## 6. Automatic security updates
+
+Enable unattended security updates (never reboots the server automatically):
+
+```bash
+sudo abstrax package auto-updates enable
+abstrax package auto-updates status
+```
+
+When a reboot is needed after those updates, check with `abstrax server reboot-required`. See [Packages](/docs/commands/packages#package-auto-updates).
+
+## 7. Remove a package
 
 ```bash
 sudo abstrax package remove nginx
