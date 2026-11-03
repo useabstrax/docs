@@ -72,7 +72,7 @@ sudo abstrax --json-stream --yes \
   --payload '{"args":["example.com"],"ref":"main"}'
 ```
 
-`--action` and `--payload` are flags on the root `abstrax` command (not a subcommand). `--payload` is a JSON object. `--payload -` reads the object from stdin. The reserved key `args` is the list of positional arguments; every other key becomes a `--flag`. `--yes` is always injected so the run is non-interactive.
+`--action` and `--payload` are flags on the root `abstrax` command (not a subcommand). `--payload` is a JSON object. `--payload -` reads the object from stdin. The reserved key `args` is the list of positional arguments; every other key becomes a `--flag`. Boolean `true` emits a bare `--flag`; boolean `false` emits `--flag=false` so default-true flags can be turned off. `--yes` is always injected so the run is non-interactive.
 
 Routing:
 
