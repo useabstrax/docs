@@ -1,6 +1,6 @@
 # Monitoring plugin
 
-Collects host, filesystem, and process metrics on the server and keeps a local history. Query it with `abstrax monitoring`. Nothing is sent to ServerAuth, and the agent heartbeat is unchanged. A later heartbeat can read the small `latest.json` vitals file this plugin writes.
+Collects host, filesystem, and process metrics on the server and keeps a local history. Query it with `abstrax monitoring`. Samples stay on the machine, including a small `latest.json` vitals file.
 
 | Item | Value |
 |---|---|
