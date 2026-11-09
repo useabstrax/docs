@@ -49,6 +49,8 @@ This must print JSON only to stdout (protocol version 1):
 | `requires_abstrax` | Semver constraint for the Abstrax CLI |
 | `commands` | List of subcommands, each with `name`, `description`, and optional `action` (for example `plugin.example.hello`) |
 
+A command `name` is the words typed after the plugin name. Words are separated by a single space (`file list`). A dash stays inside one word (`self-update`). Each word must start with a lowercase letter and contain only lowercase letters, digits, and dashes.
+
 `action` is optional. When omitted, Abstrax derives `plugin.<plugin-name>.<command-name>` with hyphens turned into underscores (`self-update` → `plugin.composer.self_update`).
 
 Abstrax reads this metadata after installation and when you run `abstrax plugin info`.
