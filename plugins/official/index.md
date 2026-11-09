@@ -17,6 +17,7 @@ Official does **not** mean “runs with elevated privileges by default.” Mutat
 |---|---|---|
 | [Deploy](/docs/plugins/official/deploy) | `abstrax deploy` | Zero-downtime GitHub deployments for Abstrax projects |
 | [Composer](/docs/plugins/official/composer) | `abstrax composer` | Install Composer globally and run it with the correct PHP binary |
+| [Monitoring](/docs/plugins/official/monitoring) | `abstrax monitoring` | Local host and process metrics with on-server history |
 
 More official plugins may appear here as they are published.
 

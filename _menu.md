@@ -48,6 +48,7 @@
 - [Official plugins](/docs/plugins/official/)
 - [Deploy](/docs/plugins/official/deploy)
 - [Composer](/docs/plugins/official/composer)
+- [Monitoring](/docs/plugins/official/monitoring)
 
 ## Reference
 - [Command reference](/docs/reference/)
