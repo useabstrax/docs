@@ -46,10 +46,19 @@ Upgrade across a major version when you are ready for breaking changes:
 sudo abstrax self update --allow-breaking
 ```
 
+Update the CLI and every installed plugin together:
+
+```bash
+sudo abstrax self update --plugins
+```
+
+`--plugins` updates the CLI first, then each registry or manifest plugin, the same way as [`plugin update`](/docs/commands/plugins#plugin-update). A plugin already on the latest compatible version is left in place. Local plugins installed with `--path` are skipped. If one plugin fails, Abstrax continues with the others and then exits with an error. The CLI update is kept. Without `--plugins`, installed plugins are not changed.
+
 Preview what would happen without making changes:
 
 ```bash
 abstrax self update --dry-run
+abstrax self update --plugins --dry-run
 ```
 
 Show download URLs and the install path:
@@ -65,6 +74,7 @@ sudo abstrax self update --verbose
 | No version given | Updates to the newest release with the same major version |
 | Version argument given | Installs that exact version if it exists on GitHub |
 | `--allow-breaking` | Installs the absolute latest release, including major version bumps |
+| `--plugins` | After the CLI update, also updates installed registry and manifest plugins |
 | Already on the latest compatible release | Reports that you are up to date |
 | A newer major release exists | Completes the compatible update (if one is available), then prints a notice about the major release |
 
