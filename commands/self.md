@@ -24,6 +24,7 @@ sudo abstrax self update [version] [flags]
 |---|---|
 | `[version]` | Optional target version (without a leading `v`). Must exist on GitHub. |
 | `--allow-breaking` | Upgrade to the latest release even when it includes breaking (major version) changes |
+| `--plugins` | After the CLI update, also update every installed registry or manifest plugin |
 
 ### Default behaviour
 
@@ -44,8 +45,66 @@ When you pass a version explicitly, Abstrax validates that the release exists on
 3. The target version is resolved.
 4. If no update is needed, Abstrax reports that you are up to date.
 5. Otherwise it downloads the release archive and checksums file, verifies the SHA-256 hash, extracts the binary, and replaces the running executable.
+6. If `--plugins` was passed, Abstrax then updates installed plugins. See [Updating plugins](#updating-plugins).
 
 Abstrax only supports `linux/amd64` and `linux/arm64`.
+
+### Updating plugins
+
+`--plugins` is optional. Without it, `self update` does not change installed plugins.
+
+```bash
+sudo abstrax self update --plugins
+abstrax self update --plugins --dry-run
+```
+
+With `--plugins`, Abstrax updates the CLI first, then updates each installed plugin the same way as [`plugin update`](/docs/commands/plugins#plugin-update):
+
+- Registry and manifest plugins move to the latest compatible stable version.
+- A plugin that is already on that version is left in place.
+- Local plugins installed with `--path` are skipped. Change those by reinstalling with `--path`.
+- A failure for one plugin does not stop the others. If any plugin fails, the command exits with an error after the remaining plugins have been attempted. The CLI update is kept.
+
+`--dry-run` lists the plugins that would change and does not install them. It does not require root.
+
+When no plugins are installed, Abstrax reports that and exits successfully.
+
+```text
+Updated from 1.0.1 to 1.1.0.
+Updated plugin deploy from 0.3.0 to 0.4.0.
+Plugin composer is already up to date (1.2.0).
+WARNING: Skipped local plugin custom. Reinstall it with --path to change it.
+```
+
+`--json` adds a `plugins` object to `data`. It is omitted when `--plugins` was not passed. `skipped` entries use `reason` `up_to_date` or `local`.
+
+```json
+"plugins": {
+  "dry_run": false,
+  "updated": [
+    {
+      "name": "deploy",
+      "version": "0.4.0",
+      "previous_version": "0.3.0"
+    }
+  ],
+  "skipped": [
+    {
+      "name": "composer",
+      "version": "1.2.0",
+      "reason": "up_to_date"
+    },
+    {
+      "name": "custom",
+      "version": "0.1.0",
+      "reason": "local"
+    }
+  ],
+  "failed": []
+}
+```
+
+If a plugin fails, the result `status` is `error`, `error_code` is `plugin_update_failed`, and `data` still includes the CLI update fields and the `plugins` object. `summary` is the CLI update message. `message` describes the plugin failure.
 
 ### Examples
 
@@ -65,6 +124,12 @@ Upgrade to the absolute latest release, including major versions:
 
 ```bash
 sudo abstrax self update --allow-breaking
+```
+
+Update the CLI and every installed plugin:
+
+```bash
+sudo abstrax self update --plugins
 ```
 
 Preview without making changes:
@@ -120,6 +185,7 @@ Common errors:
 | `self-update is only supported on Linux` | The command was run on a non-Linux system |
 | `checksum mismatch` | The downloaded archive failed verification; the update was aborted |
 | `unsupported architecture` | The server architecture is not `amd64` or `arm64` |
+| `failed to update plugin …` | A registry or manifest plugin could not be updated. The CLI update is kept, and the other plugins were still attempted |
 
 ## Related
 

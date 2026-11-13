@@ -114,6 +114,14 @@ sudo abstrax plugin update <name>
 sudo abstrax plugin update example
 ```
 
+To update Abstrax and every installed plugin in one command:
+
+```bash
+sudo abstrax self update --plugins
+```
+
+That follows the same rules as `plugin update` for each registry or manifest plugin. Local plugins are skipped. See [Updating plugins](/docs/commands/self#updating-plugins).
+
 ## `plugin remove`
 
 Remove an installed plugin. Prompts for confirmation unless `--yes` is supplied.

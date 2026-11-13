@@ -41,7 +41,7 @@ The following change system state and require root:
 These read-only or query commands do not call the root check in code:
 
 - `doctor`, `version`, `log`
-- `self update --dry-run` (preview only; the actual update requires root)
+- `self update --dry-run` (preview only, including `--plugins`; the actual update requires root)
 - `config show`, `config get`
 - `user info`, `user list`
 - `ssh config show`

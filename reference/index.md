@@ -30,7 +30,7 @@ A single-page listing of every Abstrax command and its flags. Each command links
 | `abstrax help` | No | Show help for any command | [commands](/docs/commands/index#top-level-commands) |
 | `abstrax completion <shell>` | No | Generate a shell autocompletion script | [commands](/docs/commands/index#top-level-commands) |
 
-`abstrax log [path]` flags: `--lines` (default 50), `--follow`/`-f` (default true). `abstrax self update` flags: `--allow-breaking`. The `help` and `completion` commands are provided automatically by the command framework.
+`abstrax log [path]` flags: `--lines` (default 50), `--follow`/`-f` (default true). `abstrax self update` flags: `--allow-breaking`, `--plugins`. The `help` and `completion` commands are provided automatically by the command framework.
 
 ## self
 
@@ -38,7 +38,7 @@ See [Self](/docs/commands/self).
 
 | Command | Root | Key flags |
 |---|---|---|
-| `self update [version]` | Yes | `--allow-breaking` |
+| `self update [version]` | Yes | `--allow-breaking`, `--plugins` |
 
 ## user
 

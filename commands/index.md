@@ -56,10 +56,12 @@ The `self` command group manages the Abstrax CLI. See [Self](/docs/commands/self
 sudo abstrax self update
 sudo abstrax self update 1.2.0
 sudo abstrax self update --allow-breaking
+sudo abstrax self update --plugins
 abstrax self update --dry-run
+abstrax self update --plugins --dry-run
 ```
 
-`self update` downloads a release from GitHub, verifies the SHA-256 checksum, and replaces the running binary. By default it updates to the newest release within the current major version. Use `--allow-breaking` to upgrade across major versions.
+`self update` downloads a release from GitHub, verifies the SHA-256 checksum, and replaces the running binary. By default it updates to the newest release within the current major version. Use `--allow-breaking` to upgrade across major versions. `--plugins` also updates every installed registry or manifest plugin. Local plugins are skipped.
 
 ### doctor
 
