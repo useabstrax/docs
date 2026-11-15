@@ -12,10 +12,18 @@ Pick the example that matches your application and ownership model.
 
 Omit `--user` to use `www-data` and `/var/www/<name>`:
 
+Pass `--nginx` when you want a virtual host. Without it, Abstrax creates the project directory and state only.
+
 ```bash
-sudo abstrax project add myapp \
+sudo abstrax project add myapp --nginx \
   --domains=myapp.com,www.myapp.com \
   --static
+```
+
+To serve a site on the server IP with no domain name:
+
+```bash
+sudo abstrax project add bare --nginx --static
 ```
 
 ### User isolated project
@@ -23,7 +31,7 @@ sudo abstrax project add myapp \
 Pass `--user` to run the application as that Linux user. Abstrax resolves the home directory from the system account:
 
 ```bash
-sudo abstrax project add myapp --user=mike \
+sudo abstrax project add myapp --user=mike --nginx \
   --domains=myapp.com \
   --php --public-dir=public
 ```
@@ -33,7 +41,7 @@ No separate isolation flag is needed. The project is created at `/home/mike/myap
 ### Static site with explicit path
 
 ```bash
-sudo abstrax project add myapp \
+sudo abstrax project add myapp --nginx \
   --path=/var/www/myapp \
   --domains=myapp.com,www.myapp.com \
   --static
@@ -42,13 +50,13 @@ sudo abstrax project add myapp \
 ### PHP application
 
 ```bash
-sudo abstrax project add myapp \
+sudo abstrax project add myapp --nginx \
   --path=/var/www/myapp \
   --domains=myapp.com \
   --php --public-dir=public
 ```
 
-Omit `--php-version` to use the default (`8.5`). Pass `--php-version=8.4` (or another installed version) when you need something else.
+Omit `--php-version` to use the default (`8.5`). Pass `--php-version=8.4` (or another installed version) when you need something else. On AlmaLinux/Rocky 10, `--php-version=8.3` installs AppStream PHP without Remi.
 
 If PHP is not installed yet, Abstrax asks whether to install the requested version before continuing. Answer yes to install it, or no to abort. Pass `--yes` to install without prompting. PHP is installed with FPM, CLI, and the extension packages configured in [`abstrax config`](/docs/commands/config) (defaults include `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, and `sqlite3`; `pcntl` and `posix` come with `php*-cli`).
 
@@ -63,7 +71,7 @@ For **user isolated** PHP projects, Abstrax also creates a dedicated PHP-FPM poo
 ### Node.js or Ruby application (reverse proxy)
 
 ```bash
-sudo abstrax project add myapp \
+sudo abstrax project add myapp --nginx \
   --path=/var/www/myapp \
   --domains=myapp.com \
   --node --proxy-port=3000
@@ -105,7 +113,7 @@ Abstrax never recursively changes ownership of another user's directories. See [
 
 ### Deploy your application code
 
-`project add` creates the directory and nginx configuration but does not put your application files on the server. Deploy source code separately - for example with CI/CD, `git clone`/`git pull`, rsync, or your existing deployment process - once the project path and virtual host are in place.
+`project add` creates the directory (and an nginx virtual host when you pass `--nginx`) but does not put your application files on the server. Deploy source code separately - for example with CI/CD, `git clone`/`git pull`, rsync, or your existing deployment process - once the project path and virtual host are in place.
 
 For user isolated projects, run deploy and build commands as the project user so files are owned correctly.
 
@@ -194,7 +202,7 @@ sudo abstrax project remove myapp --delete-files --force
 
 - The current web server backend is nginx. Apache is referenced in the flags but is not yet implemented.
 - Make sure the firewall allows HTTP and HTTPS: `sudo abstrax firewall allow 80` and `sudo abstrax firewall allow 443 --protocol=tcp`.
-- On systems with SELinux enforcing, projects under `/home` may need additional file contexts. Abstrax prints a warning when this may apply.
+- On systems with SELinux enforcing, Abstrax labels the project path and common writable directories (`storage`, `bootstrap/cache`, `wp-content/uploads`) and runs `restorecon`. `project remove` deletes those fcontext rules.
 - Supervisor daemons and other project processes should run as the project user in isolated mode (`daemon add --user=mike`).
 - Cron jobs and daemons that run PHP should use the versioned binary (`php8.5 artisan ...`, not bare `php artisan ...`). See [Projects](/docs/commands/projects#php-on-the-command-line).
 

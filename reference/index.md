@@ -175,7 +175,7 @@ See [Projects](/docs/commands/projects).
 
 | Command | Root | Key flags |
 |---|---|---|
-| `project add <name>` | Yes | `--path`, `--nginx`, `--apache`, `--no-vhost`, `--shared-logs`, `--domains`, `--port`, `--web-root`, `--user`, `--group`, `--ssl`, `--email`, `--redirect-http`, `--php`, `--node`, `--ruby`, `--static`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port` |
+| `project add <name>` | Yes | `--path`, `--nginx` (default false; required for a vhost), `--apache`, `--no-vhost`, `--shared-logs`, `--domains`, `--port`, `--web-root`, `--user`, `--group`, `--ssl` (requires `--nginx`), `--email`, `--redirect-http`, `--php`, `--node`, `--ruby`, `--static`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port` |
 | `project remove <name>` | Yes | `--remove-vhost`, `--remove-ssl`, `--delete-files`, `--keep-files`, `--force` |
 | `project modify <name>` | Yes | `--path`, `--domains`, `--clear-domains`, `--add-domain`, `--remove-domain`, `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port`, `--shared-logs`. Empty flag values clear stored fields |
 | `project runtime set <name>` | Yes | Exactly one of `--php`, `--node`, `--ruby`, `--static`; `--php-version`, `--node-version`, `--ruby-version`, `--public-dir`, `--proxy-port` |
@@ -201,6 +201,9 @@ See [Web server](/docs/commands/web).
 | Command | Root | Key flags |
 |---|---|---|
 | `web install` | Yes | `--apache` (not implemented), `--enable`, `--start` |
+| `web ip show` | No | Current server IP response |
+| `web ip set` | Yes | `--return` (`404`, `403`, or `444`) |
+| `web ip clear` | Yes | |
 | `web test` | No | |
 | `web reload` | Yes | |
 | `web restart` | Yes | |
@@ -256,10 +259,10 @@ See [Cache](/docs/commands/cache).
 | `cache start <driver>` | Yes | |
 | `cache stop <driver>` | Yes | |
 | `cache restart <driver>` | Yes | |
-| `cache status [driver]` | No | |
-| `cache config <driver>` | No | |
+| `cache status [driver]` | No | `installed`, `version`, port/bind when known |
+| `cache config <driver>` | No* | `--port`, `--bind`, `--memory`, `--maxmemory-policy`, `--requirepass`, `--clear-requirepass` (changing settings needs root) |
 
-Drivers: `redis`, `memcached`.
+Drivers: `redis`, `valkey`, `memcached`. On EL10, `redis` without `--enable-required-repos` falls back to Valkey.
 
 ## firewall
 
@@ -275,11 +278,11 @@ See [Firewall](/docs/commands/firewall).
 | `firewall enable` | Yes | `--allow-ssh`, `--ssh-port` |
 | `firewall disable` | Yes | |
 | `firewall allow <port>` | Yes | `--protocol`, `--from`, `--comment` |
-| `firewall deny <port>` | Yes | `--protocol`, `--from`, `--force` |
-| `firewall allow-ip <ip-or-cidr>` | Yes | `--to`, `--port`, `--protocol`, `--comment` |
+| `firewall deny <port>` | Yes | `--protocol`, `--from`, `--comment`, `--force` |
+| `firewall allow-ip <ip-or-cidr>` | Yes | `--to`, `--port` (destination), `--protocol`, `--comment` |
 | `firewall deny-ip <ip-or-cidr>` | Yes | `--comment` |
-| `firewall rule list` | No | |
-| `firewall rule remove <id>` | Yes | `--force` |
+| `firewall rule list` | No | Includes `source_port`, UFW `group`, and `pending` while UFW is inactive |
+| `firewall rule remove <id\|group>` | Yes | `--force`; UFW group removes IPv4 and IPv6 copies |
 | `firewall remove service <name>` | Yes | `--force`, firewalld |
 | `firewall remove port <port[/proto]>` | Yes | `--force`, firewalld |
 
@@ -318,7 +321,7 @@ See [Plugins](/docs/commands/plugins).
 | `plugin info <name>` | No | |
 | `plugin search <query>` | No | |
 | `plugin install` | Yes (registry only) | `--manifest`, `--path` |
-| `plugin update <name>` | Yes | |
+| `plugin update <name>` | Yes | `--path` (local plugins) |
 | `plugin remove <name>` | Yes | |
 
 Blocked plugins can also be allowed via `plugins.allow_blocked` in `/etc/abstrax/config.json`. See [Plugin security](/docs/plugins/security).

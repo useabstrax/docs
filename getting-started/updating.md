@@ -52,7 +52,7 @@ Update the CLI and every installed plugin together:
 sudo abstrax self update --plugins
 ```
 
-`--plugins` updates the CLI first, then each registry or manifest plugin, the same way as [`plugin update`](/docs/commands/plugins#plugin-update). A plugin already on the latest compatible version is left in place. Local plugins installed with `--path` are skipped. If one plugin fails, Abstrax continues with the others and then exits with an error. The CLI update is kept. Without `--plugins`, installed plugins are not changed.
+`--plugins` updates the CLI first, then each registry or manifest plugin, the same way as [`plugin update`](/docs/commands/plugins#plugin-update). A plugin already on the latest compatible version is left in place. Local plugins installed with `--path` are skipped (update those with `plugin update <name> --path …`). If one plugin fails, Abstrax continues with the others and then exits with an error. The CLI update is kept. Without `--plugins`, installed plugins are not changed.
 
 Preview what would happen without making changes:
 

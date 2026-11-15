@@ -165,7 +165,10 @@ sudo abstrax firewall deny 3306 --from=203.0.113.0/24 --protocol=tcp
 |---|---|---|
 | `--protocol` | | Protocol (`tcp` or `udp`) |
 | `--from` | | Deny only from this IP or CIDR |
+| `--comment` | | Rule comment (UFW) |
 | `--force` | `false` | Deny the port even if it would block SSH |
+
+On UFW, `--from` with `--protocol` uses `ufw <action> from <ip> to any port <port> proto <protocol>` (the short `port/<protocol>` form is rejected by UFW when a source is set). The same form is used for `firewall allow`.
 
 On firewalld, `firewall deny` adds IPv4 and IPv6 reject rich rules for the port. `--from` limits the reject rule to that source, using `family="ipv6"` for an IPv6 address.
 
@@ -183,9 +186,11 @@ sudo abstrax firewall allow-ip 203.0.113.10 --port=3306 --protocol=tcp --comment
 | Flag | Description |
 |---|---|
 | `--to` | Destination IP |
-| `--port` | Limit the allow to this port |
+| `--port` | Destination port to open for this source (not a source port) |
 | `--protocol` | Protocol (`tcp` or `udp`). When a port is set and this is omitted, both protocols are allowed |
 | `--comment` | Rule comment (UFW) |
+
+On UFW, `--port` builds `ufw allow from <ip> to <to|any> port <port> [proto <p>]`, so the port is the destination. firewalld already opens that destination with a rich rule.
 
 Before the rule is added, Abstrax tries to allow your current client IP on the SSH port. That only happens in an interactive SSH session. See [Automatic SSH lockout protection](#automatic-ssh-lockout-protection).
 
@@ -205,9 +210,11 @@ Before the rule is added, Abstrax tries to allow your current client IP on the S
 
 ## `firewall rule list`
 
-List current firewall rules. Each rule has a stable `id` (the first 8 characters of a hash of the rule) and a `number`, which is its current position in the list. The position can change when other rules are added or removed. Prefer `id` when you remove a rule.
+List current firewall rules. Each rule has a stable `id` (the first 8 characters of a hash of the rule) and a `number`, which is its current position in the list. The position can change when other rules are added or removed. Prefer `id` (or `group` on UFW) when you remove a rule.
 
-Listed rules include protocol, direction, source, destination, comment, and whether the rule is IPv6. On firewalld, rich rules are included and can be removed by id.
+Listed rules include protocol, direction, source, destination, comment, and whether the rule is IPv6. On UFW, a From column such as `10.1.2.3 3306/tcp` is split into the address, `source_port`, and protocol (`SRC` column in the table; `source_port` in JSON). IPv4 and IPv6 copies of the same rule share a `group`. On firewalld, rich rules are included and can be removed by id.
+
+When UFW is inactive, Abstrax reads `ufw show added` instead of returning an empty list. Those stored rules are marked `pending` (shown as `ALLOW (not applied)` / `DENY (not applied)`), and their ids match what `ufw status numbered` will assign once UFW is enabled.
 
 ```bash
 abstrax firewall rule list
@@ -221,23 +228,26 @@ ID        NUM   PORT   PROTOCOL   ACTION   DIR   FROM           TO
 
 An empty `FROM` means any source. The ids above are examples; use the ids printed on your server.
 
+Firewall commands that fail print the underlying `ufw` or `firewall-cmd` message (for example `ufw: ERROR: Bad port`) instead of a bare `exit status 1`.
+
 ## `firewall rule remove`
 
-Remove a rule by the `id` from `firewall rule list`.
+Remove a rule by the `id` from `firewall rule list`, or by UFW `group` to delete both the IPv4 and IPv6 copies in one step.
 
 ```bash
 sudo abstrax firewall rule remove 3f2a91c0
+sudo abstrax firewall rule remove <group>
 ```
 
-The id identifies the rule by its specification, so a later removal cannot hit a different rule that shifted into an old position.
+The id identifies the rule by its specification, so a later removal cannot hit a different rule that shifted into an old position. Passing either copy's id or the shared `group` runs one `ufw delete` that removes both address-family copies.
 
-A numeric position still works and prints a warning, because that position can change:
+A numeric position still works and prints a warning, because that position can change. Removing by number deletes only that position.
 
 ```bash
 sudo abstrax firewall rule remove 3
 ```
 
-- **UFW:** an id deletes the rule by its allow/deny specification. A numeric position deletes that numbered UFW rule.
+- **UFW:** an id or group deletes the rule by its allow/deny specification (including source-port rules such as `allow from <addr> port <port> proto <protocol>`). A numeric position deletes that numbered UFW rule.
 - **firewalld:** an id removes the matching service, port, or rich rule permanently and reloads firewalld. Rich rules created with `--from` are removed this way.
 
 | Flag | Default | Description |

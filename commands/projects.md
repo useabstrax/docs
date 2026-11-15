@@ -29,7 +29,7 @@ A project has a runtime and a web server backend.
 | Node.js | `--node` | Proxies to a local port set with `--proxy-port`; set `--node-version` (default `24`) |
 | Ruby | `--ruby` | Proxies to a local port set with `--proxy-port`; set `--ruby-version` (default `4.0`) |
 
-The web server defaults to nginx. The `--apache` flag selects Apache, but Apache support is not yet implemented; use nginx.
+`project add` does **not** create an nginx virtual host unless you pass `--nginx`. Without `--nginx`, Abstrax creates the project directory and state only. Pass `--nginx` with `--domains` for a named site, or `--nginx` alone to serve the project on the server IP (see [Default server / server IP](#default-server--server-ip)). The `--apache` flag selects Apache, but Apache support is not yet implemented.
 
 ## Application code
 
@@ -53,11 +53,11 @@ When you omit `--user`, Abstrax uses **shared web user mode**:
 | Default path | `/var/www/<name>` |
 
 ```bash
-sudo abstrax project add example.com
+sudo abstrax project add example.com --nginx --domains=example.com
 # path: /var/www/example.com, owner: www-data:www-data
 ```
 
-This preserves existing behaviour. Commands and paths you used before continue to work unchanged.
+On RHEL-family systems the shared web user and group are `nginx` instead of `www-data`, and shared-mode PHP projects use an Abstrax-managed `abstrax-web` PHP-FPM pool (Remi's default `www` pool only allows `apache`).
 
 ### User isolated mode
 
@@ -135,7 +135,7 @@ Or edit `/etc/abstrax/config.json`:
 - **Nginx** continues to run as `www-data`.
 - Abstrax sets the **other execute** bit (`chmod o+x`) on existing directories along the path from the user's home to the project so nginx can traverse without filesystem ACLs. This does not grant read access to private home files. Deeper paths inside the project (for example a `public` directory) are created by your deployment tool and must be readable by the web server once your application is deployed.
 - **PHP** runs as the project user through a **dedicated PHP-FPM pool** with a project-specific Unix socket.
-- Socket permissions use `listen.mode = 0660` with `listen.group = www-data` (not `0666`).
+- Socket permissions use `listen.mode = 0660` with `listen.group` set to the platform web user (`www-data` or `nginx`), not `0666`.
 
 ### Project removal
 
@@ -163,16 +163,16 @@ If `--path` is not given, the default depends on ownership mode: `/var/www/<name
 | Flag | Default | Description |
 |---|---|---|
 | `--path` | `/var/www/<name>` when `--user` is omitted; `<home>/<name>` when `--user` is set | Project root path |
-| `--nginx` | `true` | Use nginx (default) |
+| `--nginx` | `false` | Create an nginx virtual host |
 | `--apache` | `false` | Use Apache (not yet implemented) |
-| `--no-vhost` | `false` | Do not create a virtual host |
+| `--no-vhost` | `false` | Do not create a virtual host (compatible with the default; cannot be combined with `--nginx`) |
 | `--shared-logs` | `false` | Keep the server-wide nginx logs instead of per-project log files |
 | `--domains` | | Comma-separated domain names |
 | `--port` | `80` | HTTP port |
 | `--web-root` | | Custom web root directory |
-| `--user` | | Linux user for a user-owned project (omit for shared `www-data` mode) |
-| `--group` | `www-data` in shared mode | Project group for shared mode only |
-| `--ssl` | `false` | Enable SSL (requires certbot) |
+| `--user` | | Linux user for a user-owned project (omit for shared web-user mode) |
+| `--group` | platform web group in shared mode | Project group for shared mode only |
+| `--ssl` | `false` | Enable SSL (requires `--nginx`, `--domains`, and `--email`) |
 | `--email` | | Email for the SSL certificate |
 | `--redirect-http` | `true` | Redirect HTTP to HTTPS |
 | `--php` | `false` | PHP application |
@@ -187,7 +187,21 @@ If `--path` is not given, the default depends on ownership mode: `/var/www/<name
 
 Domains are validated. Each must be a well-formed domain name.
 
-If a virtual host will be created (the default), Abstrax checks that the requested web server is installed. When nginx is missing, the command stops with a message pointing you to `sudo abstrax web install`. Use `--no-vhost` to create the project directory without this check.
+If you pass `--nginx`, Abstrax checks that nginx is installed. When it is missing, the command stops with a message pointing you to `sudo abstrax web install`. Without `--nginx`, no web server check runs.
+
+### Default server / server IP
+
+Only one nginx listener can hold `default_server` per address and port.
+
+| Command | Behaviour |
+|---|---|
+| `project add <name> --nginx --domains=…` | Named vhost (`server_name` set). Does not take `default_server`. |
+| `project add <name> --nginx` (no domains) | Claims `listen … default_server` (IPv4 and IPv6) so the project answers on `http://<server-ip>/`, when no other project already holds it. The output says so. |
+| Second domainless `--nginx` project | Still creates the project and vhost, but does **not** take `default_server`. The output explains it will not answer on the IP until it has a domain. |
+| `project modify … --add-domain` on the IP default | Drops `default_server`. The server IP is no longer this project. |
+| Clearing every domain on a vhost | Allowed when this project can take (or already holds) `default_server`. Refused when another project already answers on the IP. |
+
+Use [`web ip`](/docs/commands/web#web-ip) when no project should answer on the server IP and you want a fixed error response instead.
 
 ### Nginx logs
 
@@ -227,13 +241,15 @@ The same check runs for `project modify` when the project uses a PHP, Node.js, o
 
 | Runtime | How Abstrax checks | What it installs |
 |---|---|---|
-| PHP | Provider PHP-FPM package for the version | Debian: `php{version}-fpm` / `php{version}-cli` via apt. RHEL-family: Remi SCL packages such as `php83-php-fpm` / `php83-php-cli` (requires Remi; pass `--enable-required-repos` or run [`repo enable remi`](/docs/commands/repo) first). Extensions come from [`config php.extensions`](/docs/commands/config); Abstrax enables and starts the versioned PHP-FPM service |
+| PHP | Provider PHP-FPM package for the version | Debian: `php{version}-fpm` / `php{version}-cli` via apt. RHEL-family EL10: PHP **8.3** installs from AppStream (`php-fpm`) without Remi; other versions use Remi SCL packages such as `php85-php-fpm` (pass `--enable-required-repos` or run [`repo enable remi`](/docs/commands/repo) first). Extensions come from [`config php.extensions`](/docs/commands/config); Abstrax enables and starts the PHP-FPM service |
 | Node.js | `node --version` major matches | NodeSource setup for the requested major (`deb.nodesource.com` on Debian-family, `rpm.nodesource.com` on RHEL-family), then `nodejs` |
 | Ruby | `ruby --version` matches major.minor on Debian-family | Debian: `ruby{version}` via apt, or `ruby-full` as a fallback. RHEL-family: stock `ruby` + `ruby-devel`. Exact version pinning on RHEL is a deliberate product limitation until a shared runtime manager is added |
 
 PHP extensions are configured server-wide with `abstrax config` (default: `mysql`, `xml`, `curl`, `mbstring`, `zip`, `bcmath`, `gd`, `intl`, `redis`, `sqlite3`; `pcntl` and `posix` are included in `php*-cli`). See [Config](/docs/commands/config).
 
-On RHEL-family systems, supported Remi PHP versions are currently 8.1–8.5. Unsupported versions fail with a clear error before any install attempt.
+On RHEL-family systems, supported Remi PHP versions are currently 8.1–8.5. On Enterprise Linux 10+, PHP 8.3 is also available from AppStream without Remi. Unsupported versions fail with a clear error before any install attempt.
+
+On RHEL-family hosts with SELinux, Abstrax labels the project path (`httpd_sys_content_t`) and common writable dirs such as `storage`, `bootstrap/cache`, and `wp-content/uploads` (`httpd_sys_rw_content_t`), then runs `restorecon`. `project remove` deletes those fcontext rules.
 
 ### PHP on the command line
 
@@ -259,36 +275,42 @@ Use `--dry-run` to preview the prompt and installation steps without making chan
 ### Examples
 
 ```bash
-# Shared static site (default mode)
-sudo abstrax project add myapp \
+# Directory only (no nginx vhost)
+sudo abstrax project add myapp --static
+
+# Shared static site with a named vhost
+sudo abstrax project add myapp --nginx \
   --domains=myapp.com,www.myapp.com --static
 
+# Serve on the server IP (no domains; claims default_server when free)
+sudo abstrax project add bare --nginx --static
+
 # User isolated PHP application in the user's home
-sudo abstrax project add myapp --user=mike \
+sudo abstrax project add myapp --user=mike --nginx \
   --domains=myapp.com --php --public-dir=public
 
 # Shared PHP application with custom path
-sudo abstrax project add myapp --path=/var/www/myapp \
+sudo abstrax project add myapp --path=/var/www/myapp --nginx \
   --domains=myapp.com --php --public-dir=public
 
 # PHP application with a specific version
-sudo abstrax project add myapp --path=/var/www/myapp \
+sudo abstrax project add myapp --path=/var/www/myapp --nginx \
   --domains=myapp.com --php --php-version=8.4 --public-dir=public
 
 # Node.js application (reverse proxy, uses default Node.js 24)
-sudo abstrax project add myapp --path=/var/www/myapp \
+sudo abstrax project add myapp --path=/var/www/myapp --nginx \
   --domains=myapp.com --node --proxy-port=3000
 
 # Node.js application with a specific version
-sudo abstrax project add myapp --path=/var/www/myapp \
+sudo abstrax project add myapp --path=/var/www/myapp --nginx \
   --domains=myapp.com --node --node-version=22 --proxy-port=3000
 
 # Ruby application (reverse proxy, uses default Ruby 4.0)
-sudo abstrax project add myapp --path=/var/www/myapp \
+sudo abstrax project add myapp --path=/var/www/myapp --nginx \
   --domains=myapp.com --ruby --proxy-port=3000
 
 # Ruby application with a specific version
-sudo abstrax project add myapp --path=/var/www/myapp \
+sudo abstrax project add myapp --path=/var/www/myapp --nginx \
   --domains=myapp.com --ruby --ruby-version=3.4 --proxy-port=3000
 ```
 
@@ -369,7 +391,7 @@ sudo abstrax project modify <name> [flags]
 
 Flags that are not passed leave the stored field unchanged. A flag passed with an empty value (or `0` for `--proxy-port`) clears that field.
 
-Removing every domain (`--domains=""`, `--clear-domains`, or the last `--remove-domain`) is refused when the project has an nginx vhost, because the vhost would be written with `server_name _` and answer for every host. `--path` must not be empty and is validated the same way as `project add`. `--public-dir` must stay inside the project path.
+Removing every domain (`--domains=""`, `--clear-domains`, or the last `--remove-domain`) on a project with a vhost makes that project the server IP default when no other project already holds `default_server`. If another project already answers on the IP, the change is refused. Adding a domain to the IP default project drops `default_server`. `--path` must not be empty and is validated the same way as `project add`. `--public-dir` must stay inside the project path.
 
 The runtime install check runs only when the active runtime's version (or the runtime itself) changes. The nginx vhost is rewritten only when a value that appears in it changed. A disabled vhost stays disabled across rewrites. If `nginx -t` rejects the new vhost, the previous file is restored.
 

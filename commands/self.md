@@ -62,7 +62,7 @@ With `--plugins`, Abstrax updates the CLI first, then updates each installed plu
 
 - Registry and manifest plugins move to the latest compatible stable version.
 - A plugin that is already on that version is left in place.
-- Local plugins installed with `--path` are skipped. Change those by reinstalling with `--path`.
+- Local plugins installed with `--path` are skipped. Update those with [`plugin update <name> --path …`](/docs/commands/plugins#plugin-update).
 - A failure for one plugin does not stop the others. If any plugin fails, the command exits with an error after the remaining plugins have been attempted. The CLI update is kept.
 
 `--dry-run` lists the plugins that would change and does not install them. It does not require root.
@@ -73,7 +73,7 @@ When no plugins are installed, Abstrax reports that and exits successfully.
 Updated from 1.0.1 to 1.1.0.
 Updated plugin deploy from 0.3.0 to 0.4.0.
 Plugin composer is already up to date (1.2.0).
-WARNING: Skipped local plugin custom. Reinstall it with --path to change it.
+WARNING: Skipped local plugin custom. Update it with plugin update --path.
 ```
 
 `--json` adds a `plugins` object to `data`. It is omitted when `--plugins` was not passed. `skipped` entries use `reason` `up_to_date` or `local`.

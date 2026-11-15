@@ -10,7 +10,7 @@ Most subcommands accept a `--nginx` flag for selecting the backend. nginx is the
 
 ## Permissions
 
-`web install`, `web reload`, and `web restart` require root. `web test` does not require root.
+`web install`, `web ip set`, `web ip clear`, `web reload`, and `web restart` require root. `web test` and `web ip show` do not require root.
 
 ## `web install`
 
@@ -32,7 +32,52 @@ sudo abstrax web install
 sudo abstrax web install --no-start
 ```
 
-After installing nginx, use [Projects](/docs/commands/projects) to add virtual hosts for your applications. On Debian-family systems Abstrax writes site configs to `/etc/nginx/sites-available` and enables them via symlinks in `/etc/nginx/sites-enabled`. On RHEL-family systems configs are written to `/etc/nginx/conf.d/{site}.conf`.
+After installing nginx, use [Projects](/docs/commands/projects) with `--nginx` to add virtual hosts for your applications. On Debian-family systems Abstrax writes site configs to `/etc/nginx/sites-available` and enables them via symlinks in `/etc/nginx/sites-enabled`. On RHEL-family systems configs are written to `/etc/nginx/conf.d/{site}.conf`.
+
+`web install` does **not** create a managed response for the bare server IP. Until you set one with [`web ip`](#web-ip) or create a domainless `--nginx` project, a single named site may still answer on the IP as nginx's implicit default.
+
+
+## `web ip`
+
+Control what `http://<server-ip>/` and `https://<server-ip>/` return when no project holds `default_server`. Registered as `web.ip.show`, `web.ip.set`, and `web.ip.clear`.
+
+A project added with `project add --nginx` and no domains owns `default_server` instead (see [Projects](/docs/commands/projects#default-server--server-ip)). While that project holds the IP, the `web ip` block keeps its return code but drops `default_server`. When the project gains a domain or is removed, the IP block takes `default_server` again if a response is still configured.
+
+### `web ip show`
+
+Show the configured response. Does not require root.
+
+```bash
+abstrax web ip show
+```
+
+Unset is the default. The note explains whether a named site may still answer the IP as nginx's implicit default.
+
+### `web ip set`
+
+Write an Abstrax-managed nginx block (`abstrax-ip.conf`, not named `abstrax-<project>` so `project remove` does not delete it).
+
+```bash
+sudo abstrax web ip set --return 404
+sudo abstrax web ip set --return 403
+sudo abstrax web ip set --return 444
+```
+
+| Flag | Description |
+|---|---|
+| `--return` | Required. `404`, `403`, or `444` (`444` closes the connection with no response) |
+
+The HTTP server listens on port 80 (and `[::]:80`) with `return <code>`. The HTTPS server listens on 443 with `ssl_reject_handshake on`, so HTTPS to the IP does not fall through to a named site and does not need a certificate.
+
+### `web ip clear`
+
+Remove the managed block and reload nginx.
+
+```bash
+sudo abstrax web ip clear
+```
+
+After clear, remaining named sites may answer the IP again as nginx's implicit default.
 
 
 ## `web test`

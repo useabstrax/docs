@@ -214,19 +214,20 @@ If you are already locked out, you will need console access to run `sudo abstrax
 
 - Confirm the project was created with `project add --user=...` (traverse permissions are applied during creation).
 - Ensure the document root exists and is readable after you deploy your application. Intermediate directories on the path to the document root must allow web server traverse (for example `755` directories).
-- On SELinux enforcing systems under `/home`, you may need appropriate file contexts (`semanage fcontext` / `restorecon`).
+- On SELinux enforcing systems, Abstrax labels the project path and common writable dirs during `project add` / `project modify --path`. If you created the site before that behaviour, re-run a path modify or add the contexts manually (`semanage fcontext` / `restorecon`).
 - Check AppArmor profiles for nginx if access is denied despite correct Unix permissions.
 
 ## PHP socket permission failures
 
-**Symptom.** nginx error log shows `connect() to unix:... failed (13: Permission denied)` for a user isolated PHP project.
+**Symptom.** nginx error log shows `connect() to unix:... failed (13: Permission denied)` for a PHP project.
 
-**Cause.** PHP-FPM socket permissions or pool ownership are incorrect.
+**Cause.** PHP-FPM socket permissions or pool ownership are incorrect. On RHEL-family systems, Remi's default `www` pool only allows `apache`, while nginx runs as `nginx`.
 
 **Fix.**
 
 - Inspect project state: `abstrax project info <name>` and confirm `PHP socket` is set.
-- User isolated pools use `listen.mode = 0660` and `listen.group = www-data`.
+- User isolated pools use `listen.mode = 0660` and `listen.group` set to the platform web user (`www-data` or `nginx`).
+- Shared-mode PHP projects on RHEL-family use an Abstrax-managed `abstrax-web` pool. Re-create the project (or add a new shared PHP project on that PHP version) so the pool is ensured.
 - Re-create the pool by removing and re-adding the project if the pool file was edited manually.
 
 ## `user "..." does not exist`
