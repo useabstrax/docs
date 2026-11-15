@@ -103,24 +103,31 @@ Local installs:
 - Record `source: local` and community trust
 - Do not require root (same as `--manifest`); root still writes under `/usr/local/lib/abstrax/plugins/`
 
-`plugin update` cannot update local plugins; reinstall with `--path` instead.
-
 ## `plugin update`
 
-Update an installed plugin to the latest compatible version from the registry.
+Update an installed plugin to the latest compatible version from the registry, or refresh a local plugin installed with `--path`.
 
 ```bash
 sudo abstrax plugin update <name>
 sudo abstrax plugin update example
+sudo abstrax plugin update myplugin --path /opt/custom/abstrax-myplugin
 ```
 
-To update Abstrax and every installed plugin in one command:
+| Flag | Description |
+|---|---|
+| `--path` | Update a local plugin by re-pointing its install symlink at this binary and refreshing metadata |
+
+Without `--path`, a local plugin updates from its recorded `source_path` when that file still exists; otherwise Abstrax asks for `--path`. Registry and manifest plugins still resolve the latest compatible version from the registry.
+
+On SELinux-enforcing hosts, registry and manifest installs copy the binary into the plugin directory (instead of renaming from `/tmp`, which kept a `tmp_t` label), add a persistent `bin_t` fcontext for the install directory, and run `restorecon`.
+
+To update Abstrax and every installed registry or manifest plugin in one command:
 
 ```bash
 sudo abstrax self update --plugins
 ```
 
-That follows the same rules as `plugin update` for each registry or manifest plugin. Local plugins are skipped. See [Updating plugins](/docs/commands/self#updating-plugins).
+That follows the same rules as `plugin update` for each registry or manifest plugin. Local plugins are skipped by `self update --plugins` (update those with `plugin update --path`). See [Updating plugins](/docs/commands/self#updating-plugins).
 
 ## `plugin remove`
 

@@ -55,7 +55,7 @@ abstrax server reboot-required --json
 
 On Debian and Ubuntu, Abstrax reads `/var/run/reboot-required`. When that file exists, package names are read from `/var/run/reboot-required.pkgs`.
 
-On RHEL-family systems, Abstrax runs `needs-restarting -r` from `dnf-utils`. Exit code 1 means a reboot is required. If `needs-restarting` is not installed, the command succeeds with `required` set to false and a note that it is not installed.
+On RHEL-family systems, Abstrax runs `needs-restarting -r` from `dnf-utils`. Exit code 1 means a reboot is required. If `needs-restarting` is not installed, the command succeeds with `required` set to `null` (not `false`) and a note that it cannot tell. The human summary is `Can't tell: needs-restarting is not installed.`
 
 ```text
 Reboot required.
@@ -70,7 +70,11 @@ Packages:
 {"required": true, "packages": ["linux-image-5.15.0-91-generic"]}
 ```
 
-When `needs-restarting` is missing, `data` also includes `"note": "needs-restarting is not installed"`.
+When `needs-restarting` is missing:
+
+```json
+{"required": null, "note": "needs-restarting is not installed"}
+```
 
 ## Other server commands
 

@@ -216,7 +216,7 @@ abstrax daemon logs queue-worker --stderr --process=1
 
 ## Notes
 
-- These commands require Supervisor. If it is not installed, use `--install-supervisor` with `daemon add`, or install it first. Run `abstrax doctor` to check whether Supervisor is present.
+- These commands require Supervisor. If it is not installed, use `--install-supervisor` with `daemon add`, or install it first. On Rocky/Alma/RHEL, Abstrax enables EPEL before installing Supervisor (honouring `--enable-required-repos` on RHEL/Oracle), the same way [`ssl install`](/docs/commands/certificates) does. Run `abstrax doctor` to check whether Supervisor is present.
 - `--autorestart` accepts `always`, `unexpected`, or `false`. The default on `daemon add` is `unexpected`, which restarts the process only when it exits with an unexpected code.
 - `daemon add` and `daemon modify` reject line breaks, carriage returns, and null bytes. They also reject an invalid user, a relative path, an unknown stop signal, an invalid exit-code list, and an invalid environment name.
 - A `%` in the command is stored as `%%`, so Supervisor treats it as a literal percent. Environment values are double-quoted. A value that contains `"` or `\` is rejected, because Supervisor parses `environment` with a non-POSIX reader that does not treat `\` as an escape.

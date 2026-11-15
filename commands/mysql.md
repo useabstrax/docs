@@ -50,6 +50,8 @@ abstrax mysql status --json
 
 Reports whether a MySQL-compatible server is installed, which engine is present (`mysql` or `mariadb`), and which version. It also reports the service name, whether that service is active and enabled, and the port and socket when those are known.
 
+When the server is running, `--json` also includes `auth`: `ok` when Abstrax can log in with the saved root password, or `failed` when the password is missing or rejected. `auth` is omitted when the server is not running.
+
 The command does not fail when MySQL is missing or stopped. Those are normal states and the process exits 0. A connection failure only makes the running fields less detailed: the version is then read from `mysqld --version` or `mariadbd --version`, and the port and socket fall back to the saved connection config.
 
 When nothing is installed, `engine` is the server Abstrax would install on this platform, and `version` is null. Other fields are omitted. A UI can use `engine` to say which server will be installed before install runs. On Ubuntu that value is `mysql`. On Debian and RHEL-family systems it is `mariadb`.
@@ -98,7 +100,9 @@ Install behaviour depends on the platform family:
 - **Debian/Ubuntu family:** installs `mysql-server` via `apt`, enables/starts the `mysql` service, and sets root password auth with `caching_sha2_password` (replacing Debian's default `auth_socket` where present).
 - **RHEL-compatible family:** installs MariaDB as the MySQL-compatible database server (`mariadb-server` via `dnf`), enables/starts `mariadb`, and sets root password auth with MariaDB-compatible `IDENTIFIED BY` SQL. The CLI command remains `mysql` for compatibility; this is not Oracle MySQL.
 
-In both cases Abstrax applies secure defaults (removes anonymous users, drops the test database, restricts remote root) and sets the root password for both `root@localhost` (socket) and `root@127.0.0.1` (TCP).
+In both cases Abstrax applies secure defaults (removes anonymous users, drops the test database, restricts remote root), binds the server to localhost (`127.0.0.1`), and sets the root password for both `root@localhost` (socket) and `root@127.0.0.1` (TCP). Use [`mysql remote enable`](#remote-access) when clients on other hosts need to connect.
+
+On hosts with 1 GiB of memory or less, Abstrax writes a drop-in that sets `innodb_buffer_pool_size=64M`, turns off `performance_schema`, and lowers `max_connections`, then restarts the service so those settings apply. That avoids OOM restart loops on small VPS plans.
 
 On RHEL-family systems, `--version` is ignored and the stock AppStream MariaDB package is installed.
 
@@ -189,11 +193,11 @@ After writing or removing the drop-in, Abstrax restarts the database service and
 
 ### Disable when the setting is not Abstrax's
 
-`remote disable` only removes `zz-abstrax-remote.cnf`. If the running server is bound to something other than loopback and that value does not come from Abstrax's file, the command says so and does not claim that remote access was turned off.
+`remote disable` removes `zz-abstrax-remote.cnf` and writes loopback bind (`127.0.0.1`), including when there was no Abstrax drop-in yet. If the running server is bound to something other than loopback and that value does not come from Abstrax's file, the command says so and does not claim that remote access was turned off.
 
 ### Status
 
-`remote status` reads the effective value from the running server (`SHOW VARIABLES LIKE 'bind_address'`), not only whether the drop-in exists. `enabled` is true only when that address is something other than loopback (`127.0.0.1` or `::1`). If an administrator set `bind-address` in another file, status still reports the value the server is using.
+`remote status` reads the effective value from the running server (`SHOW VARIABLES LIKE 'bind_address'`), not only whether the drop-in exists. An empty `bind_address` is treated as all interfaces (`0.0.0.0`). `enabled` is true only when that address is something other than loopback (`127.0.0.1` or `::1`). If an administrator set `bind-address` in another file, status still reports the value the server is using.
 
 ```json
 { "enabled": true, "bind_address": "0.0.0.0", "managed_file": "/etc/mysql/mysql.conf.d/zz-abstrax-remote.cnf", "port": 3306 }
@@ -296,7 +300,7 @@ abstrax mysql user list --grants --exclude-system
 | `--grants` | Include each user's raw grants and the parsed privileges for each database |
 | `--exclude-system` | Hide built-in accounts |
 
-With `--grants`, the text table adds a `DATABASES` column. `--json` adds `grants` (the raw `SHOW GRANTS` lines), `databases` (name, privileges, and a matching preset when one applies), and `global_privileges`. Without `--grants`, those fields are omitted.
+`mysql user list` always hides MariaDB's built-in `mysql@localhost` system account. With `--grants`, the text table adds a `DATABASES` column. `--json` adds `grants` (the raw `SHOW GRANTS` lines), `databases` (name, privileges, and a matching preset when one applies), and `global_privileges`. Without `--grants`, those fields are omitted.
 
 ### `user info`
 
@@ -326,7 +330,7 @@ abstrax mysql revoke <user> <database>
 | `--preset` | `app` when `--privileges` is omitted | Privilege preset (`readonly`, `app`, `admin`) |
 | `--host` | local app hosts | Limit the grant to one host, including a specific IP |
 
-When `--host` is omitted, Abstrax grants on the local accounts (`'user'@'localhost'` and `'user'@'127.0.0.1'`). If only one local account exists, Abstrax creates the missing one by copying the authentication hash from the existing account. Pass `--host` to grant a different account, such as `'user'@'10.0.4.12'`.
+When `--host` is omitted, Abstrax grants on the local accounts (`'user'@'localhost'` and `'user'@'127.0.0.1'`). If only one local account exists, Abstrax creates the missing one by copying the authentication hash from the existing account. Pass `--host localhost` or `--host 127.0.0.1` and Abstrax updates **both** local accounts, matching `mysql user add` and `mysql user password`. Pass another `--host` to grant a single remote account, such as `'user'@'10.0.4.12'`.
 
 Privileges are checked against an allowlist and the `GRANT` statement is built from that list. Column-level privileges, such as `SELECT(id)`, are rejected. Hosts must use letters, digits, and `.` `%` `_` `:` `/` `-`, and are escaped in SQL.
 

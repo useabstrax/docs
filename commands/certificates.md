@@ -18,7 +18,7 @@ Install Certbot and the nginx plugin using the platform package manager (`apt` o
 sudo abstrax ssl install
 ```
 
-On Rocky Linux, AlmaLinux, and CentOS Stream, Abstrax installs the EPEL repository (`epel-release`) when needed before installing Certbot. On RHEL or Oracle Linux, enable EPEL explicitly first:
+On Rocky Linux, AlmaLinux, and CentOS Stream, Abstrax installs the EPEL repository (`epel-release`) when needed before installing Certbot. On Enterprise Linux 10.x, it pins the EPEL metalink to the OS minor version (for example `epel-10.2` on AlmaLinux 10.2) so Certbot is not pulled from a newer minor that needs AppStream libraries the host does not have. On RHEL or Oracle Linux, enable EPEL explicitly first:
 
 ```bash
 sudo abstrax repo enable epel --enable-required-repos

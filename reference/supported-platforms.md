@@ -111,26 +111,26 @@ Run `abstrax doctor` to see the detected profile on your server, including:
 | Nginx config directory | `/etc/nginx/conf.d` |
 | Web user / group | `nginx` / `nginx` |
 | Default project root | `/var/www` |
-| Multi-version PHP | Remi Software Collections (`php83-php-fpm`, paths under `/opt/remi` and `/etc/opt/remi`) |
+| Multi-version PHP | Remi Software Collections (`php85-php-fpm`, paths under `/opt/remi` and `/etc/opt/remi`); EL10 AppStream PHP 8.3 without Remi |
 | Firewall | firewalld |
-| SELinux | Detected and warned about; never disabled automatically |
+| SELinux | Detected; project and plugin paths are labelled when needed; never disabled automatically |
 
 Important RHEL-family differences:
 
 - Package commands use `dnf` rather than `apt`.
 - Nginx site configs are written to `/etc/nginx/conf.d/{site}.conf`. There is no Debian-style `sites-available` / `sites-enabled` symlink layout. Disabling a site renames the file to `{site}.conf.disabled`.
-- The default web user/group is usually `nginx`, not `www-data`.
-- Multi-version PHP uses Remi SCL packages (for example `php83-php-fpm`). Services, binaries, sockets, and pool configs are version-specific under Remi paths. Abstrax resolves these through the provider layer.
-- Remi (and often EPEL/CRB) must be enabled before PHP install, and before Redis install on EL10+. Use `abstrax repo enable remi --enable-required-repos` or pass `--enable-required-repos`. Abstrax will not silently enable Remi.
-- On Rocky/Alma 10+, AppStream ships Valkey instead of Redis. `abstrax cache install redis` installs Redis from Remi’s `redis:remi-7.2` module stream (not Valkey) so the `redis` package and service names stay consistent.
+- The default web user/group is usually `nginx`, not `www-data`. Shared-mode PHP projects use an Abstrax-managed `abstrax-web` pool (Remi's default `www` pool only allows `apache`).
+- Multi-version PHP uses Remi SCL packages (for example `php85-php-fpm`). Services, binaries, sockets, and pool configs are version-specific under Remi paths. On EL10+, PHP **8.3** installs from AppStream (`php-fpm`) without Remi; other versions still need Remi.
+- Remi (and often EPEL/CRB) must be enabled before non-stock PHP install, and before Redis install on EL10+. Use `abstrax repo enable remi --enable-required-repos` or pass `--enable-required-repos`. Abstrax will not silently enable Remi.
+- On Rocky/Alma 10+, AppStream ships Valkey instead of Redis. Prefer `abstrax cache install valkey`. `cache install redis` without `--enable-required-repos` falls back to Valkey; with that flag it installs Redis from Remi’s `redis:remi-7.2` module stream.
 - Firewall commands use firewalld (`firewall-cmd`) where available, with permanent rules and reload after changes.
 - `abstrax firewall rule list` gives every firewalld rule a stable id (a short hash) and keeps the list position as `number`. `abstrax firewall rule remove <id>` removes the matching service, port, or rich rule. `firewall allow <port> --from <ip>` writes a rich rule for that source, including for ports 80 and 443, instead of opening the port to every address. You can also use `abstrax firewall remove service http` or `abstrax firewall remove port 8080/tcp`.
-- Database install uses MariaDB (`mariadb-server`) as the MySQL-compatible server. The CLI command remains `mysql` for compatibility.
-- Certbot may install EPEL automatically on Rocky/Alma/CentOS Stream. On RHEL/Oracle Linux, enable EPEL explicitly (`abstrax repo enable epel --enable-required-repos` or pass `--enable-required-repos`).
-- Supervisor uses the `supervisord` service and `/etc/supervisord.d` with `.ini` program configs.
+- Database install uses MariaDB (`mariadb-server`) as the MySQL-compatible server and binds it to localhost. The CLI command remains `mysql` for compatibility.
+- Certbot may install EPEL automatically on Rocky/Alma/CentOS Stream. On EL10.x, Abstrax pins EPEL to the OS minor version. On RHEL/Oracle Linux, enable EPEL explicitly (`abstrax repo enable epel --enable-required-repos` or pass `--enable-required-repos`).
+- Supervisor uses the `supervisord` service and `/etc/supervisord.d` with `.ini` program configs. Installing Supervisor enables EPEL first when needed.
 - Node.js auto-install uses the NodeSource RPM setup script (`https://rpm.nodesource.com/setup_XX.x`).
 - Exact Ruby version pinning is a deliberate product limitation on RHEL-family systems today: Abstrax installs distro `ruby` + `ruby-devel`. Cross-distro exact pinning (for example via rbenv/asdf) is not implemented yet. Debian-family continues to use versioned apt packages where available.
-- SELinux may require additional manual context rules for web project paths, nginx config, or PHP-FPM. Abstrax detects and warns only; it will not run `setenforce 0` or rewrite SELinux policy.
+- On SELinux-enforcing hosts, Abstrax labels project paths and plugin binaries (`bin_t`) and runs `restorecon`. It will not run `setenforce 0` or rewrite broader SELinux policy.
 
 ## Repositories (RHEL-family)
 
@@ -140,12 +140,15 @@ Some features require extra repositories:
 |---|---|---|---|
 | EPEL | Certbot; Remi dependency | May enable automatically when required | Requires `abstrax repo enable epel --enable-required-repos` or `--enable-required-repos` |
 | CRB | Remi dependency on EL9 | Enabled as part of Remi setup when consented | Same, with explicit consent |
-| Remi | Multi-version PHP; Redis on EL10+ (AppStream ships Valkey) | Requires `--enable-required-repos` or `abstrax repo enable remi --enable-required-repos` | Same |
+| Remi | Non-stock PHP versions; Redis on EL10+ (AppStream ships Valkey) | Requires `--enable-required-repos` or `abstrax repo enable remi --enable-required-repos` | Same |
 
 ```bash
 sudo abstrax repo enable epel --enable-required-repos
 sudo abstrax repo enable remi --enable-required-repos
-sudo abstrax project add app --php --php-version=8.3 --enable-required-repos
+# EL10 AppStream PHP 8.3 needs no Remi:
+sudo abstrax project add app --nginx --php --php-version=8.3
+# Other PHP versions still need Remi:
+sudo abstrax project add app --nginx --php --php-version=8.5 --enable-required-repos
 ```
 
 Abstrax will not silently enable policy-sensitive third-party repositories on enterprise distributions without explicit user action.
@@ -164,15 +167,15 @@ Abstrax will not silently enable policy-sensitive third-party repositories on en
 | Daemon management (Supervisor) | Implemented | Implemented (`supervisord`, `/etc/supervisord.d`, `.ini`) |
 | Project management (nginx) | Implemented | Implemented (`conf.d` layout) |
 | Web server management (nginx) | Implemented | Implemented |
-| PHP multi-version install | Implemented (apt `php{version}-fpm`) | Implemented (Remi SCL; requires Remi/EPEL with explicit consent) |
+| PHP multi-version install | Implemented (apt `php{version}-fpm`) | Implemented (EL10 AppStream PHP 8.3; other versions Remi SCL with explicit consent) |
 | Node.js runtime auto-install | Implemented (deb.nodesource) | Implemented (rpm.nodesource) |
 | Ruby runtime auto-install | Implemented (versioned apt packages) | Implemented (stock `ruby` + `ruby-devel`; exact pinning is a deliberate product limitation) |
-| SSL (Certbot) install | Implemented | Implemented (EPEL on Rocky/Alma/CentOS; explicit on RHEL/Oracle) |
-| MySQL / MariaDB install | Implemented (`mysql-server`) | Implemented (`mariadb-server` as MySQL-compatible server) |
-| Cache (Redis, Memcached) | Implemented | Implemented (`redis` package/service; Rocky/Alma 10+ installs Redis via Remi with `--enable-required-repos`) |
+| SSL (Certbot) install | Implemented | Implemented (EPEL on Rocky/Alma/CentOS, pinned to OS minor on EL10; explicit on RHEL/Oracle) |
+| MySQL / MariaDB install | Implemented (`mysql-server`) | Implemented (`mariadb-server` as MySQL-compatible server; localhost bind) |
+| Cache (Redis, Valkey, Memcached) | Implemented | Implemented (EL10 prefers Valkey from AppStream; Redis via Remi with `--enable-required-repos`) |
 | Firewall | UFW (numbered rule delete) | firewalld (list IDs + service/port remove) |
 | Repository helpers | Not required | `abstrax repo enable` + `--enable-required-repos` |
-| SELinux warnings | Detected where present | Detected and warned |
+| SELinux | Detected where present | Detected; project/plugin labelling applied when needed |
 | Apache support | Not implemented | Not implemented |
 | Hosted agent | Planned as optional plugin | Planned as optional plugin |
 

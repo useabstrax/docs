@@ -207,7 +207,7 @@ sudo abstrax ssh config disable-password-auth
 sudo abstrax ssh config enable-password-auth
 ```
 
-`enable-root-login` writes `PermitRootLogin yes`, which also allows a password when password authentication is on. `--keys-only` writes `prohibit-password`, so root can log in with an SSH key and not a password. `disable-root-login` writes `no` and blocks root for every method.
+`enable-root-login` writes `PermitRootLogin yes`, which also allows a password when password authentication is on. `--keys-only` writes `prohibit-password`, so root can log in with an SSH key and not a password. On OpenSSH builds that still print `without-password` from `sshd -T`, Abstrax treats that value as equal to `prohibit-password`, and `ssh config show` normalizes it to `prohibit-password`. `disable-root-login` writes `no` and blocks root for every method.
 
 `disable-password-auth` prints a warning reminding you to confirm you have a working SSH key before disabling password logins.
 

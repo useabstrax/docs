@@ -341,7 +341,9 @@ deploy     1001   /home/deploy    /bin/bash   yes                               
 www-data   33     /var/www        /usr/sbin/nologin
 ```
 
-`LOCKED`, `EXPIRED`, and `BLOCKED` are blank unless that state is set. They match `locked`, `expired`, and `login_blocked` in JSON. `LAST LOGIN` is blank when the time is unknown. Each JSON object includes `last_login_at` and `last_login_from`, and those are `null` when unknown. `user list` reads `lastlog2` or `lastlog` once for the whole list, rather than once per user. If neither tool is available, the fields are `null` and the command still succeeds.
+`LOCKED`, `EXPIRED`, and `BLOCKED` are blank unless that state is set. They match `locked`, `expired`, and `login_blocked` in JSON and are filled for every listed user. `LAST LOGIN` is blank when the time is unknown. Each JSON object includes `last_login_at` and `last_login_from`, and those are `null` when unknown. `user list` reads `lastlog2` or `lastlog` once for the whole list, rather than once per user. If neither tool is available, the fields are `null` and the command still succeeds.
+
+System vs regular users follow `UID_MIN` / `UID_MAX` from `/etc/login.defs` (defaults `1000` / `60000`). Accounts outside that range, including `nobody` (UID `65534`), are treated as system users.
 
 ## Related
 

@@ -29,7 +29,7 @@ The following change system state and require root:
 - **cron**: `add`, `remove`, `modify`, `run`
 - **daemon**: `add`, `remove`, `modify`, `start`, `stop`, `restart`
 - **project**: `add`, `remove`, `modify`, `enable`, `disable`, `reload`, `service restart`, `service reload`
-- **web**: `install`, `reload`, `restart`
+- **web**: `install`, `ip set`, `ip clear`, `reload`, `restart`
 - **ssl**: `install`, `add`, `remove`, `renew`
 - **mysql**: `config set`, `install`, `reset-root-password`
 - **cache**: `install`, `remove`, `start`, `stop`, `restart`
@@ -53,7 +53,8 @@ These read-only or query commands do not call the root check in code:
 - `web test`
 - `ssl status`
 - All `server` commands (`status`, `cpu`, `memory`, `disk`, `load`, `services`)
-- `cache status`, `cache config`
+- `cache status`, `cache config` (read-only; changing config settings needs root)
+- `web ip show`
 - `firewall status`, `firewall defaults`, `firewall rule list`
 - All `ssh-key` commands (`add`, `remove`, `list`, `info`)
 - `plugin list`, `plugin info`, `plugin search`

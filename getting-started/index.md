@@ -119,6 +119,8 @@ Or install directly in a single command:
 wget -qO- https://useabstrax.com/install.sh | sudo bash
 ```
 
+On minimal images, when run as root (or with sudo), the script installs missing tools it needs (`tar`, `gzip`, `grep`, `sed`, `sha256sum`, and `curl` or `wget`) via the platform package manager. Either `curl` or `wget` is enough to download. Pass `--no-install-deps` to skip automatic package installs; missing tools are then reported together.
+
 If you would prefer not to pipe a script into `sudo bash`, use the manual release archive instructions above. They produce the same result with every step visible.
 
 ## Option 3: Build from source
